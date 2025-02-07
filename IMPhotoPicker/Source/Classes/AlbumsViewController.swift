@@ -101,12 +101,10 @@ class AlbumsViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
         self.albums = albumCollections.filter { album in
-            let assetsFetchResult = PHAsset.fetchAssets(in: album, options: nil)
+            let fetchOptions = PHFetchOptions()
+            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+            let assetsFetchResult = PHAsset.fetchAssets(in: album, options: fetchOptions)
             return assetsFetchResult.count > 0
-        }
-        
-        self.albums.sort { (a, b) -> Bool in
-            (a.localizedTitle ?? "") < (b.localizedTitle ?? "")
         }
         
         tableView.reloadData()
@@ -133,9 +131,9 @@ class AlbumsViewController: UIViewController, UITableViewDataSource, UITableView
         let album = albums[indexPath.row]
         cell.titleLabel.text = album.localizedTitle
         let assetsFetchResult = PHAsset.fetchAssets(in: album, options: nil)
-        if let firstAsset = assetsFetchResult.firstObject {
+        if let lastAsset = assetsFetchResult.lastObject {
             let targetSize = CGSize(width: 100, height: 100)
-            imageManager.requestImage(for: firstAsset,
+            imageManager.requestImage(for: lastAsset,
                                       targetSize: targetSize,
                                       contentMode: .aspectFill,
                                       options: nil) { image, _ in

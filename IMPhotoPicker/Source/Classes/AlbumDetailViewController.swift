@@ -32,7 +32,9 @@ class AlbumDetailViewController: AssetsCollectionViewController {
     
     // MARK: - Assets Loading
     override func loadAssets() {
-        self.assets = PHAsset.fetchAssets(in: album, options: nil)
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        self.assets = PHAsset.fetchAssets(in: album, options: fetchOptions)
         collectionView.reloadData()
     }
 }
