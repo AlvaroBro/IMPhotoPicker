@@ -11,8 +11,7 @@ import Photos
 // MARK: - AlbumDetailViewController
 class AlbumDetailViewController: AssetsCollectionViewController {
     
-    // Public property representing the album whose assets will be fetched.
-    let album: PHAssetCollection
+    private var album: PHAssetCollection
     
     // MARK: - Initializers
     init(album: PHAssetCollection) {
