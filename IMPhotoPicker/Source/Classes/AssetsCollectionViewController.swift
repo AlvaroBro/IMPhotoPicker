@@ -7,6 +7,7 @@
 
 import UIKit
 import Photos
+import AVKit
 
 class AssetsCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
@@ -113,6 +114,43 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
                 cell.updateVideoDuration(for: assetForCell, selectionOrder: order)
             }
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let asset = assets?[indexPath.item] else { return nil }
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+            if asset.mediaType == .video {
+                let playerVC = AVPlayerViewController()
+                playerVC.showsPlaybackControls = false
+                playerVC.view.backgroundColor = .clear
+                PHImageManager.default().requestAVAsset(forVideo: asset, options: nil) { avAsset, _, _ in
+                    DispatchQueue.main.async {
+                        if let avAsset = avAsset {
+                            let playerItem = AVPlayerItem(asset: avAsset)
+                            let player = AVPlayer(playerItem: playerItem)
+                            playerVC.player = player
+                            player.play()
+                        }
+                    }
+                }
+                return playerVC
+            } else {
+                let previewVC = UIViewController()
+                let imageView = UIImageView()
+                imageView.contentMode = .scaleAspectFit
+                imageView.frame = previewVC.view.bounds
+                imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                self.imageManager.requestImage(for: asset, targetSize: previewVC.view.bounds.size, contentMode: .aspectFit, options: nil) { image, _ in
+                    DispatchQueue.main.async {
+                        imageView.image = image
+                    }
+                }
+                previewVC.view.addSubview(imageView)
+                return previewVC
+            }
+        }, actionProvider: { _ in
+            return UIMenu(title: "", children: [])
+        })
     }
     
     // MARK: - UICollectionViewDelegateFlowLayout
