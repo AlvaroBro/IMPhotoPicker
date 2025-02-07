@@ -27,6 +27,7 @@ class AlbumDetailViewController: AssetsCollectionViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
         loadAssets()
     }
     
