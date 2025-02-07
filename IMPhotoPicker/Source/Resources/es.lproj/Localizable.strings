@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  IMPhotoPicker
+
+  Created by Alvaro Marcos on 7/2/25.
+  
+*/
+
+"accept_button_title" = "Aceptar";
+"albums_segment_title" = "Álbumes";
+"alert_no_access_message" = "Por favor, habilita el acceso a la librería de fotos en la configuración.";
+"alert_no_access_title" = "Sin acceso a fotos";
+"alert_ok" = "OK";
+"cancel_button_title" = "Cancelar";
+"default_album_title" = "Álbum";
+"photos_segment_title" = "Fotos";

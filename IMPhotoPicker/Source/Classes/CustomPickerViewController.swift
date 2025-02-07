@@ -19,8 +19,8 @@ class CustomPickerViewController: UIViewController {
     // MARK: - Main Properties
     let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: [
-            String(localized: "photos_segment_title"),
-            String(localized: "albums_segment_title")
+            NSLocalizedString("photos_segment_title", comment: ""),
+            NSLocalizedString("albums_segment_title", comment: "")
         ])
         sc.selectedSegmentIndex = 0
         return sc
@@ -54,7 +54,7 @@ class CustomPickerViewController: UIViewController {
     func setupNavigationBar() {
         navigationItem.titleView = segmentedControl
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: String(localized: "cancel_button_title"),
+            title: NSLocalizedString("cancel_button_title", comment: ""),
             style: .plain,
             target: self,
             action: #selector(cancelTapped)
@@ -64,7 +64,7 @@ class CustomPickerViewController: UIViewController {
         switch rightButtonStyle {
         case .accept:
             navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: String(localized: "accept_button_title"),
+                title: NSLocalizedString("accept_button_title", comment: ""),
                 style: .done,
                 target: self,
                 action: #selector(acceptTapped)
@@ -136,7 +136,7 @@ class CustomPickerViewController: UIViewController {
         }
         navigationItem.titleView = segmentedControl
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: String(localized: "cancel_button_title"),
+            title: NSLocalizedString("cancel_button_title", comment: ""),
             style: .plain,
             target: self,
             action: #selector(cancelTapped)
@@ -151,7 +151,7 @@ class CustomPickerViewController: UIViewController {
         }
         navigationItem.titleView = segmentedControl
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: String(localized: "cancel_button_title"),
+            title: NSLocalizedString("cancel_button_title", comment: ""),
             style: .plain,
             target: self,
             action: #selector(cancelTapped)
@@ -216,7 +216,7 @@ extension CustomPickerViewController: AlbumsViewControllerDelegate {
     func albumsViewController(_ controller: AlbumsViewController, didSelectAlbum album: PHAssetCollection) {
         let albumDetailVC = AlbumDetailViewController(album: album)
         albumDetailVC.selectionDelegate = self
-        albumDetailVC.navigationItem.title = album.localizedTitle ?? String(localized: "default_album_title")
+        albumDetailVC.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", comment: "")
         albumDetailVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),
             style: .plain,

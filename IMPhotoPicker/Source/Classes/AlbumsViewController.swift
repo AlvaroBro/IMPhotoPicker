@@ -45,24 +45,42 @@ class AlbumsViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: - Permissions
     func checkPhotoLibraryPermission() {
-        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-        switch status {
-        case .authorized, .limited:
-            loadAlbums()
-        case .notDetermined:
-            PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] newStatus in
-                if newStatus == .authorized || newStatus == .limited {
+        if #available(iOS 14, *) {
+            let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            switch status {
+            case .authorized, .limited:
+                loadAlbums()
+            case .notDetermined:
+                PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] newStatus in
                     DispatchQueue.main.async {
-                        self?.loadAlbums()
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self?.showNoPermissionAlert()
+                        if newStatus == .authorized || newStatus == .limited {
+                            self?.loadAlbums()
+                        } else {
+                            self?.showNoPermissionAlert()
+                        }
                     }
                 }
+            default:
+                showNoPermissionAlert()
             }
-        default:
-            showNoPermissionAlert()
+        } else {
+            let status = PHPhotoLibrary.authorizationStatus()
+            switch status {
+            case .authorized:
+                loadAlbums()
+            case .notDetermined:
+                PHPhotoLibrary.requestAuthorization { [weak self] newStatus in
+                    DispatchQueue.main.async {
+                        if newStatus == .authorized {
+                            self?.loadAlbums()
+                        } else {
+                            self?.showNoPermissionAlert()
+                        }
+                    }
+                }
+            default:
+                showNoPermissionAlert()
+            }
         }
     }
     
@@ -97,11 +115,11 @@ class AlbumsViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: - Alerts
     func showNoPermissionAlert() {
         let alert = UIAlertController(
-            title: String(localized: "alert_no_access_title"),
-            message: String(localized: "alert_no_access_message"),
+            title: NSLocalizedString("alert_no_access_title", comment: ""),
+            message: NSLocalizedString("alert_no_access_message", comment: ""),
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: String(localized: "alert_ok"), style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("alert_ok", comment: ""), style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     

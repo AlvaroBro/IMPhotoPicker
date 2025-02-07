@@ -21,6 +21,7 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupCollectionView()
+        checkPhotoLibraryPermission()
     }
     
     // MARK: - Setup
@@ -43,6 +44,58 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+    
+    // MARK: - Permissions
+    func checkPhotoLibraryPermission() {
+        if #available(iOS 14, *) {
+            let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            switch status {
+            case .authorized, .limited:
+                loadAssets()
+            case .notDetermined:
+                PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] newStatus in
+                    DispatchQueue.main.async {
+                        if newStatus == .authorized || newStatus == .limited {
+                            self?.loadAssets()
+                        } else {
+                            self?.showNoPermissionAlert()
+                        }
+                    }
+                }
+            default:
+                showNoPermissionAlert()
+            }
+        } else {
+            let status = PHPhotoLibrary.authorizationStatus()
+            switch status {
+            case .authorized:
+                loadAssets()
+            case .notDetermined:
+                PHPhotoLibrary.requestAuthorization { [weak self] newStatus in
+                    DispatchQueue.main.async {
+                        if newStatus == .authorized {
+                            self?.loadAssets()
+                        } else {
+                            self?.showNoPermissionAlert()
+                        }
+                    }
+                }
+            default:
+                showNoPermissionAlert()
+            }
+        }
+    }
+    
+    // MARK: - Alerts
+    func showNoPermissionAlert() {
+        let alert = UIAlertController(
+            title: NSLocalizedString("alert_no_access_title", comment: ""),
+            message: NSLocalizedString("alert_no_access_message", comment: ""),
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: NSLocalizedString("alert_ok", comment: ""), style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - UICollectionViewDataSource
@@ -96,14 +149,7 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
         if delegate.selectionOrder(for: asset) != nil {
             delegate.deselectAsset(asset)
         } else {
-            if !delegate.selectAsset(asset) {
-                let alertTitle = String(localized: "alert_selection_limit_title")
-                let alertMessageFormat = String(localized: "alert_selection_limit_message")
-                let alertMessage = String(format: alertMessageFormat, delegate.maxSelectionCount)
-                let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: String(localized: "alert_ok"), style: .default, handler: nil))
-                present(alert, animated: true, completion: nil)
-            }
+            _ = delegate.selectAsset(asset)
         }
         
         for ip in collectionView.indexPathsForVisibleItems {
