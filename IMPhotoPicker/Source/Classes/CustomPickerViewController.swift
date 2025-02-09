@@ -8,9 +8,31 @@
 import UIKit
 import Photos
 
-class CustomPickerViewController: UIViewController {
+// MARK: - CustomPickerViewControllerDelegate
+/// Delegate protocol for CustomPickerViewController events.
+public protocol CustomPickerViewControllerDelegate: AnyObject {
+    /// Called whenever the selection is updated.
+    func customPickerViewController(_ controller: CustomPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool)
+    
+    /// Called when the user accepts the selection.
+    func customPickerViewController(_ controller: CustomPickerViewController, didFinishPicking selection: [PHAsset], hdModeEnabled: Bool)
+    
+    /// Called when the user cancels the picker.
+    func customPickerViewControllerDidCancel(_ controller: CustomPickerViewController)
+    
+    /// (Optional) Called when the right bar button is tapped.
+    /// This allows the picker presenter to decide how to react.
+    func customPickerViewControllerDidTapRightButton(_ controller: CustomPickerViewController)
+}
 
-    enum CustomPickerRightButtonStyle: Equatable {
+extension CustomPickerViewControllerDelegate {
+    func customPickerViewControllerDidTapRightButton(_ controller: CustomPickerViewController) { }
+}
+
+public class CustomPickerViewController: UIViewController {
+
+    // MARK: - Types
+    public enum CustomPickerRightButtonStyle: Equatable {
         case accept
         case hdModeToggle
         case custom(UIBarButtonItem)
@@ -39,7 +61,7 @@ class CustomPickerViewController: UIViewController {
     weak var delegate: CustomPickerViewControllerDelegate?
     
     // MARK: - Lifecycle
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
         setupNavigationBar()
@@ -177,7 +199,6 @@ class CustomPickerViewController: UIViewController {
     }
     
     // MARK: - Selection Management
-    /// Attempts to select the given asset; returns true if successful.
     private func select(asset: PHAsset) -> Bool {
         guard !selectedAssets.contains(where: { $0.localIdentifier == asset.localIdentifier }),
               selectedAssets.count < maxSelectionCount else {
@@ -188,10 +209,10 @@ class CustomPickerViewController: UIViewController {
             navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
         }
         delegate?.customPickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
+        updateInputBarVisibility()
         return true
     }
     
-    /// Deselects the given asset if selected.
     private func deselect(asset: PHAsset) {
         if let index = selectedAssets.firstIndex(where: { $0.localIdentifier == asset.localIdentifier }) {
             selectedAssets.remove(at: index)
@@ -199,15 +220,21 @@ class CustomPickerViewController: UIViewController {
                 navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
             }
             delegate?.customPickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
+            updateInputBarVisibility()
         }
     }
     
-    /// Returns the 1-based selection order for the asset, or nil if not selected.
     private func orderFor(asset: PHAsset) -> Int? {
         if let index = selectedAssets.firstIndex(where: { $0.localIdentifier == asset.localIdentifier }) {
             return index + 1
         }
         return nil
+    }
+    
+    private func updateInputBarVisibility() {
+        if let container = self.navigationController?.parent as? CustomPickerContainerViewController {
+            container.updateInputBarVisibility(selectedAssetCount: selectedAssets.count)
+        }
     }
 }
 

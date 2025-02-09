@@ -21,14 +21,14 @@ class ViewController: UIViewController {
     
     let customPickerAcceptButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Custom Picker", for: .normal)
+        btn.setTitle("Custom Picker Example 1", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
     
     let customPickerHDButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Custom Picker with HD option", for: .normal)
+        btn.setTitle("Custom Picker Example 2", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
@@ -78,25 +78,24 @@ class ViewController: UIViewController {
     }
     
     @objc func presentPicker2() {
-        let pickerVC = CustomPickerViewController()
-        pickerVC.rightButtonStyle = .accept
-        pickerVC.delegate = self
-        let navController = UINavigationController(rootViewController: pickerVC)
+        let picker = CustomPickerViewController()
+        picker.rightButtonStyle = .accept
+        picker.delegate = self
+        let navController = UINavigationController(rootViewController: picker)
         navController.modalPresentationStyle = .fullScreen
         present(navController, animated: true, completion: nil)
     }
-    
+
     @objc func presentPicker3() {
-        let pickerVC = CustomPickerViewController()
-        pickerVC.rightButtonStyle = .hdModeToggle
-        pickerVC.delegate = self
-        let navController = UINavigationController(rootViewController: pickerVC)
-        navController.modalPresentationStyle = .pageSheet
-        if let sheet = navController.sheetPresentationController {
+        let container = CustomPickerContainerViewController(rightButtonStyle: .hdModeToggle)
+        container.pickerDelegate = self
+        container.containerDelegate = self
+        container.modalPresentationStyle = .pageSheet
+        if let sheet = container.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.preferredCornerRadius = 20
         }
-        present(navController, animated: true, completion: nil)
+        present(container, animated: true, completion: nil)
     }
 }
 
@@ -127,5 +126,12 @@ extension ViewController: CustomPickerViewControllerDelegate {
     
     func customPickerViewControllerDidTapRightButton(_ controller: CustomPickerViewController) {
         print("Right button tapped")
+    }
+}
+
+extension ViewController: CustomPickerContainerViewControllerDelegate {
+    func customPickerContainerViewController(_ controller: CustomPickerContainerViewController, didTapSendWithText text: String) {
+        print("Send tapped with text: \(text)")
+        controller.inputBar.badgeCount = 1
     }
 }
