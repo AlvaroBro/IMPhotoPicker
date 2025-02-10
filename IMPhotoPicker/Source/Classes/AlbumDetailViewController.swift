@@ -35,6 +35,5 @@ class AlbumDetailViewController: AssetsCollectionViewController {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         self.assets = PHAsset.fetchAssets(in: album, options: fetchOptions)
-        collectionView.reloadData()
     }
 }

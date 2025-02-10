@@ -32,6 +32,9 @@ public class CustomPickerContainerViewController: UIViewController {
     private let keyboardFrameTrackerView = KeyboardFrameTrackerView(height: 56)
     private var inputBarBottomConstraint: NSLayoutConstraint!
     private var inputBarHeightConstraint: NSLayoutConstraint!
+    private var childNavigationControllerBottomConstraint: NSLayoutConstraint!
+    private var visibleKeyboardHeight: CGFloat = 0
+    private var selectedAssetCount: Int = 0
 
     // MARK: - Initializers
     public init() {
@@ -56,11 +59,13 @@ public class CustomPickerContainerViewController: UIViewController {
         view.addSubview(childNavigationController.view)
         childNavigationController.didMove(toParent: self)
         
+        childNavigationControllerBottomConstraint = childNavigationController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        
         NSLayoutConstraint.activate([
             childNavigationController.view.topAnchor.constraint(equalTo: view.topAnchor),
             childNavigationController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             childNavigationController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            childNavigationController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            childNavigationControllerBottomConstraint
         ])
         
         inputBar.translatesAutoresizingMaskIntoConstraints = false
@@ -79,26 +84,18 @@ public class CustomPickerContainerViewController: UIViewController {
         inputBar.sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         
         keyboardFrameTrackerView.delegate = self
-        hideInputVar()
     }
 
     // MARK: - Public Methods
     /// Updates the input bar visibility based on the number of selected assets.
     public func updateInputBarVisibility(selectedAssetCount: Int) {
-        if selectedAssetCount > 0 {
-            showInputVar()
-        } else {
-            hideInputVar()
-        }
-    }
-    
-    public func showInputVar() {
-        inputBar.isHidden = false
-    }
-    
-    public func hideInputVar() {
-        inputBar.isHidden = true
-        inputBar.textField.resignFirstResponder()
+        self.selectedAssetCount = selectedAssetCount
+        UIView.animate(withDuration: 0.3, animations: {
+            if selectedAssetCount == 0 {
+                self.inputBar.textField.resignFirstResponder()
+            }
+            self.updateFrames(selectedAssetCount: selectedAssetCount)
+        })
     }
 
     public override var canBecomeFirstResponder: Bool {
@@ -112,6 +109,33 @@ public class CustomPickerContainerViewController: UIViewController {
     // MARK: - Private Methods
     @objc private func sendButtonTapped() {
         containerDelegate?.customPickerContainerViewController(self, didTapSendWithText: inputBar.textField.text ?? "")
+    }
+    
+    private func updateFrames(selectedAssetCount: Int) {
+        let bottomSafeArea = view.safeAreaInsets.bottom
+        let bottomGap = max(bottomSafeArea - visibleKeyboardHeight, 0)
+        
+        if visibleKeyboardHeight > 0 {
+            inputBarHeightConstraint.constant = 56 + bottomGap
+            inputBarBottomConstraint.constant = min(-visibleKeyboardHeight, -bottomSafeArea) + bottomGap
+        } else {
+            inputBarHeightConstraint.constant = 56 + bottomSafeArea
+            inputBarBottomConstraint.constant = selectedAssetCount != 0 ? 0 : inputBarHeightConstraint.constant
+        }
+        
+        childNavigationControllerBottomConstraint.constant = -visibleKeyboardHeight - (selectedAssetCount == 0 ? 0 : inputBarHeightConstraint.constant)
+        
+        view.layoutIfNeeded()
+    }
+    
+    private func switchToLargeDetentIfNeeded() {
+        if #available(iOS 15.0, *) {
+            if let sheet = sheetPresentationController {
+                sheet.animateChanges {
+                    sheet.selectedDetentIdentifier = .large
+                }
+            }
+        }
     }
 }
 
@@ -150,24 +174,14 @@ extension CustomPickerContainerViewController: CustomPickerViewControllerDelegat
     }
 }
 
-// MARK: - AMKeyboardFrameTrackerDelegate
+// MARK: - KeyboardFrameTrackerDelegate
 extension CustomPickerContainerViewController: KeyboardFrameTrackerDelegate {
     public func keyboardFrameDidChange(with frame: CGRect) {
         let screenHeight = UIScreen.main.bounds.height
-        let visibleKeyboardHeight = max(0, screenHeight - frame.origin.y - keyboardFrameTrackerView.frame.size.height)
-        
+        visibleKeyboardHeight = max(0, screenHeight - frame.origin.y - keyboardFrameTrackerView.frame.size.height)
         if visibleKeyboardHeight > 0 {
-            inputBarHeightConstraint.constant = 56
-            inputBarBottomConstraint.constant = -visibleKeyboardHeight
-        } else {
-            let bottomSafeArea = view.safeAreaInsets.bottom
-            inputBarHeightConstraint.constant = 56 + bottomSafeArea
-            inputBarBottomConstraint.constant = 0
+            switchToLargeDetentIfNeeded()
         }
-        
-        // This ensures the child view resizes so you can scroll to the bottom
-        childNavigationController.additionalSafeAreaInsets.bottom = visibleKeyboardHeight
-        
-        view.layoutIfNeeded()
+        updateFrames(selectedAssetCount: selectedAssetCount)
     }
 }

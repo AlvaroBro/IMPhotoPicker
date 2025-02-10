@@ -15,6 +15,5 @@ class PhotosViewController: AssetsCollectionViewController {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         self.assets = PHAsset.fetchAssets(with: fetchOptions)
-        collectionView.reloadData()
     }
 }

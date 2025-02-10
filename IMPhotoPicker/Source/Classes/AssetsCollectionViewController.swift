@@ -53,12 +53,12 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
             let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
             switch status {
             case .authorized, .limited:
-                loadAssets()
+                loadAssetsAndReload()
             case .notDetermined:
                 PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] newStatus in
                     DispatchQueue.main.async {
                         if newStatus == .authorized || newStatus == .limited {
-                            self?.loadAssets()
+                            self?.loadAssetsAndReload()
                         } else {
                             self?.showNoPermissionAlert()
                         }
@@ -71,12 +71,12 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
             let status = PHPhotoLibrary.authorizationStatus()
             switch status {
             case .authorized:
-                loadAssets()
+                loadAssetsAndReload()
             case .notDetermined:
                 PHPhotoLibrary.requestAuthorization { [weak self] newStatus in
                     DispatchQueue.main.async {
                         if newStatus == .authorized {
-                            self?.loadAssets()
+                            self?.loadAssetsAndReload()
                         } else {
                             self?.showNoPermissionAlert()
                         }
@@ -208,6 +208,15 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
         let totalSpacing = spacing * 2
         let width = (collectionView.bounds.width - totalSpacing) / 3
         return CGSize(width: width, height: width)
+    }
+    
+    // MARK: - Private methods
+    func loadAssetsAndReload() {
+        loadAssets()
+        UIView.performWithoutAnimation {
+            collectionView.reloadData()
+            collectionView.layoutIfNeeded()
+        }
     }
     
     // MARK: - Abstract Method

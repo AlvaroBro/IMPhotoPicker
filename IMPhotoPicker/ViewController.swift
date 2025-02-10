@@ -89,12 +89,30 @@ class ViewController: UIViewController {
     @objc func presentPicker3() {
         let container = CustomPickerContainerViewController()
         container.containerDelegate = self
-        container.modalPresentationStyle = .pageSheet
-        if let sheet = container.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.preferredCornerRadius = 20
+        
+        if #available(iOS 15.0, *) {
+            container.modalPresentationStyle = .pageSheet
+            if let sheet = container.sheetPresentationController {
+                if #available(iOS 16.0, *) {
+                    sheet.detents = [
+                        .custom(identifier: .init("custom.detent")) { context in
+                            return context.maximumDetentValue * 0.65
+                        },
+                        .large()
+                    ]
+                } else if #available(iOS 15.0, *) {
+                    sheet.detents = [
+                        .medium(),
+                        .large()
+                    ]
+                }
+                sheet.preferredCornerRadius = 20
+                present(container, animated: true)
+            }
+        } else {
+            container.modalPresentationStyle = .pageSheet
+            present(container, animated: true, completion: nil)
         }
-        present(container, animated: true, completion: nil)
     }
 }
 
@@ -129,5 +147,6 @@ extension ViewController: CustomPickerContainerViewControllerDelegate {
     
     func customPickerContainerViewController(_ controller: CustomPickerContainerViewController, didTapSendWithText text: String) {
         print("Send tapped with text: \(text)")
+        controller.dismiss(animated: true, completion: nil)
     }
 }
