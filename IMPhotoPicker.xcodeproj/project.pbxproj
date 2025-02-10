@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		384F15D22D5A1A480035FF7D /* KeyboardFrameTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384F15D12D5A1A480035FF7D /* KeyboardFrameTracker.swift */; };
 		38B9E1862D582AB60079209F /* InputBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B9E1852D582AB50079209F /* InputBarView.swift */; };
 		38B9E1882D58304E0079209F /* CustomPickerContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B9E1872D58304D0079209F /* CustomPickerContainerViewController.swift */; };
 		5B5998E02D566890004F6A20 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B5998DE2D566890004F6A20 /* Localizable.strings */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		384F15D12D5A1A480035FF7D /* KeyboardFrameTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardFrameTracker.swift; sourceTree = "<group>"; };
 		38B9E1852D582AB50079209F /* InputBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputBarView.swift; sourceTree = "<group>"; };
 		38B9E1872D58304D0079209F /* CustomPickerContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPickerContainerViewController.swift; sourceTree = "<group>"; };
 		5B5998DF2D566890004F6A20 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				38B9E1872D58304D0079209F /* CustomPickerContainerViewController.swift */,
 				5B733F492D53B96E008485DD /* CustomPickerViewController.swift */,
 				38B9E1852D582AB50079209F /* InputBarView.swift */,
+				384F15D12D5A1A480035FF7D /* KeyboardFrameTracker.swift */,
 				5B733F4E2D53C8AA008485DD /* PhotoCell.swift */,
 				5B733F3F2D53AE4E008485DD /* PhotosViewController.swift */,
 			);
@@ -208,6 +211,7 @@
 				5B733F552D54FAC3008485DD /* AssetsCollectionViewController.swift in Sources */,
 				5B733F4F2D53C8AB008485DD /* PhotoCell.swift in Sources */,
 				38B9E1882D58304E0079209F /* CustomPickerContainerViewController.swift in Sources */,
+				384F15D22D5A1A480035FF7D /* KeyboardFrameTracker.swift in Sources */,
 				38B9E1862D582AB60079209F /* InputBarView.swift in Sources */,
 				5B733F482D53B8F1008485DD /* AlbumDetailViewController.swift in Sources */,
 				6FF3B59524F9090C0023EB44 /* SceneDelegate.swift in Sources */,

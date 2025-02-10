@@ -34,6 +34,7 @@ class AlbumsViewController: UIViewController, UITableViewDataSource, UITableView
     func setupTableView() {
         tableView = UITableView(frame: .zero, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.keyboardDismissMode = .interactive
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(AlbumTableViewCell.self, forCellReuseIdentifier: AlbumTableViewCell.identifier)

@@ -31,7 +31,7 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
         layout.minimumLineSpacing = 2
         
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
-        collectionView.keyboardDismissMode = .onDrag
+        collectionView.keyboardDismissMode = .interactive
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .systemBackground
         collectionView.dataSource = self

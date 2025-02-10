@@ -53,7 +53,7 @@ public class InputBarView: UIView {
     private let badgeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .systemRed
+        label.backgroundColor = .systemBlue
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 10, weight: .bold)
         label.textAlignment = .center
@@ -93,8 +93,8 @@ public class InputBarView: UIView {
             sendButton.heightAnchor.constraint(equalToConstant: 36),
             sendButton.widthAnchor.constraint(equalTo: sendButton.heightAnchor),
             
-            badgeLabel.topAnchor.constraint(equalTo: sendButton.topAnchor, constant: -4),
-            badgeLabel.trailingAnchor.constraint(equalTo: sendButton.trailingAnchor, constant: 4),
+            badgeLabel.topAnchor.constraint(equalTo: sendButton.topAnchor, constant: -6),
+            badgeLabel.trailingAnchor.constraint(equalTo: sendButton.trailingAnchor, constant: 6),
             badgeLabel.widthAnchor.constraint(equalToConstant: 20),
             badgeLabel.heightAnchor.constraint(equalToConstant: 20)
         ])

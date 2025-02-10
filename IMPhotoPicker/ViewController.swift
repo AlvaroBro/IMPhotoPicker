@@ -129,6 +129,5 @@ extension ViewController: CustomPickerContainerViewControllerDelegate {
     
     func customPickerContainerViewController(_ controller: CustomPickerContainerViewController, didTapSendWithText text: String) {
         print("Send tapped with text: \(text)")
-        controller.inputBar.badgeCount = 1
     }
 }

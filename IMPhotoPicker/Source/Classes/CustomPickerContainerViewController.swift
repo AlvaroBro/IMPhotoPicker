@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Photos
 
 // MARK: - CustomPickerContainerViewControllerDelegate
 public protocol CustomPickerContainerViewControllerDelegate: CustomPickerViewControllerDelegate {
@@ -18,11 +19,7 @@ public class CustomPickerContainerViewController: UIViewController {
 
     // MARK: - Public Properties
     /// Delegate for container events.
-    public weak var containerDelegate: CustomPickerContainerViewControllerDelegate? {
-        didSet {
-            pickerViewController.delegate = containerDelegate
-        }
-    }
+    public weak var containerDelegate: CustomPickerContainerViewControllerDelegate?
     
     /// The internally instantiated picker.
     public let pickerViewController: CustomPickerViewController
@@ -32,20 +29,18 @@ public class CustomPickerContainerViewController: UIViewController {
 
     // MARK: - Private Properties
     private let childNavigationController: UINavigationController
-    private var inputBarHeightConstraint: NSLayoutConstraint!
+    private let keyboardFrameTrackerView = KeyboardFrameTrackerView(height: 56)
     private var inputBarBottomConstraint: NSLayoutConstraint!
-    private var childNavToInputBarConstraint: NSLayoutConstraint!
-    private var childNavToBottomConstraint: NSLayoutConstraint!
-    private var keyboardVisible = false
+    private var inputBarHeightConstraint: NSLayoutConstraint!
 
     // MARK: - Initializers
     public init() {
         pickerViewController = CustomPickerViewController()
         pickerViewController.rightButtonStyle = .hdModeToggle
-        pickerViewController.delegate = containerDelegate
         childNavigationController = UINavigationController(rootViewController: pickerViewController)
         inputBar = InputBarView()
         super.init(nibName: nil, bundle: nil)
+        pickerViewController.delegate = self
     }
 
     required public init?(coder: NSCoder) {
@@ -61,118 +56,118 @@ public class CustomPickerContainerViewController: UIViewController {
         view.addSubview(childNavigationController.view)
         childNavigationController.didMove(toParent: self)
         
-        inputBar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(inputBar)
-        
-        childNavToInputBarConstraint = childNavigationController.view.bottomAnchor.constraint(equalTo: inputBar.topAnchor)
-        childNavToBottomConstraint = childNavigationController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        // Initially, inputBar is hidden so the child view should extend to the bottom.
-        childNavToBottomConstraint.isActive = true
-        
         NSLayoutConstraint.activate([
             childNavigationController.view.topAnchor.constraint(equalTo: view.topAnchor),
             childNavigationController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             childNavigationController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            inputBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            inputBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            childNavigationController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+        inputBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(inputBar)
+        
         inputBarBottomConstraint = inputBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        inputBarBottomConstraint.isActive = true
+        inputBarHeightConstraint = inputBar.heightAnchor.constraint(equalToConstant: 56)
         
-        inputBarHeightConstraint = inputBar.heightAnchor.constraint(equalToConstant: 56 + view.safeAreaInsets.bottom)
-        inputBarHeightConstraint.isActive = true
+        NSLayoutConstraint.activate([
+            inputBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            inputBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            inputBarBottomConstraint,
+            inputBarHeightConstraint
+        ])
         
-        inputBar.backgroundColor = .secondarySystemBackground
-        inputBar.isHidden = true
-        view.bringSubviewToFront(inputBar)
-        inputBar.transform = CGAffineTransform(translationX: 0, y: inputBarHeightConstraint.constant)
         inputBar.sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillShow(_:)),
-                                               name: UIResponder.keyboardWillShowNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillHide(_:)),
-                                               name: UIResponder.keyboardWillHideNotification,
-                                               object: nil)
+        keyboardFrameTrackerView.delegate = self
+        hideInputVar()
     }
-    
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let desiredHeight: CGFloat = keyboardVisible ? 56 : (56 + view.safeAreaInsets.bottom)
-        inputBarHeightConstraint.constant = desiredHeight
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
+
     // MARK: - Public Methods
-    /// Shows the input bar.
-    public func showInputBar() {
-        guard inputBar.isHidden else { return }
-        inputBar.isHidden = false
-        childNavToBottomConstraint.isActive = false
-        childNavToInputBarConstraint.isActive = true
-        inputBar.transform = CGAffineTransform(translationX: 0, y: inputBarHeightConstraint.constant)
-        UIView.animate(withDuration: 0.3) {
-            self.inputBar.transform = .identity
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    /// Hides the input bar.
-    public func hideInputBar() {
-        guard !inputBar.isHidden else { return }
-        childNavToInputBarConstraint.isActive = false
-        childNavToBottomConstraint.isActive = true
-        UIView.animate(withDuration: 0.3, animations: {
-            self.inputBar.transform = CGAffineTransform(translationX: 0, y: self.inputBarHeightConstraint.constant)
-            self.view.layoutIfNeeded()
-        }) { _ in
-            self.inputBar.isHidden = true
-        }
-    }
-    
     /// Updates the input bar visibility based on the number of selected assets.
     public func updateInputBarVisibility(selectedAssetCount: Int) {
         if selectedAssetCount > 0 {
-            showInputBar()
+            showInputVar()
         } else {
-            hideInputBar()
-            inputBar.textField.resignFirstResponder()
+            hideInputVar()
         }
     }
     
+    public func showInputVar() {
+        inputBar.isHidden = false
+    }
+    
+    public func hideInputVar() {
+        inputBar.isHidden = true
+        inputBar.textField.resignFirstResponder()
+    }
+
+    public override var canBecomeFirstResponder: Bool {
+        true
+    }
+    
+    public override var inputAccessoryView: UIView? {
+        keyboardFrameTrackerView
+    }
+
     // MARK: - Private Methods
     @objc private func sendButtonTapped() {
         containerDelegate?.customPickerContainerViewController(self, didTapSendWithText: inputBar.textField.text ?? "")
     }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
-              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-        let keyboardFrame = keyboardFrameValue.cgRectValue
-        keyboardVisible = true
-        inputBarHeightConstraint.constant = 56
-        inputBarBottomConstraint.constant = -keyboardFrame.height
-        UIView.animate(withDuration: animationDuration) {
-            self.view.layoutIfNeeded()
-        }
+}
+
+// MARK: - CustomPickerViewControllerDelegate
+extension CustomPickerContainerViewController: CustomPickerViewControllerDelegate {
+
+    public func customPickerViewController(
+        _ controller: CustomPickerViewController,
+        didUpdateSelection selection: [PHAsset],
+        hdModeEnabled: Bool
+    ) {
+        self.inputBar.badgeCount = selection.count
+        containerDelegate?.customPickerViewController(controller,
+            didUpdateSelection: selection,
+            hdModeEnabled: hdModeEnabled
+        )
     }
-    
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-        keyboardVisible = false
-        inputBarHeightConstraint.constant = 56 + self.view.safeAreaInsets.bottom
-        inputBarBottomConstraint.constant = 0
-        UIView.animate(withDuration: animationDuration) {
-            self.view.layoutIfNeeded()
+
+    public func customPickerViewController(
+        _ controller: CustomPickerViewController,
+        didFinishPicking selection: [PHAsset],
+        hdModeEnabled: Bool
+    ) {
+        containerDelegate?.customPickerViewController(controller,
+            didFinishPicking: selection,
+            hdModeEnabled: hdModeEnabled
+        )
+    }
+
+    public func customPickerViewControllerDidCancel(_ controller: CustomPickerViewController) {
+        containerDelegate?.customPickerViewControllerDidCancel(controller)
+    }
+
+    public func customPickerViewControllerDidTapRightButton(_ controller: CustomPickerViewController) {
+        containerDelegate?.customPickerViewControllerDidTapRightButton(controller)
+    }
+}
+
+// MARK: - AMKeyboardFrameTrackerDelegate
+extension CustomPickerContainerViewController: KeyboardFrameTrackerDelegate {
+    public func keyboardFrameDidChange(with frame: CGRect) {
+        let screenHeight = UIScreen.main.bounds.height
+        let visibleKeyboardHeight = max(0, screenHeight - frame.origin.y - keyboardFrameTrackerView.frame.size.height)
+        
+        if visibleKeyboardHeight > 0 {
+            inputBarHeightConstraint.constant = 56
+            inputBarBottomConstraint.constant = -visibleKeyboardHeight
+        } else {
+            let bottomSafeArea = view.safeAreaInsets.bottom
+            inputBarHeightConstraint.constant = 56 + bottomSafeArea
+            inputBarBottomConstraint.constant = 0
         }
+        
+        // This ensures the child view resizes so you can scroll to the bottom
+        childNavigationController.additionalSafeAreaInsets.bottom = visibleKeyboardHeight
+        
+        view.layoutIfNeeded()
     }
 }
