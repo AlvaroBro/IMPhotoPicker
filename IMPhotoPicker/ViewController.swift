@@ -87,8 +87,7 @@ class ViewController: UIViewController {
     }
 
     @objc func presentPicker3() {
-        let container = CustomPickerContainerViewController(rightButtonStyle: .hdModeToggle)
-        container.pickerDelegate = self
+        let container = CustomPickerContainerViewController()
         container.containerDelegate = self
         container.modalPresentationStyle = .pageSheet
         if let sheet = container.sheetPresentationController {
@@ -109,7 +108,7 @@ extension ViewController: PHPickerViewControllerDelegate {
 
 // MARK: - CustomPickerViewControllerDelegate
 
-extension ViewController: CustomPickerViewControllerDelegate {
+extension ViewController: CustomPickerContainerViewControllerDelegate {
     func customPickerViewController(_ controller: CustomPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool) {
         print("Updated selection: \(selection.count) items, HD mode: \(hdModeEnabled ? "Enabled" : "Disabled")")
     }
@@ -127,9 +126,7 @@ extension ViewController: CustomPickerViewControllerDelegate {
     func customPickerViewControllerDidTapRightButton(_ controller: CustomPickerViewController) {
         print("Right button tapped")
     }
-}
-
-extension ViewController: CustomPickerContainerViewControllerDelegate {
+    
     func customPickerContainerViewController(_ controller: CustomPickerContainerViewController, didTapSendWithText text: String) {
         print("Send tapped with text: \(text)")
         controller.inputBar.badgeCount = 1

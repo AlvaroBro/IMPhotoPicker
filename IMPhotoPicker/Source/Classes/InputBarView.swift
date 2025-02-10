@@ -15,7 +15,7 @@ public class InputBarView: UIView {
     public let textField: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "Type a message..."
+        tf.placeholder = NSLocalizedString("input_placeholder", comment: "")
         tf.backgroundColor = .white
         tf.borderStyle = .none
         tf.layer.borderColor = UIColor.gray.cgColor
