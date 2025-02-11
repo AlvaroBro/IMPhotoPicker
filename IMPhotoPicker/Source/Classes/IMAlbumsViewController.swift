@@ -19,8 +19,9 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     var tableView: UITableView!
     var albums: [PHAssetCollection] = []
-    weak var delegate: IMAlbumsViewControllerDelegate?
     let imageManager = PHCachingImageManager()
+    weak var delegate: IMAlbumsViewControllerDelegate?
+    weak var pickerController: IMPickerViewController?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -58,8 +59,8 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
                 if authorized {
                     self?.loadAlbums()
                 } else {
-                    if let pickerVC = self?.findPickerViewController() {
-                        pickerVC.delegate?.pickerViewController(pickerVC, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
+                    if let picker = self?.pickerController {
+                        picker.delegate?.pickerViewController(picker, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
                     }
                 }
             }

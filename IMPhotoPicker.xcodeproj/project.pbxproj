@@ -14,7 +14,6 @@
 		5B5998E62D5B654A004F6A20 /* IMAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E52D5B654A004F6A20 /* IMAlbumCell.swift */; };
 		5B5998E82D5B6736004F6A20 /* IMPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */; };
 		5B5998EA2D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */; };
-		5B5998EC2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998EB2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift */; };
 		5B5998EE2D5B95F5004F6A20 /* IMPickerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998ED2D5B95F5004F6A20 /* IMPickerConfiguration.swift */; };
 		5B733F422D53AFBA008485DD /* IMAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F412D53AFBA008485DD /* IMAlbumsViewController.swift */; };
 		5B733F482D53B8F1008485DD /* IMAlbumAssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F472D53B8F1008485DD /* IMAlbumAssetsViewController.swift */; };
@@ -39,7 +38,6 @@
 		5B5998E52D5B654A004F6A20 /* IMAlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAlbumCell.swift; sourceTree = "<group>"; };
 		5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMPhotosViewController.swift; sourceTree = "<group>"; };
 		5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPhotoLibraryPermissionManager.swift; sourceTree = "<group>"; };
-		5B5998EB2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+IMExtensions.swift"; sourceTree = "<group>"; };
 		5B5998ED2D5B95F5004F6A20 /* IMPickerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPickerConfiguration.swift; sourceTree = "<group>"; };
 		5B733F412D53AFBA008485DD /* IMAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMAlbumsViewController.swift; sourceTree = "<group>"; };
 		5B733F472D53B8F1008485DD /* IMAlbumAssetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMAlbumAssetsViewController.swift; sourceTree = "<group>"; };
@@ -91,7 +89,6 @@
 				5B5998ED2D5B95F5004F6A20 /* IMPickerConfiguration.swift */,
 				5B733F492D53B96E008485DD /* IMPickerViewController.swift */,
 				38B9E1872D58304D0079209F /* IMPickerWrapperViewController.swift */,
-				5B5998EB2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -217,7 +214,6 @@
 				5B733F552D54FAC3008485DD /* IMAssetsCollectionViewController.swift in Sources */,
 				5B733F4F2D53C8AB008485DD /* IMPhotoCell.swift in Sources */,
 				38B9E1882D58304E0079209F /* IMPickerWrapperViewController.swift in Sources */,
-				5B5998EC2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift in Sources */,
 				384F15D22D5A1A480035FF7D /* IMKeyboardFrameTrackerView.swift in Sources */,
 				38B9E1862D582AB60079209F /* IMInputBarView.swift in Sources */,
 				5B5998E82D5B6736004F6A20 /* IMPhotosViewController.swift in Sources */,

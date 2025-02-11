@@ -29,8 +29,9 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     var collectionView: UICollectionView!
     var assets: PHFetchResult<PHAsset>?
     let imageManager = PHCachingImageManager()
+    var badgeColor: UIColor?
     weak var selectionDelegate: IMAssetSelectionDelegate?
-    public var badgeColor: UIColor?
+    weak var pickerController: IMPickerViewController?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -70,8 +71,8 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
                 if authorized {
                     self?.loadAssetsAndReload()
                 } else {
-                    if let pickerVC = self?.findPickerViewController() {
-                        pickerVC.delegate?.pickerViewController(pickerVC, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
+                    if let picker = self?.pickerController {
+                        picker.delegate?.pickerViewController(picker, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
                     }
                 }
             }

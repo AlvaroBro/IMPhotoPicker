@@ -80,8 +80,10 @@ public class IMPickerViewController: UIViewController {
         segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
         photosVC.badgeColor = configuration.selectionOverlayBadgeColor
         photosVC.selectionDelegate = self
+        photosVC.pickerController = self
         add(childViewController: photosVC)
         albumsVC.delegate = self
+        albumsVC.pickerController = self
     }
     
     // MARK: - Navigation Bar Setup
@@ -151,7 +153,6 @@ public class IMPickerViewController: UIViewController {
     @objc func toggleHDMode() {
         hdModeEnabled.toggle()
         navigationItem.rightBarButtonItem?.image = hdModeImage()
-        print("HD Mode: \(hdModeEnabled ? "Enabled" : "Disabled")")
         delegate?.pickerViewControllerDidTapRightButton(self)
         delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
     }
@@ -262,6 +263,7 @@ extension IMPickerViewController: IMAlbumsViewControllerDelegate {
     func albumsViewController(_ controller: IMAlbumsViewController, didSelectAlbum album: PHAssetCollection) {
         let albumDetailVC = IMAlbumAssetsViewController(album: album)
         albumDetailVC.selectionDelegate = self
+        albumDetailVC.pickerController = self
         albumDetailVC.badgeColor = configuration.selectionOverlayBadgeColor
         albumDetailVC.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", comment: "")
         albumDetailVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
