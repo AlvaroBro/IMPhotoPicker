@@ -1,5 +1,5 @@
 //
-//  CustomPickerViewController.swift
+//  IMPickerViewController.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 5/2/25.
@@ -8,28 +8,28 @@
 import UIKit
 import Photos
 
-// MARK: - CustomPickerViewControllerDelegate
-/// Delegate protocol for CustomPickerViewController events.
-public protocol CustomPickerViewControllerDelegate: AnyObject {
+// MARK: - IMPickerViewControllerDelegate
+/// Delegate protocol for IMPickerViewController events.
+public protocol IMPickerViewControllerDelegate: AnyObject {
     /// Called whenever the selection is updated.
-    func customPickerViewController(_ controller: CustomPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool)
+    func pickerViewController(_ controller: IMPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool)
     
     /// Called when the user accepts the selection.
-    func customPickerViewController(_ controller: CustomPickerViewController, didFinishPicking selection: [PHAsset], hdModeEnabled: Bool)
+    func pickerViewController(_ controller: IMPickerViewController, didFinishPicking selection: [PHAsset], hdModeEnabled: Bool)
     
     /// Called when the user cancels the picker.
-    func customPickerViewControllerDidCancel(_ controller: CustomPickerViewController)
+    func pickerViewControllerDidCancel(_ controller: IMPickerViewController)
     
     /// (Optional) Called when the right bar button is tapped.
     /// This allows the picker presenter to decide how to react.
-    func customPickerViewControllerDidTapRightButton(_ controller: CustomPickerViewController)
+    func pickerViewControllerDidTapRightButton(_ controller: IMPickerViewController)
 }
 
-extension CustomPickerViewControllerDelegate {
-    func customPickerViewControllerDidTapRightButton(_ controller: CustomPickerViewController) { }
+extension IMPickerViewControllerDelegate {
+    func pickerViewControllerDidTapRightButton(_ controller: IMPickerViewController) { }
 }
 
-public class CustomPickerViewController: UIViewController {
+public class IMPickerViewController: UIViewController {
 
     // MARK: - Types
     public enum CustomPickerRightButtonStyle: Equatable {
@@ -50,15 +50,15 @@ public class CustomPickerViewController: UIViewController {
     
     let containerView = UIView()
     
-    let photosVC = PhotosViewController()
-    let albumsVC = AlbumsViewController()
+    let photosVC = IMPhotosViewController()
+    let albumsVC = IMAlbumsViewController()
     
     var rightButtonStyle: CustomPickerRightButtonStyle = .accept
     var hdModeEnabled: Bool = false
     private var selectedAssets: [PHAsset] = []
     let maxSelectionCount: Int = 5
     
-    weak var delegate: CustomPickerViewControllerDelegate?
+    weak var delegate: IMPickerViewControllerDelegate?
     
     // MARK: - Lifecycle
     public override func viewDidLoad() {
@@ -119,13 +119,13 @@ public class CustomPickerViewController: UIViewController {
     
     // MARK: - Navigation Bar Actions
     @objc func cancelTapped() {
-        delegate?.customPickerViewControllerDidCancel(self)
+        delegate?.pickerViewControllerDidCancel(self)
         dismiss(animated: true, completion: nil)
     }
     
     @objc func acceptTapped() {
-        delegate?.customPickerViewControllerDidTapRightButton(self)
-        delegate?.customPickerViewController(self, didFinishPicking: selectedAssets, hdModeEnabled: hdModeEnabled)
+        delegate?.pickerViewControllerDidTapRightButton(self)
+        delegate?.pickerViewController(self, didFinishPicking: selectedAssets, hdModeEnabled: hdModeEnabled)
         dismiss(animated: true, completion: nil)
     }
     
@@ -133,12 +133,12 @@ public class CustomPickerViewController: UIViewController {
         hdModeEnabled.toggle()
         navigationItem.rightBarButtonItem?.image = hdModeImage()
         print("HD Mode: \(hdModeEnabled ? "Enabled" : "Disabled")")
-        delegate?.customPickerViewControllerDidTapRightButton(self)
-        delegate?.customPickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
+        delegate?.pickerViewControllerDidTapRightButton(self)
+        delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
     }
     
     private func hdModeImage() -> UIImage? {
-        let imageName = hdModeEnabled ? "deselect-hd" : "select-hd"
+        let imageName = hdModeEnabled ? "im-hd-selected" : "im-hd"
         return UIImage(named: imageName)?.withRenderingMode(.alwaysOriginal) ?? nil
     }
     
@@ -208,7 +208,7 @@ public class CustomPickerViewController: UIViewController {
         if rightButtonStyle == .accept {
             navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
         }
-        delegate?.customPickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
+        delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
         updateInputBarVisibility()
         return true
     }
@@ -219,7 +219,7 @@ public class CustomPickerViewController: UIViewController {
             if rightButtonStyle == .accept {
                 navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
             }
-            delegate?.customPickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
+            delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
             updateInputBarVisibility()
         }
     }
@@ -232,16 +232,16 @@ public class CustomPickerViewController: UIViewController {
     }
     
     private func updateInputBarVisibility() {
-        if let container = self.navigationController?.parent as? CustomPickerContainerViewController {
+        if let container = self.navigationController?.parent as? IMPickerWrapperViewController {
             container.updateInputBarVisibility(selectedAssetCount: selectedAssets.count)
         }
     }
 }
 
-// MARK: - AlbumsViewControllerDelegate Implementation
-extension CustomPickerViewController: AlbumsViewControllerDelegate {
-    func albumsViewController(_ controller: AlbumsViewController, didSelectAlbum album: PHAssetCollection) {
-        let albumDetailVC = AlbumDetailViewController(album: album)
+// MARK: - IMAlbumsViewControllerDelegate Implementation
+extension IMPickerViewController: IMAlbumsViewControllerDelegate {
+    func albumsViewController(_ controller: IMAlbumsViewController, didSelectAlbum album: PHAssetCollection) {
+        let albumDetailVC = IMAlbumAssetsViewController(album: album)
         albumDetailVC.selectionDelegate = self
         albumDetailVC.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", comment: "")
         albumDetailVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -260,8 +260,8 @@ extension CustomPickerViewController: AlbumsViewControllerDelegate {
     }
 }
 
-// MARK: - AssetSelectionDelegate Implementation
-extension CustomPickerViewController: AssetSelectionDelegate {
+// MARK: - IMAssetSelectionDelegate Implementation
+extension IMPickerViewController: IMAssetSelectionDelegate {
     func selectAsset(_ asset: PHAsset) -> Bool {
         return select(asset: asset)
     }

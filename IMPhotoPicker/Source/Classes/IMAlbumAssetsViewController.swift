@@ -1,5 +1,5 @@
 //
-//  AlbumDetailViewController.swift
+//  IMAlbumAssetsViewController.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 5/2/25.
@@ -8,8 +8,8 @@
 import UIKit
 import Photos
 
-// MARK: - AlbumDetailViewController
-class AlbumDetailViewController: AssetsCollectionViewController {
+// MARK: - IMAlbumAssetsViewController
+class IMAlbumAssetsViewController: IMAssetsCollectionViewController {
     
     private var album: PHAssetCollection
     

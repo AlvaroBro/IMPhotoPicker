@@ -1,5 +1,5 @@
 //
-//  AlbumsViewController.swift
+//  IMAlbumsViewController.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 5/2/25.
@@ -8,18 +8,18 @@
 import UIKit
 import Photos
 
-// MARK: - AlbumsViewControllerDelegate
+// MARK: - IMAlbumsViewControllerDelegate
 /// Delegate protocol to notify album selection events.
-protocol AlbumsViewControllerDelegate: AnyObject {
-    /// Called when an album is selected in AlbumsViewController.
-    func albumsViewController(_ controller: AlbumsViewController, didSelectAlbum album: PHAssetCollection)
+protocol IMAlbumsViewControllerDelegate: AnyObject {
+    /// Called when an album is selected in IMAlbumsViewController.
+    func albumsViewController(_ controller: IMAlbumsViewController, didSelectAlbum album: PHAssetCollection)
 }
 
-class AlbumsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var tableView: UITableView!
     var albums: [PHAssetCollection] = []
-    weak var delegate: AlbumsViewControllerDelegate?
+    weak var delegate: IMAlbumsViewControllerDelegate?
     let imageManager = PHCachingImageManager()
     
     // MARK: - Lifecycle
@@ -37,7 +37,7 @@ class AlbumsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.keyboardDismissMode = .interactive
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(AlbumTableViewCell.self, forCellReuseIdentifier: AlbumTableViewCell.identifier)
+        tableView.register(IMAlbumCell.self, forCellReuseIdentifier: IMAlbumCell.identifier)
         tableView.layer.cornerRadius = 12
         tableView.clipsToBounds = true
         view.addSubview(tableView)
@@ -135,7 +135,7 @@ class AlbumsViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: AlbumTableViewCell.identifier, for: indexPath) as! AlbumTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: IMAlbumCell.identifier, for: indexPath) as! IMAlbumCell
         let album = albums[indexPath.row]
         cell.titleLabel.text = album.localizedTitle
         let assetsFetchResult = PHAsset.fetchAssets(in: album, options: nil)

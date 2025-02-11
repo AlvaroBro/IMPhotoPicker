@@ -1,5 +1,5 @@
 //
-//  AssetsCollectionViewController.swift
+//  IMAssetsCollectionViewController.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 6/2/25.
@@ -9,12 +9,30 @@ import UIKit
 import Photos
 import AVKit
 
-class AssetsCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+// MARK: - IMAssetSelectionDelegate
+/// Delegate protocol to manage asset selection.
+protocol IMAssetSelectionDelegate: AnyObject {
+    /// Called when an asset is to be selected. Returns true if the selection succeeded.
+    func selectAsset(_ asset: PHAsset) -> Bool
+    
+    /// Called when an asset should be deselected.
+    func deselectAsset(_ asset: PHAsset)
+    
+    /// Returns the selection order (1-based) for the asset, or nil if not selected.
+    func selectionOrder(for asset: PHAsset) -> Int?
+    
+    /// The maximum number of assets that can be selected.
+    var maxSelectionCount: Int { get }
+}
+
+
+// MARK: - IMAssetsCollectionViewController
+class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var collectionView: UICollectionView!
     var assets: PHFetchResult<PHAsset>?
     let imageManager = PHCachingImageManager()
-    weak var selectionDelegate: AssetSelectionDelegate?
+    weak var selectionDelegate: IMAssetSelectionDelegate?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -36,7 +54,7 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
         collectionView.backgroundColor = .systemBackground
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseIdentifier)
+        collectionView.register(IMPhotoCell.self, forCellWithReuseIdentifier: IMPhotoCell.reuseIdentifier)
         
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
@@ -105,8 +123,8 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseIdentifier, for: indexPath) as? PhotoCell else {
-            fatalError("Failed to dequeue PhotoCell")
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IMPhotoCell.reuseIdentifier, for: indexPath) as? IMPhotoCell else {
+            fatalError("Failed to dequeue cell")
         }
         
         if let asset = assets?[indexPath.item] {
@@ -132,7 +150,7 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         for indexPath in collectionView.indexPathsForVisibleItems {
-            if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell,
+            if let cell = collectionView.cellForItem(at: indexPath) as? IMPhotoCell,
                let asset = assets?[indexPath.item],
                let delegate = selectionDelegate {
                 let order = delegate.selectionOrder(for: asset)
@@ -154,7 +172,7 @@ class AssetsCollectionViewController: UIViewController, UICollectionViewDataSour
         }
         
         for ip in collectionView.indexPathsForVisibleItems {
-            if let cell = collectionView.cellForItem(at: ip) as? PhotoCell,
+            if let cell = collectionView.cellForItem(at: ip) as? IMPhotoCell,
                let assetForCell = assets?[ip.item] {
                 let order = delegate.selectionOrder(for: assetForCell)
                 cell.setSelectionOrder(order)

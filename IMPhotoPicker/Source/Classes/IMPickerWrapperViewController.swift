@@ -1,5 +1,5 @@
 //
-//  CustomPickerContainerViewController.swift
+//  IMPickerWrapperViewController.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 9/2/25.
@@ -8,28 +8,28 @@
 import UIKit
 import Photos
 
-// MARK: - CustomPickerContainerViewControllerDelegate
-public protocol CustomPickerContainerViewControllerDelegate: CustomPickerViewControllerDelegate {
+// MARK: - IMPickerWrapperViewControllerDelegate
+public protocol IMPickerWrapperViewControllerDelegate: IMPickerViewControllerDelegate {
     /// Called when the send button is tapped.
-    func customPickerContainerViewController(_ controller: CustomPickerContainerViewController, didTapSendWithText text: String)
+    func pickerWrapperViewController(_ controller: IMPickerWrapperViewController, didTapSendWithText text: String)
 }
 
-// MARK: - CustomPickerContainerViewController
-public class CustomPickerContainerViewController: UIViewController {
+// MARK: - IMPickerWrapperViewController
+public class IMPickerWrapperViewController: UIViewController {
 
     // MARK: - Public Properties
     /// Delegate for container events.
-    public weak var containerDelegate: CustomPickerContainerViewControllerDelegate?
+    public weak var containerDelegate: IMPickerWrapperViewControllerDelegate?
     
     /// The internally instantiated picker.
-    public let pickerViewController: CustomPickerViewController
+    public let pickerViewController: IMPickerViewController
     
     /// The input bar view.
-    public let inputBar: InputBarView
+    public let inputBar: IMInputBarView
 
     // MARK: - Private Properties
     private let childNavigationController: UINavigationController
-    private let keyboardFrameTrackerView = KeyboardFrameTrackerView(height: 56)
+    private let keyboardFrameTrackerView = IMKeyboardFrameTrackerView(height: 56)
     private var inputBarBottomConstraint: NSLayoutConstraint!
     private var inputBarHeightConstraint: NSLayoutConstraint!
     private var childNavigationControllerBottomConstraint: NSLayoutConstraint!
@@ -38,10 +38,10 @@ public class CustomPickerContainerViewController: UIViewController {
 
     // MARK: - Initializers
     public init() {
-        pickerViewController = CustomPickerViewController()
+        pickerViewController = IMPickerViewController()
         pickerViewController.rightButtonStyle = .hdModeToggle
         childNavigationController = UINavigationController(rootViewController: pickerViewController)
-        inputBar = InputBarView()
+        inputBar = IMInputBarView()
         super.init(nibName: nil, bundle: nil)
         pickerViewController.delegate = self
     }
@@ -108,7 +108,7 @@ public class CustomPickerContainerViewController: UIViewController {
 
     // MARK: - Private Methods
     @objc private func sendButtonTapped() {
-        containerDelegate?.customPickerContainerViewController(self, didTapSendWithText: inputBar.textField.text ?? "")
+        containerDelegate?.pickerWrapperViewController(self, didTapSendWithText: inputBar.textField.text ?? "")
     }
     
     private func updateFrames(selectedAssetCount: Int) {
@@ -139,43 +139,43 @@ public class CustomPickerContainerViewController: UIViewController {
     }
 }
 
-// MARK: - CustomPickerViewControllerDelegate
-extension CustomPickerContainerViewController: CustomPickerViewControllerDelegate {
+// MARK: - IMPickerViewControllerDelegate
+extension IMPickerWrapperViewController: IMPickerViewControllerDelegate {
 
-    public func customPickerViewController(
-        _ controller: CustomPickerViewController,
+    public func pickerViewController(
+        _ controller: IMPickerViewController,
         didUpdateSelection selection: [PHAsset],
         hdModeEnabled: Bool
     ) {
         self.inputBar.badgeCount = selection.count
-        containerDelegate?.customPickerViewController(controller,
+        containerDelegate?.pickerViewController(controller,
             didUpdateSelection: selection,
             hdModeEnabled: hdModeEnabled
         )
     }
 
-    public func customPickerViewController(
-        _ controller: CustomPickerViewController,
+    public func pickerViewController(
+        _ controller: IMPickerViewController,
         didFinishPicking selection: [PHAsset],
         hdModeEnabled: Bool
     ) {
-        containerDelegate?.customPickerViewController(controller,
+        containerDelegate?.pickerViewController(controller,
             didFinishPicking: selection,
             hdModeEnabled: hdModeEnabled
         )
     }
 
-    public func customPickerViewControllerDidCancel(_ controller: CustomPickerViewController) {
-        containerDelegate?.customPickerViewControllerDidCancel(controller)
+    public func pickerViewControllerDidCancel(_ controller: IMPickerViewController) {
+        containerDelegate?.pickerViewControllerDidCancel(controller)
     }
 
-    public func customPickerViewControllerDidTapRightButton(_ controller: CustomPickerViewController) {
-        containerDelegate?.customPickerViewControllerDidTapRightButton(controller)
+    public func pickerViewControllerDidTapRightButton(_ controller: IMPickerViewController) {
+        containerDelegate?.pickerViewControllerDidTapRightButton(controller)
     }
 }
 
 // MARK: - KeyboardFrameTrackerDelegate
-extension CustomPickerContainerViewController: KeyboardFrameTrackerDelegate {
+extension IMPickerWrapperViewController: IMKeyboardFrameTrackerViewDelegate {
     public func keyboardFrameDidChange(with frame: CGRect) {
         let screenHeight = UIScreen.main.bounds.height
         visibleKeyboardHeight = max(0, screenHeight - frame.origin.y - keyboardFrameTrackerView.frame.size.height)

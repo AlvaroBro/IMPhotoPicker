@@ -78,7 +78,7 @@ class ViewController: UIViewController {
     }
     
     @objc func presentPicker2() {
-        let picker = CustomPickerViewController()
+        let picker = IMPickerViewController()
         picker.rightButtonStyle = .accept
         picker.delegate = self
         let navController = UINavigationController(rootViewController: picker)
@@ -87,7 +87,7 @@ class ViewController: UIViewController {
     }
 
     @objc func presentPicker3() {
-        let container = CustomPickerContainerViewController()
+        let container = IMPickerWrapperViewController()
         container.containerDelegate = self
         
         if #available(iOS 15.0, *) {
@@ -124,28 +124,28 @@ extension ViewController: PHPickerViewControllerDelegate {
     }
 }
 
-// MARK: - CustomPickerViewControllerDelegate
+// MARK: - IMPickerViewControllerDelegate
 
-extension ViewController: CustomPickerContainerViewControllerDelegate {
-    func customPickerViewController(_ controller: CustomPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool) {
+extension ViewController: IMPickerWrapperViewControllerDelegate {
+    func pickerViewController(_ controller: IMPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool) {
         print("Updated selection: \(selection.count) items, HD mode: \(hdModeEnabled ? "Enabled" : "Disabled")")
     }
     
-    func customPickerViewController(_ controller: CustomPickerViewController, didFinishPicking selection: [PHAsset], hdModeEnabled: Bool) {
+    func pickerViewController(_ controller: IMPickerViewController, didFinishPicking selection: [PHAsset], hdModeEnabled: Bool) {
         print("Finished picking: \(selection.count) items, HD mode: \(hdModeEnabled ? "Enabled" : "Disabled")")
         controller.dismiss(animated: true, completion: nil)
     }
     
-    func customPickerViewControllerDidCancel(_ controller: CustomPickerViewController) {
+    func pickerViewControllerDidCancel(_ controller: IMPickerViewController) {
         print("Picker canceled")
         controller.dismiss(animated: true, completion: nil)
     }
     
-    func customPickerViewControllerDidTapRightButton(_ controller: CustomPickerViewController) {
+    func pickerViewControllerDidTapRightButton(_ controller: IMPickerViewController) {
         print("Right button tapped")
     }
     
-    func customPickerContainerViewController(_ controller: CustomPickerContainerViewController, didTapSendWithText text: String) {
+    func pickerWrapperViewController(_ controller: IMPickerWrapperViewController, didTapSendWithText text: String) {
         print("Send tapped with text: \(text)")
         controller.dismiss(animated: true, completion: nil)
     }

@@ -1,5 +1,5 @@
 //
-//  AMKeyboardFrameTracker.swift
+//  IMKeyboardFrameTrackerView.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 9/2/25.
@@ -7,14 +7,14 @@
 
 import UIKit
 
-@objc public protocol KeyboardFrameTrackerDelegate: AnyObject {
+@objc public protocol IMKeyboardFrameTrackerViewDelegate: AnyObject {
     func keyboardFrameDidChange(with frame: CGRect)
 }
 
-@objc public class KeyboardFrameTrackerView: UIView {
+@objc public class IMKeyboardFrameTrackerView: UIView {
     /// Set your self as the delegate
     /// if you want to observe keyboard frame changes in a delegate style
-    @objc public weak var delegate: KeyboardFrameTrackerDelegate?
+    @objc public weak var delegate: IMKeyboardFrameTrackerViewDelegate?
     
     /// This closure will be called everytime a keyboard frame change
     public var onKeyboardFrameDidChange: ((_ frame: CGRect) -> ())?

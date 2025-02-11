@@ -1,5 +1,5 @@
 //
-//  PhotoCell.swift
+//  IMPhotoCell.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 5/2/25.
@@ -8,9 +8,9 @@
 import UIKit
 import Photos
 
-// MARK: - PhotoCell
-class PhotoCell: UICollectionViewCell {
-    static let reuseIdentifier = "PhotoCell"
+// MARK: - IMPhotoCell
+class IMPhotoCell: UICollectionViewCell {
+    static let reuseIdentifier = "IMPhotoCell"
     
     // MARK: - UI Properties
     let imageView: UIImageView = {
@@ -126,7 +126,7 @@ class PhotoCell: UICollectionViewCell {
     }
 }
 
-extension PhotoCell {
+extension IMPhotoCell {
     /// Updates video duration display based on selection status.
     func updateVideoDuration(for asset: PHAsset, selectionOrder: Int?) {
         if asset.mediaType == .video {

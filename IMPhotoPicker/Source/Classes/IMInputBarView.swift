@@ -1,5 +1,5 @@
 //
-//  InputBarView.swift
+//  IMInputBarView.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 9/2/25.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-// MARK: - InputBarView
-public class InputBarView: UIView {
+// MARK: - IMInputBarView
+public class IMInputBarView: UIView {
 
     // MARK: - Public Properties
     /// The text field for input.

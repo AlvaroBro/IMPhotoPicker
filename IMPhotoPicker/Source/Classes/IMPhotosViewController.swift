@@ -1,5 +1,5 @@
 //
-//  PhotosViewController.swift
+//  IMPhotosViewController.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 5/2/25.
@@ -8,7 +8,7 @@
 import UIKit
 import Photos
 
-class PhotosViewController: AssetsCollectionViewController {
+class IMPhotosViewController: IMAssetsCollectionViewController {
     
     // MARK: - Assets Loading
     override func loadAssets() {

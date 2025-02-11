@@ -1,5 +1,5 @@
 //
-//  AlbumTableViewCell.swift
+//  IMAlbumCell.swift
 //  IMPhotoPicker
 //
 //  Created by Alvaro Marcos on 5/2/25.
@@ -7,10 +7,10 @@
 
 import UIKit
 
-// MARK: - AlbumTableViewCell
-class AlbumTableViewCell: UITableViewCell {
+// MARK: - IMAlbumCell
+class IMAlbumCell: UITableViewCell {
     
-    static let identifier = "AlbumTableViewCell"
+    static let identifier = "IMAlbumCell"
     
     // Public image view for album thumbnail
     let albumImageView: UIImageView = {
