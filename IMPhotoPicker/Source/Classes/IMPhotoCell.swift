@@ -10,6 +10,7 @@ import Photos
 
 // MARK: - IMPhotoCell
 class IMPhotoCell: UICollectionViewCell {
+    var representedAssetIdentifier: String?
     static let reuseIdentifier = "IMPhotoCell"
     
     // MARK: - UI Properties
@@ -94,6 +95,14 @@ class IMPhotoCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) not implemented")
+    }
+        
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+        representedAssetIdentifier = nil
+        setSelectionOrder(nil)
+        setVideoDuration(nil)
     }
     
     // MARK: - Public Methods

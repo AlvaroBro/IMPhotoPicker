@@ -91,14 +91,20 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
         }
         
         if let asset = assets?[indexPath.item] {
+            cell.representedAssetIdentifier = asset.localIdentifier
             let scale = UIScreen.main.scale
             let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
             let itemSize = layout?.itemSize ?? CGSize(width: 100, height: 100)
             let targetSize = CGSize(width: itemSize.width * scale, height: itemSize.height * scale)
             
-            imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: nil) { image, _ in
+            imageManager.requestImage(for: asset,
+                                      targetSize: targetSize,
+                                      contentMode: .aspectFill,
+                                      options: nil) { [weak cell] image, _ in
                 DispatchQueue.main.async {
-                    cell.imageView.image = image
+                    if cell?.representedAssetIdentifier == asset.localIdentifier {
+                        cell?.imageView.image = image
+                    }
                 }
             }
             
