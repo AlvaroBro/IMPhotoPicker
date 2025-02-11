@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,8 @@
 		5B5998E02D566890004F6A20 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B5998DE2D566890004F6A20 /* Localizable.strings */; };
 		5B5998E62D5B654A004F6A20 /* IMAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E52D5B654A004F6A20 /* IMAlbumCell.swift */; };
 		5B5998E82D5B6736004F6A20 /* IMPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */; };
+		5B5998EA2D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */; };
+		5B5998EC2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998EB2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift */; };
 		5B733F422D53AFBA008485DD /* IMAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F412D53AFBA008485DD /* IMAlbumsViewController.swift */; };
 		5B733F482D53B8F1008485DD /* IMAlbumAssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F472D53B8F1008485DD /* IMAlbumAssetsViewController.swift */; };
 		5B733F4A2D53B96F008485DD /* IMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F492D53B96E008485DD /* IMPickerViewController.swift */; };
@@ -35,6 +37,8 @@
 		5B5998E42D566AA2004F6A20 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5B5998E52D5B654A004F6A20 /* IMAlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAlbumCell.swift; sourceTree = "<group>"; };
 		5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMPhotosViewController.swift; sourceTree = "<group>"; };
+		5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPhotoLibraryPermissionManager.swift; sourceTree = "<group>"; };
+		5B5998EB2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+IMExtensions.swift"; sourceTree = "<group>"; };
 		5B733F412D53AFBA008485DD /* IMAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMAlbumsViewController.swift; sourceTree = "<group>"; };
 		5B733F472D53B8F1008485DD /* IMAlbumAssetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMAlbumAssetsViewController.swift; sourceTree = "<group>"; };
 		5B733F492D53B96E008485DD /* IMPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPickerViewController.swift; sourceTree = "<group>"; };
@@ -80,9 +84,11 @@
 				38B9E1852D582AB50079209F /* IMInputBarView.swift */,
 				384F15D12D5A1A480035FF7D /* IMKeyboardFrameTrackerView.swift */,
 				5B733F4E2D53C8AA008485DD /* IMPhotoCell.swift */,
+				5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */,
 				5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */,
 				5B733F492D53B96E008485DD /* IMPickerViewController.swift */,
 				38B9E1872D58304D0079209F /* IMPickerWrapperViewController.swift */,
+				5B5998EB2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -152,8 +158,9 @@
 		6FF3B58724F9090C0023EB44 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1200;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					6FF3B58E24F9090C0023EB44 = {
 						CreatedOnToolsVersion = 12.0;
@@ -206,10 +213,12 @@
 				5B733F552D54FAC3008485DD /* IMAssetsCollectionViewController.swift in Sources */,
 				5B733F4F2D53C8AB008485DD /* IMPhotoCell.swift in Sources */,
 				38B9E1882D58304E0079209F /* IMPickerWrapperViewController.swift in Sources */,
+				5B5998EC2D5B7A5D004F6A20 /* UIViewController+IMExtensions.swift in Sources */,
 				384F15D22D5A1A480035FF7D /* IMKeyboardFrameTrackerView.swift in Sources */,
 				38B9E1862D582AB60079209F /* IMInputBarView.swift in Sources */,
 				5B5998E82D5B6736004F6A20 /* IMPhotosViewController.swift in Sources */,
 				5B733F482D53B8F1008485DD /* IMAlbumAssetsViewController.swift in Sources */,
+				5B5998EA2D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift in Sources */,
 				6FF3B59524F9090C0023EB44 /* SceneDelegate.swift in Sources */,
 				5B733F422D53AFBA008485DD /* IMAlbumsViewController.swift in Sources */,
 			);
@@ -243,6 +252,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -276,6 +286,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -305,6 +316,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -338,6 +350,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

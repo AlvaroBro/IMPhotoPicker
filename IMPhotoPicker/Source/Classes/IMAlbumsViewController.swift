@@ -53,41 +53,15 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     // MARK: - Permissions
     func checkPhotoLibraryPermission() {
-        if #available(iOS 14, *) {
-            let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-            switch status {
-            case .authorized, .limited:
-                loadAlbums()
-            case .notDetermined:
-                PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] newStatus in
-                    DispatchQueue.main.async {
-                        if newStatus == .authorized || newStatus == .limited {
-                            self?.loadAlbums()
-                        } else {
-                            self?.showNoPermissionAlert()
-                        }
+        IMPhotoLibraryPermissionManager.shared.checkAuthorization { [weak self] authorized in
+            DispatchQueue.main.async {
+                if authorized {
+                    self?.loadAlbums()
+                } else {
+                    if let pickerVC = self?.findPickerViewController() {
+                        pickerVC.delegate?.pickerViewController(pickerVC, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
                     }
                 }
-            default:
-                showNoPermissionAlert()
-            }
-        } else {
-            let status = PHPhotoLibrary.authorizationStatus()
-            switch status {
-            case .authorized:
-                loadAlbums()
-            case .notDetermined:
-                PHPhotoLibrary.requestAuthorization { [weak self] newStatus in
-                    DispatchQueue.main.async {
-                        if newStatus == .authorized {
-                            self?.loadAlbums()
-                        } else {
-                            self?.showNoPermissionAlert()
-                        }
-                    }
-                }
-            default:
-                showNoPermissionAlert()
             }
         }
     }
@@ -116,17 +90,6 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         tableView.reloadData()
-    }
-    
-    // MARK: - Alerts
-    func showNoPermissionAlert() {
-        let alert = UIAlertController(
-            title: NSLocalizedString("alert_no_access_title", comment: ""),
-            message: NSLocalizedString("alert_no_access_message", comment: ""),
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: NSLocalizedString("alert_ok", comment: ""), style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - UITableViewDataSource

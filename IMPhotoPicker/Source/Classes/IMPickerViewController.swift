@@ -23,10 +23,14 @@ public protocol IMPickerViewControllerDelegate: AnyObject {
     /// (Optional) Called when the right bar button is tapped.
     /// This allows the picker presenter to decide how to react.
     func pickerViewControllerDidTapRightButton(_ controller: IMPickerViewController)
+    
+    /// Called when a permission error occurs.
+    func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error)
 }
 
 extension IMPickerViewControllerDelegate {
     func pickerViewControllerDidTapRightButton(_ controller: IMPickerViewController) { }
+    func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) { }
 }
 
 public class IMPickerViewController: UIViewController {

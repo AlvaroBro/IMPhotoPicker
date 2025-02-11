@@ -114,6 +114,19 @@ class ViewController: UIViewController {
             present(container, animated: true, completion: nil)
         }
     }
+    
+    // MARK: - Alerts
+    func showNoPermissionAlert(fromViewController: UIViewController) {
+        let alert = UIAlertController(
+            title: NSLocalizedString("alert_no_access_title", comment: ""),
+            message: NSLocalizedString("alert_no_access_message", comment: ""),
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: NSLocalizedString("alert_ok", comment: ""), style: .default, handler: { UIAlertAction in
+            fromViewController.dismiss(animated: true)
+        }))
+        fromViewController.present(alert, animated: true, completion: nil)
+    }
 }
 
 // MARK: - PHPickerViewControllerDelegate
@@ -148,5 +161,10 @@ extension ViewController: IMPickerWrapperViewControllerDelegate {
     func pickerWrapperViewController(_ controller: IMPickerWrapperViewController, didTapSendWithText text: String) {
         print("Send tapped with text: \(text)")
         controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) {
+        print("Permission error: \(error)")
+        showNoPermissionAlert(fromViewController: controller)
     }
 }

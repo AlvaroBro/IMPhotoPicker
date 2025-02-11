@@ -172,6 +172,10 @@ extension IMPickerWrapperViewController: IMPickerViewControllerDelegate {
     public func pickerViewControllerDidTapRightButton(_ controller: IMPickerViewController) {
         containerDelegate?.pickerViewControllerDidTapRightButton(controller)
     }
+    
+    public func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) {
+        containerDelegate?.pickerViewController(controller, didFailWithPermissionError: error)
+    }
 }
 
 // MARK: - KeyboardFrameTrackerDelegate
