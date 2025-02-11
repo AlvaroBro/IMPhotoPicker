@@ -213,7 +213,7 @@ public class IMPickerViewController: UIViewController {
             navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
         }
         delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
-        updateInputBarVisibility()
+        updateInputBarVisibilityIfNeeded()
         return true
     }
     
@@ -224,7 +224,7 @@ public class IMPickerViewController: UIViewController {
                 navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
             }
             delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
-            updateInputBarVisibility()
+            updateInputBarVisibilityIfNeeded()
         }
     }
     
@@ -235,7 +235,7 @@ public class IMPickerViewController: UIViewController {
         return nil
     }
     
-    private func updateInputBarVisibility() {
+    private func updateInputBarVisibilityIfNeeded() {
         if let container = self.navigationController?.parent as? IMPickerWrapperViewController {
             container.updateInputBarVisibility(selectedAssetCount: selectedAssets.count)
         }
