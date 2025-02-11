@@ -59,7 +59,7 @@ public class IMInputBarView: UIView {
         label.textAlignment = .center
         label.clipsToBounds = true
         label.isHidden = true
-        label.layer.borderWidth = 1.0
+        label.layer.borderWidth = 1.5
         label.layer.borderColor = UIColor.white.cgColor
         return label
     }()
@@ -72,6 +72,18 @@ public class IMInputBarView: UIView {
     
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) not implemented")
+    }
+    
+    // MARK: - Public Methods
+    
+    public func applyConfiguration(_ config: IMPickerConfiguration.InputBarConfiguration?) {
+        textField.placeholder = config?.placeholder
+        textField.backgroundColor = config?.textFieldBackgroundColor
+        textField.font = config?.textFieldFont
+        sendButton.setImage(config?.sendButtonImage, for: .normal)
+        sendButton.tintColor = config?.sendButtonTintColor
+        sendButton.backgroundColor = config?.sendButtonBackgroundColor
+        badgeLabel.backgroundColor = config?.sendButtonBadgeColor
     }
     
     // MARK: - Private Methods

@@ -14,6 +14,13 @@ class IMPhotoCell: UICollectionViewCell {
     static let reuseIdentifier = "IMPhotoCell"
     
     // MARK: - UI Properties
+    
+    public var badgeColor: UIColor = .systemBlue {
+        didSet {
+            badgeLabel.backgroundColor = badgeColor
+        }
+    }
+    
     let imageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
@@ -41,7 +48,7 @@ class IMPhotoCell: UICollectionViewCell {
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.layer.borderColor = UIColor.white.cgColor
-        label.layer.borderWidth = 2
+        label.layer.borderWidth = 1.5
         return label
     }()
     

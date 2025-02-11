@@ -19,16 +19,23 @@ class ViewController: UIViewController {
         return btn
     }()
     
-    let customPickerAcceptButton: UIButton = {
+    let customPicker1Button: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Custom Picker Example 1", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
     
-    let customPickerHDButton: UIButton = {
+    let customPicker2Button: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Custom Picker Example 2", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
+    let customPicker3Button: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Custom Picker Example 3", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
@@ -45,22 +52,27 @@ class ViewController: UIViewController {
 
     func setupUI() {
         view.addSubview(nativePickerButton)
-        view.addSubview(customPickerAcceptButton)
-        view.addSubview(customPickerHDButton)
+        view.addSubview(customPicker1Button)
+        view.addSubview(customPicker2Button)
+        view.addSubview(customPicker3Button)
         
         nativePickerButton.addTarget(self, action: #selector(presentNativePicker), for: .touchUpInside)
-        customPickerAcceptButton.addTarget(self, action: #selector(presentPicker2), for: .touchUpInside)
-        customPickerHDButton.addTarget(self, action: #selector(presentPicker3), for: .touchUpInside)
+        customPicker1Button.addTarget(self, action: #selector(presentPicker1), for: .touchUpInside)
+        customPicker2Button.addTarget(self, action: #selector(presentPicker2), for: .touchUpInside)
+        customPicker3Button.addTarget(self, action: #selector(presentPicker3), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             nativePickerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nativePickerButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             
-            customPickerAcceptButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            customPickerAcceptButton.topAnchor.constraint(equalTo: nativePickerButton.bottomAnchor, constant: 20),
+            customPicker1Button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            customPicker1Button.topAnchor.constraint(equalTo: nativePickerButton.bottomAnchor, constant: 20),
             
-            customPickerHDButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            customPickerHDButton.topAnchor.constraint(equalTo: customPickerAcceptButton.bottomAnchor, constant: 20)
+            customPicker2Button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            customPicker2Button.topAnchor.constraint(equalTo: customPicker1Button.bottomAnchor, constant: 20),
+            
+            customPicker3Button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            customPicker3Button.topAnchor.constraint(equalTo: customPicker2Button.bottomAnchor, constant: 20)
         ])
     }
     
@@ -77,22 +89,57 @@ class ViewController: UIViewController {
         present(picker, animated: true)
     }
     
-    @objc func presentPicker2() {
+    @objc func presentPicker1() {
         let picker = IMPickerViewController()
-        picker.rightButtonStyle = .accept
         picker.delegate = self
         let navController = UINavigationController(rootViewController: picker)
         navController.modalPresentationStyle = .fullScreen
         present(navController, animated: true, completion: nil)
     }
+    
+    @objc func presentPicker2() {
+        let picker = IMPickerViewController()
+        let customButton = UIBarButtonItem(title: "Custom", style: .done, target: self, action: #selector(customRightButtonTapped))
+        picker.configuration = IMPickerConfiguration(
+            rightButtonStyle: .custom(customButton),
+            maxSelectionCount: 3,
+            cancelButtonNavigationItemTintColor: .red,
+            leftNavigationItemTintColor: .blue,
+            rightNavigationItemTintColor: .blue,
+            segmentedControlTintColor: .white,
+            segmentedControlSelectedSegmentTintColor: .black,
+            segmentedControlTextAttributes: [.foregroundColor: UIColor.black],
+            segmentedControlSelectedTextAttributes: [.foregroundColor: UIColor.white]
+        )
+        picker.delegate = self
+        let navController = UINavigationController(rootViewController: picker)
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true)
+    }
 
     @objc func presentPicker3() {
-        let container = IMPickerWrapperViewController()
-        container.containerDelegate = self
-        
+        let picker = IMPickerWrapperViewController()
+        picker.configuration = IMPickerConfiguration(
+            rightButtonStyle: .hdModeToggle,
+            maxSelectionCount: 10,
+            cancelButtonNavigationItemTintColor: .black,
+            leftNavigationItemTintColor: .black,
+            rightNavigationItemTintColor: .black,
+            selectionOverlayBadgeColor: .systemGreen,
+            inputBarConfiguration: IMPickerConfiguration.InputBarConfiguration(
+                        placeholder: "Enter your message...",
+                        sendButtonBackgroundColor: .systemGreen,
+                        sendButtonBadgeColor: .systemGreen
+                    )
+        )
+        picker.delegate = self
+        presentPickerWrapperAsPageSheet(picker: picker)
+    }
+    
+    func presentPickerWrapperAsPageSheet(picker: IMPickerWrapperViewController) {
         if #available(iOS 15.0, *) {
-            container.modalPresentationStyle = .pageSheet
-            if let sheet = container.sheetPresentationController {
+            picker.modalPresentationStyle = .pageSheet
+            if let sheet = picker.sheetPresentationController {
                 if #available(iOS 16.0, *) {
                     sheet.detents = [
                         .custom(identifier: .init("custom.detent")) { context in
@@ -107,12 +154,16 @@ class ViewController: UIViewController {
                     ]
                 }
                 sheet.preferredCornerRadius = 20
-                present(container, animated: true)
+                present(picker, animated: true)
             }
         } else {
-            container.modalPresentationStyle = .pageSheet
-            present(container, animated: true, completion: nil)
+            picker.modalPresentationStyle = .pageSheet
+            present(picker, animated: true, completion: nil)
         }
+    }
+    
+    @objc func customRightButtonTapped() {
+        print("Custom button tapped")
     }
     
     // MARK: - Alerts

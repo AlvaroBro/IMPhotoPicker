@@ -18,8 +18,16 @@ public protocol IMPickerWrapperViewControllerDelegate: IMPickerViewControllerDel
 public class IMPickerWrapperViewController: UIViewController {
 
     // MARK: - Public Properties
+    ///
+    public var configuration: IMPickerConfiguration = IMPickerConfiguration() {
+        didSet {
+            pickerViewController.configuration = configuration
+            inputBar.applyConfiguration(configuration.inputBarConfiguration)
+        }
+    }
+    
     /// Delegate for container events.
-    public weak var containerDelegate: IMPickerWrapperViewControllerDelegate?
+    public weak var delegate: IMPickerWrapperViewControllerDelegate?
     
     /// The internally instantiated picker.
     public let pickerViewController: IMPickerViewController
@@ -108,7 +116,7 @@ public class IMPickerWrapperViewController: UIViewController {
 
     // MARK: - Private Methods
     @objc private func sendButtonTapped() {
-        containerDelegate?.pickerWrapperViewController(self, didTapSendWithText: inputBar.textField.text ?? "")
+        delegate?.pickerWrapperViewController(self, didTapSendWithText: inputBar.textField.text ?? "")
     }
     
     private func updateFrames(selectedAssetCount: Int) {
@@ -142,39 +150,31 @@ public class IMPickerWrapperViewController: UIViewController {
 // MARK: - IMPickerViewControllerDelegate
 extension IMPickerWrapperViewController: IMPickerViewControllerDelegate {
 
-    public func pickerViewController(
-        _ controller: IMPickerViewController,
-        didUpdateSelection selection: [PHAsset],
-        hdModeEnabled: Bool
-    ) {
+    public func pickerViewController(_ controller: IMPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool) {
         self.inputBar.badgeCount = selection.count
-        containerDelegate?.pickerViewController(controller,
+        delegate?.pickerViewController(controller,
             didUpdateSelection: selection,
             hdModeEnabled: hdModeEnabled
         )
     }
 
-    public func pickerViewController(
-        _ controller: IMPickerViewController,
-        didFinishPicking selection: [PHAsset],
-        hdModeEnabled: Bool
-    ) {
-        containerDelegate?.pickerViewController(controller,
+    public func pickerViewController(_ controller: IMPickerViewController, didFinishPicking selection: [PHAsset], hdModeEnabled: Bool) {
+        delegate?.pickerViewController(controller,
             didFinishPicking: selection,
             hdModeEnabled: hdModeEnabled
         )
     }
 
     public func pickerViewControllerDidCancel(_ controller: IMPickerViewController) {
-        containerDelegate?.pickerViewControllerDidCancel(controller)
+        delegate?.pickerViewControllerDidCancel(controller)
     }
 
     public func pickerViewControllerDidTapRightButton(_ controller: IMPickerViewController) {
-        containerDelegate?.pickerViewControllerDidTapRightButton(controller)
+        delegate?.pickerViewControllerDidTapRightButton(controller)
     }
     
     public func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) {
-        containerDelegate?.pickerViewController(controller, didFailWithPermissionError: error)
+        delegate?.pickerViewController(controller, didFailWithPermissionError: error)
     }
 }
 

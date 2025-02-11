@@ -42,8 +42,20 @@ public class IMPickerViewController: UIViewController {
         case custom(UIBarButtonItem)
     }
 
-    // MARK: - Main Properties
-    let segmentedControl: UISegmentedControl = {
+    // MARK: - Public Properties
+    public var rightButtonStyle: CustomPickerRightButtonStyle = .accept
+    
+    public var configuration: IMPickerConfiguration = IMPickerConfiguration() {
+        didSet {
+            maxSelectionCount = configuration.maxSelectionCount!
+            rightButtonStyle = configuration.rightButtonStyle!
+        }
+    }
+    
+    weak var delegate: IMPickerViewControllerDelegate?
+    
+    // MARK: - Private Properties
+    private let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: [
             NSLocalizedString("photos_segment_title", comment: ""),
             NSLocalizedString("albums_segment_title", comment: "")
@@ -52,17 +64,12 @@ public class IMPickerViewController: UIViewController {
         return sc
     }()
     
-    let containerView = UIView()
-    
-    let photosVC = IMPhotosViewController()
-    let albumsVC = IMAlbumsViewController()
-    
-    var rightButtonStyle: CustomPickerRightButtonStyle = .accept
-    var hdModeEnabled: Bool = false
+    private let containerView = UIView()
+    private let photosVC = IMPhotosViewController()
+    private let albumsVC = IMAlbumsViewController()
+    private var hdModeEnabled: Bool = false
     private var selectedAssets: [PHAsset] = []
-    let maxSelectionCount: Int = 5
-    
-    weak var delegate: IMPickerViewControllerDelegate?
+    private var maxSelectionCount: Int = 5
     
     // MARK: - Lifecycle
     public override func viewDidLoad() {
@@ -71,6 +78,7 @@ public class IMPickerViewController: UIViewController {
         setupNavigationBar()
         setupContainerView()
         segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
+        photosVC.badgeColor = configuration.selectionOverlayBadgeColor
         photosVC.selectionDelegate = self
         add(childViewController: photosVC)
         albumsVC.delegate = self
@@ -78,6 +86,11 @@ public class IMPickerViewController: UIViewController {
     
     // MARK: - Navigation Bar Setup
     func setupNavigationBar() {
+        segmentedControl.selectedSegmentTintColor = configuration.segmentedControlSelectedSegmentTintColor
+        segmentedControl.backgroundColor = configuration.segmentedControlTintColor
+        segmentedControl.setTitleTextAttributes(configuration.segmentedControlTextAttributes, for: .normal)
+        segmentedControl.setTitleTextAttributes(configuration.segmentedControlSelectedTextAttributes, for: .selected)
+        
         navigationItem.titleView = segmentedControl
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("cancel_button_title", comment: ""),
@@ -85,7 +98,7 @@ public class IMPickerViewController: UIViewController {
             target: self,
             action: #selector(cancelTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .black
+        navigationItem.leftBarButtonItem?.tintColor = configuration.cancelButtonNavigationItemTintColor
         
         switch rightButtonStyle {
         case .accept:
@@ -96,7 +109,7 @@ public class IMPickerViewController: UIViewController {
                 action: #selector(acceptTapped)
             )
             navigationItem.rightBarButtonItem?.isEnabled = false
-            navigationItem.rightBarButtonItem?.tintColor = .black
+            navigationItem.rightBarButtonItem?.tintColor = configuration.rightNavigationItemTintColor
         case .hdModeToggle:
             navigationItem.rightBarButtonItem = UIBarButtonItem(
                 image: hdModeImage(),
@@ -104,8 +117,10 @@ public class IMPickerViewController: UIViewController {
                 target: self,
                 action: #selector(toggleHDMode)
             )
+            navigationItem.rightBarButtonItem?.tintColor = configuration.rightNavigationItemTintColor
         case .custom(let item):
             navigationItem.rightBarButtonItem = item
+            item.tintColor = configuration.rightNavigationItemTintColor
         }
     }
     
@@ -167,7 +182,7 @@ public class IMPickerViewController: UIViewController {
             target: self,
             action: #selector(cancelTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .black
+        navigationItem.leftBarButtonItem?.tintColor = configuration.cancelButtonNavigationItemTintColor
     }
     
     func switchToAlbums() {
@@ -182,7 +197,7 @@ public class IMPickerViewController: UIViewController {
             target: self,
             action: #selector(cancelTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .black
+        navigationItem.leftBarButtonItem?.tintColor = configuration.cancelButtonNavigationItemTintColor
     }
     
     // MARK: - Child View Controller Management
@@ -247,6 +262,7 @@ extension IMPickerViewController: IMAlbumsViewControllerDelegate {
     func albumsViewController(_ controller: IMAlbumsViewController, didSelectAlbum album: PHAssetCollection) {
         let albumDetailVC = IMAlbumAssetsViewController(album: album)
         albumDetailVC.selectionDelegate = self
+        albumDetailVC.badgeColor = configuration.selectionOverlayBadgeColor
         albumDetailVC.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", comment: "")
         albumDetailVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),
@@ -254,7 +270,7 @@ extension IMPickerViewController: IMAlbumsViewControllerDelegate {
             target: self,
             action: #selector(backFromAlbumDetail)
         )
-        albumDetailVC.navigationItem.leftBarButtonItem?.tintColor = .black
+        albumDetailVC.navigationItem.leftBarButtonItem?.tintColor = configuration.leftNavigationItemTintColor
         albumDetailVC.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
         navigationController?.pushViewController(albumDetailVC, animated: true)
     }

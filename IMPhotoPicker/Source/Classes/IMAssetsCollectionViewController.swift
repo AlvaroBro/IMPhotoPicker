@@ -20,9 +20,6 @@ protocol IMAssetSelectionDelegate: AnyObject {
     
     /// Returns the selection order (1-based) for the asset, or nil if not selected.
     func selectionOrder(for asset: PHAsset) -> Int?
-    
-    /// The maximum number of assets that can be selected.
-    var maxSelectionCount: Int { get }
 }
 
 
@@ -33,6 +30,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     var assets: PHFetchResult<PHAsset>?
     let imageManager = PHCachingImageManager()
     weak var selectionDelegate: IMAssetSelectionDelegate?
+    public var badgeColor: UIColor?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -111,6 +109,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
             let order = selectionDelegate?.selectionOrder(for: asset)
             cell.setSelectionOrder(order)
             cell.updateVideoDuration(for: asset, selectionOrder: order)
+            cell.badgeColor = badgeColor ?? .systemBlue
         }
         return cell
     }
