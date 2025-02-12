@@ -103,7 +103,9 @@ class ViewController: UIViewController {
     
     @objc func presentInputAccessoryViewController() {
         let viewController = InputAccessoryViewController()
-        present(viewController, animated: true)
+        let navController = UINavigationController(rootViewController: viewController)
+        navController.modalPresentationStyle = .automatic
+        present(navController, animated: true)
     }
     
     @objc func presentPicker1() {

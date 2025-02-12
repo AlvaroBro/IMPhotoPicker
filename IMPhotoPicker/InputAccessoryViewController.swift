@@ -34,14 +34,19 @@ class InputAccessoryViewController: UIViewController, UITableViewDataSource, UIT
         return count > 0
     }
     
+    private var keyboardVisible: Bool = false
+    
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.contentInsetAdjustmentBehavior = .never
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -61,7 +66,15 @@ class InputAccessoryViewController: UIViewController, UITableViewDataSource, UIT
         NotificationCenter.default.removeObserver(self)
     }
     
-    public func updateInputBarVisibility() {
+    override open func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        setContentBottomInset(bottomInset: keyboardVisible ? 0 : self.view.safeAreaInsets.bottom)
+    }
+    
+    // MARK: - Private Methods
+    
+    private func updateInputBarVisibility() {
         let count = tableView.indexPathsForSelectedRows?.count ?? 0
         if count > 0 {
             if !inputBar.isFirstResponder, !isFirstResponder {
@@ -74,6 +87,13 @@ class InputAccessoryViewController: UIViewController, UITableViewDataSource, UIT
                 _ = inputBar.resignFirstResponder()
             }
         }
+    }
+    
+    private func setContentBottomInset(bottomInset: CGFloat) {
+        self.tableView.contentInset.bottom = bottomInset
+        var verticalInsets = self.tableView.verticalScrollIndicatorInsets
+        verticalInsets.bottom = bottomInset
+        self.tableView.verticalScrollIndicatorInsets = verticalInsets
     }
     
     // MARK: - Keyboard notifications
@@ -94,10 +114,8 @@ class InputAccessoryViewController: UIViewController, UITableViewDataSource, UIT
                        delay: 0,
                        options: UIView.AnimationOptions(rawValue: curveValue << 16),
                        animations: {
-            self.tableView.contentInset.bottom = bottomInset
-            var verticalInsets = self.tableView.verticalScrollIndicatorInsets
-            verticalInsets.bottom = bottomInset
-            self.tableView.verticalScrollIndicatorInsets = verticalInsets
+            self.setContentBottomInset(bottomInset: bottomInset)
+            self.keyboardVisible = true
         }, completion: nil)
     }
 
@@ -111,10 +129,8 @@ class InputAccessoryViewController: UIViewController, UITableViewDataSource, UIT
                        delay: 0,
                        options: UIView.AnimationOptions(rawValue: curveValue << 16),
                        animations: {
-            self.tableView.contentInset.bottom = 0
-            var verticalInsets = self.tableView.verticalScrollIndicatorInsets
-            verticalInsets.bottom = 0
-            self.tableView.verticalScrollIndicatorInsets = verticalInsets
+            self.setContentBottomInset(bottomInset: self.view.safeAreaInsets.bottom)
+            self.keyboardVisible = false
         }, completion: nil)
     }
 
