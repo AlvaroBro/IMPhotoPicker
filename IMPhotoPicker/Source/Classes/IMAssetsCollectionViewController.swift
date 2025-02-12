@@ -54,6 +54,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(IMPhotoCell.self, forCellWithReuseIdentifier: IMPhotoCell.reuseIdentifier)
+        collectionView.contentInsetAdjustmentBehavior = .never
         
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
@@ -195,6 +196,14 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
         let totalSpacing = spacing * 2
         let width = (collectionView.bounds.width - totalSpacing) / 3
         return CGSize(width: width, height: width)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        if section == 0 {
+            return UIEdgeInsets(top: 0, left: 0, bottom: view.safeAreaInsets.bottom, right: 0)
+        } else {
+            return UIEdgeInsets.zero
+        }
     }
     
     // MARK: - Private methods

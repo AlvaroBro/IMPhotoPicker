@@ -41,12 +41,13 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.register(IMAlbumCell.self, forCellReuseIdentifier: IMAlbumCell.identifier)
         tableView.layer.cornerRadius = 12
         tableView.clipsToBounds = true
+        tableView.contentInsetAdjustmentBehavior = .never
         view.addSubview(tableView)
         
         let margin: CGFloat = 15
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: margin),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -margin),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: margin),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -margin - 34),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: margin),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -margin)
         ])
