@@ -121,7 +121,6 @@ class ViewController: UIViewController {
         let picker = IMPickerWrapperViewController()
         picker.configuration = IMPickerConfiguration(
             rightButtonStyle: .hdModeToggle,
-            maxSelectionCount: 10,
             cancelButtonNavigationItemTintColor: .black,
             leftNavigationItemTintColor: .black,
             rightNavigationItemTintColor: .black,

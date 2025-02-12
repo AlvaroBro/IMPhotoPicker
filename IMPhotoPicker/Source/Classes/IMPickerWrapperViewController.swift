@@ -47,7 +47,7 @@ public class IMPickerWrapperViewController: UIViewController {
     // MARK: - Initializers
     public init() {
         pickerViewController = IMPickerViewController()
-        pickerViewController.rightButtonStyle = .hdModeToggle
+        pickerViewController.configuration = IMPickerConfiguration(rightButtonStyle: .hdModeToggle)
         childNavigationController = UINavigationController(rootViewController: pickerViewController)
         inputBar = IMInputBarView()
         super.init(nibName: nil, bundle: nil)

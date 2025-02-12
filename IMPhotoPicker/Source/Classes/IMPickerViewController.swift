@@ -43,14 +43,16 @@ public class IMPickerViewController: UIViewController {
     }
 
     // MARK: - Public Properties
-    public var rightButtonStyle: CustomPickerRightButtonStyle = .accept
     
-    public var configuration: IMPickerConfiguration = IMPickerConfiguration() {
-        didSet {
-            maxSelectionCount = configuration.maxSelectionCount!
-            rightButtonStyle = configuration.rightButtonStyle!
-        }
+    var maxSelectionCount: Int {
+        configuration.maxSelectionCount
     }
+    
+    var rightButtonStyle: CustomPickerRightButtonStyle {
+        configuration.rightButtonStyle
+    }
+    
+    var configuration: IMPickerConfiguration = IMPickerConfiguration()
     
     weak var delegate: IMPickerViewControllerDelegate?
     
@@ -69,7 +71,6 @@ public class IMPickerViewController: UIViewController {
     private let albumsVC = IMAlbumsViewController()
     private var hdModeEnabled: Bool = false
     private var selectedAssets: [PHAsset] = []
-    private var maxSelectionCount: Int = 5
     
     // MARK: - Lifecycle
     public override func viewDidLoad() {
