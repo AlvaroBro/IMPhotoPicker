@@ -15,7 +15,7 @@ public struct IMPickerConfiguration {
     public var rightButtonStyle: IMPickerViewController.CustomPickerRightButtonStyle = .accept
     
     /// The maximum number of assets that can be selected.
-    public var maxSelectionCount: Int = 5
+    public var selectionLimit: Int = 0
     
     /// The tint color for the cancel button in the navigation bar.
     public var cancelButtonNavigationItemTintColor: UIColor?

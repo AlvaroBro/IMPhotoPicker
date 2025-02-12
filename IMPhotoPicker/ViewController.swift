@@ -102,7 +102,7 @@ class ViewController: UIViewController {
         let customButton = UIBarButtonItem(title: "Custom", style: .done, target: self, action: #selector(customRightButtonTapped))
         picker.configuration = IMPickerConfiguration(
             rightButtonStyle: .custom(customButton),
-            maxSelectionCount: 3,
+            selectionLimit: 3,
             cancelButtonNavigationItemTintColor: .red,
             leftNavigationItemTintColor: .blue,
             rightNavigationItemTintColor: .blue,

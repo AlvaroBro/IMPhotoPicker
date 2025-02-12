@@ -44,8 +44,8 @@ public class IMPickerViewController: UIViewController {
 
     // MARK: - Public Properties
     
-    var maxSelectionCount: Int {
-        configuration.maxSelectionCount
+    var selectionLimit: Int {
+        configuration.selectionLimit
     }
     
     var rightButtonStyle: CustomPickerRightButtonStyle {
@@ -221,8 +221,10 @@ public class IMPickerViewController: UIViewController {
     
     // MARK: - Selection Management
     private func select(asset: PHAsset) -> Bool {
-        guard !selectedAssets.contains(where: { $0.localIdentifier == asset.localIdentifier }),
-              selectedAssets.count < maxSelectionCount else {
+        guard !selectedAssets.contains(where: { $0.localIdentifier == asset.localIdentifier }) else {
+            return false
+        }
+        if selectionLimit != 0 && selectedAssets.count >= selectionLimit {
             return false
         }
         selectedAssets.append(asset)
