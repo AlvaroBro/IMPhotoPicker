@@ -185,14 +185,6 @@ public class IMPickerViewController: UIViewController {
         if photosViewController.parent == nil {
             add(childViewController: photosViewController)
         }
-        navigationItem.titleView = segmentedControl
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("cancel_button_title", comment: ""),
-            style: .plain,
-            target: self,
-            action: #selector(cancelTapped)
-        )
-        navigationItem.leftBarButtonItem?.tintColor = configuration.cancelButtonNavigationItemTintColor
     }
     
     func switchToAlbums() {
@@ -200,14 +192,6 @@ public class IMPickerViewController: UIViewController {
         if albumsViewController.parent == nil {
             add(childViewController: albumsViewController)
         }
-        navigationItem.titleView = segmentedControl
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("cancel_button_title", comment: ""),
-            style: .plain,
-            target: self,
-            action: #selector(cancelTapped)
-        )
-        navigationItem.leftBarButtonItem?.tintColor = configuration.cancelButtonNavigationItemTintColor
     }
     
     // MARK: - Child View Controller Management
@@ -287,7 +271,7 @@ extension IMPickerViewController: IMAlbumsViewControllerDelegate {
         viewController.navigationItem.leftBarButtonItem?.tintColor = configuration.leftNavigationItemTintColor
         viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
         navigationController?.pushViewController(viewController, animated: true)
-        self.albumAssetsViewController = viewController
+        albumAssetsViewController = viewController
     }
     
     @objc func backFromAlbumDetail() {

@@ -199,12 +199,10 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
         return CGSize(width: width, height: width)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        if adjustsContentInset {
-            return UIEdgeInsets(top: 0, left: 0, bottom: view.safeAreaInsets.bottom, right: 0)
-        } else {
-            return UIEdgeInsets.zero
-        }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: view.safeAreaInsets.top, left: 0, bottom: adjustsContentInset ? view.safeAreaInsets.bottom : 0, right: 0)
     }
     
     // MARK: - Private methods
