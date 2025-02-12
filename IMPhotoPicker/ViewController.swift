@@ -19,6 +19,13 @@ class ViewController: UIViewController {
         return btn
     }()
     
+    let inputAccessoryButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Input Accessory View Example", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
     let customPicker1Button: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Custom Picker Example 1", for: .normal)
@@ -52,11 +59,13 @@ class ViewController: UIViewController {
 
     func setupUI() {
         view.addSubview(nativePickerButton)
+        view.addSubview(inputAccessoryButton)
         view.addSubview(customPicker1Button)
         view.addSubview(customPicker2Button)
         view.addSubview(customPicker3Button)
         
         nativePickerButton.addTarget(self, action: #selector(presentNativePicker), for: .touchUpInside)
+        inputAccessoryButton.addTarget(self, action: #selector(presentInputAccessoryViewController), for: .touchUpInside)
         customPicker1Button.addTarget(self, action: #selector(presentPicker1), for: .touchUpInside)
         customPicker2Button.addTarget(self, action: #selector(presentPicker2), for: .touchUpInside)
         customPicker3Button.addTarget(self, action: #selector(presentPicker3), for: .touchUpInside)
@@ -65,8 +74,11 @@ class ViewController: UIViewController {
             nativePickerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nativePickerButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             
+            inputAccessoryButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            inputAccessoryButton.topAnchor.constraint(equalTo: nativePickerButton.bottomAnchor, constant: 20),
+            
             customPicker1Button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            customPicker1Button.topAnchor.constraint(equalTo: nativePickerButton.bottomAnchor, constant: 20),
+            customPicker1Button.topAnchor.constraint(equalTo: inputAccessoryButton.bottomAnchor, constant: 20),
             
             customPicker2Button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             customPicker2Button.topAnchor.constraint(equalTo: customPicker1Button.bottomAnchor, constant: 20),
@@ -87,6 +99,11 @@ class ViewController: UIViewController {
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true)
+    }
+    
+    @objc func presentInputAccessoryViewController() {
+        let viewController = InputAccessoryViewController()
+        present(viewController, animated: true)
     }
     
     @objc func presentPicker1() {

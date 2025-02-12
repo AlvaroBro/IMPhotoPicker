@@ -76,6 +76,24 @@ public class IMInputBarView: UIView {
     
     // MARK: - Public Methods
     
+    public override func resignFirstResponder() -> Bool {
+        return textField.resignFirstResponder()
+    }
+    
+    public override var isFirstResponder: Bool {
+        return textField.isFirstResponder
+    }
+    
+    public override var intrinsicContentSize: CGSize {
+        let bottomInset = safeAreaInsets.bottom
+        return CGSize(width: UIView.noIntrinsicMetric, height: 56 + bottomInset)
+    }
+    
+    public override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        invalidateIntrinsicContentSize()
+    }
+    
     public func applyConfiguration(_ config: IMPickerConfiguration.InputBarConfiguration?) {
         textField.placeholder = config?.placeholder
         textField.backgroundColor = config?.textFieldBackgroundColor
