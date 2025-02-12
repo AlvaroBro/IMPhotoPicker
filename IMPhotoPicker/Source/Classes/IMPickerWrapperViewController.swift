@@ -33,29 +33,42 @@ public class IMPickerWrapperViewController: UIViewController {
     public let pickerViewController: IMPickerViewController
     
     /// The input bar view.
-    public let inputBar: IMInputBarView
+    public let inputBar: IMInputBarView = {
+        let view = IMInputBarView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     // MARK: - Private Properties
     private let childNavigationController: UINavigationController
-    private let keyboardFrameTrackerView = IMKeyboardFrameTrackerView(height: 56)
-    private var inputBarBottomConstraint: NSLayoutConstraint!
-    private var inputBarHeightConstraint: NSLayoutConstraint!
     private var childNavigationControllerBottomConstraint: NSLayoutConstraint!
-    private var visibleKeyboardHeight: CGFloat = 0
     private var selectedAssetCount: Int = 0
 
     // MARK: - Initializers
     public init() {
         pickerViewController = IMPickerViewController()
         pickerViewController.configuration = IMPickerConfiguration(rightButtonStyle: .hdModeToggle)
+        pickerViewController.adjustsContentInset = false
         childNavigationController = UINavigationController(rootViewController: pickerViewController)
-        inputBar = IMInputBarView()
         super.init(nibName: nil, bundle: nil)
         pickerViewController.delegate = self
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillChangeFrame(notification:)),
+                                               name: UIResponder.keyboardWillChangeFrameNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(notification:)),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
     }
 
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) not implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - Lifecycle
@@ -76,64 +89,37 @@ public class IMPickerWrapperViewController: UIViewController {
             childNavigationControllerBottomConstraint
         ])
         
-        inputBar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(inputBar)
-        
-        inputBarBottomConstraint = inputBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        inputBarHeightConstraint = inputBar.heightAnchor.constraint(equalToConstant: 56)
-        
-        NSLayoutConstraint.activate([
-            inputBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            inputBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            inputBarBottomConstraint,
-            inputBarHeightConstraint
-        ])
-        
         inputBar.sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
-        
-        keyboardFrameTrackerView.delegate = self
     }
 
     // MARK: - Public Methods
     /// Updates the input bar visibility based on the number of selected assets.
     public func updateInputBarVisibility(selectedAssetCount: Int) {
         self.selectedAssetCount = selectedAssetCount
-        UIView.animate(withDuration: 0.3, animations: {
-            if selectedAssetCount == 0 {
-                self.inputBar.textField.resignFirstResponder()
+        if selectedAssetCount > 0 {
+            if !inputBar.isFirstResponder, !isFirstResponder {
+                becomeFirstResponder()
             }
-            self.updateFrames(selectedAssetCount: selectedAssetCount)
-        })
-    }
-
-    public override var canBecomeFirstResponder: Bool {
-        true
+        } else {
+            if isFirstResponder {
+                resignFirstResponder()
+            } else if inputBar.isFirstResponder {
+                _ = inputBar.resignFirstResponder()
+            }
+        }
     }
     
     public override var inputAccessoryView: UIView? {
-        keyboardFrameTrackerView
+        return self.selectedAssetCount > 0 ? inputBar : nil
+    }
+    
+    public override var canBecomeFirstResponder: Bool {
+        return self.selectedAssetCount > 0
     }
 
     // MARK: - Private Methods
     @objc private func sendButtonTapped() {
         delegate?.pickerWrapperViewController(self, didTapSendWithText: inputBar.textField.text ?? "")
-    }
-    
-    private func updateFrames(selectedAssetCount: Int) {
-        let bottomSafeArea = view.safeAreaInsets.bottom
-        let bottomGap = max(bottomSafeArea - visibleKeyboardHeight, 0)
-        
-        if visibleKeyboardHeight > 0 {
-            inputBarHeightConstraint.constant = 56 + bottomGap
-            inputBarBottomConstraint.constant = min(-visibleKeyboardHeight, -bottomSafeArea) + bottomGap
-        } else {
-            inputBarHeightConstraint.constant = 56 + bottomSafeArea
-            inputBarBottomConstraint.constant = selectedAssetCount != 0 ? 0 : inputBarHeightConstraint.constant
-        }
-        
-        childNavigationControllerBottomConstraint.constant = -visibleKeyboardHeight - (selectedAssetCount == 0 ? 0 : inputBarHeightConstraint.constant)
-        
-        view.layoutIfNeeded()
     }
     
     private func switchToLargeDetentIfNeeded() {
@@ -144,6 +130,49 @@ public class IMPickerWrapperViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    // MARK: - Keyboard notifications
+
+    @objc func keyboardWillChangeFrame(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+              let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt
+        else { return }
+        
+        let keyboardFrame = keyboardFrameValue.cgRectValue
+        let convertedFrame = view.convert(keyboardFrame, from: nil)
+        let intersection = view.bounds.intersection(convertedFrame)
+        let bottomInset = intersection.height
+        let keyboardWillAppear = bottomInset - inputBar.frame.size.height > 0
+        
+        if keyboardWillAppear {
+            switchToLargeDetentIfNeeded()
+        }
+        
+        UIView.animate(withDuration: duration,
+                       delay: 0,
+                       options: UIView.AnimationOptions(rawValue: curveValue << 16),
+                       animations: {
+            // TODO: content inset
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+
+    @objc func keyboardWillHide(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+              let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt
+        else { return }
+        
+        UIView.animate(withDuration: duration,
+                       delay: 0,
+                       options: UIView.AnimationOptions(rawValue: curveValue << 16),
+                       animations: {
+            // TODO: content inset
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
 }
 
@@ -175,17 +204,5 @@ extension IMPickerWrapperViewController: IMPickerViewControllerDelegate {
     
     public func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) {
         delegate?.pickerViewController(controller, didFailWithPermissionError: error)
-    }
-}
-
-// MARK: - KeyboardFrameTrackerDelegate
-extension IMPickerWrapperViewController: IMKeyboardFrameTrackerViewDelegate {
-    public func keyboardFrameDidChange(with frame: CGRect) {
-        let screenHeight = UIScreen.main.bounds.height
-        visibleKeyboardHeight = max(0, screenHeight - frame.origin.y - keyboardFrameTrackerView.frame.size.height)
-        if visibleKeyboardHeight > 0 {
-            switchToLargeDetentIfNeeded()
-        }
-        updateFrames(selectedAssetCount: selectedAssetCount)
     }
 }

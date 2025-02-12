@@ -26,6 +26,7 @@ protocol IMAssetSelectionDelegate: AnyObject {
 // MARK: - IMAssetsCollectionViewController
 class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
+    var adjustsContentInset: Bool = true
     var collectionView: UICollectionView!
     var assets: PHFetchResult<PHAsset>?
     let imageManager = PHCachingImageManager()
@@ -199,7 +200,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        if section == 0 {
+        if adjustsContentInset {
             return UIEdgeInsets(top: 0, left: 0, bottom: view.safeAreaInsets.bottom, right: 0)
         } else {
             return UIEdgeInsets.zero

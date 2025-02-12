@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		384F15D22D5A1A480035FF7D /* IMKeyboardFrameTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384F15D12D5A1A480035FF7D /* IMKeyboardFrameTrackerView.swift */; };
 		38B9E1862D582AB60079209F /* IMInputBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B9E1852D582AB50079209F /* IMInputBarView.swift */; };
 		38B9E1882D58304E0079209F /* IMPickerWrapperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B9E1872D58304D0079209F /* IMPickerWrapperViewController.swift */; };
 		5B5998E02D566890004F6A20 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B5998DE2D566890004F6A20 /* Localizable.strings */; };
@@ -31,7 +30,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		384F15D12D5A1A480035FF7D /* IMKeyboardFrameTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMKeyboardFrameTrackerView.swift; sourceTree = "<group>"; };
 		38B9E1852D582AB50079209F /* IMInputBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMInputBarView.swift; sourceTree = "<group>"; };
 		38B9E1872D58304D0079209F /* IMPickerWrapperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPickerWrapperViewController.swift; sourceTree = "<group>"; };
 		5B5998DF2D566890004F6A20 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -86,7 +84,6 @@
 				5B733F412D53AFBA008485DD /* IMAlbumsViewController.swift */,
 				5B733F542D54FAC0008485DD /* IMAssetsCollectionViewController.swift */,
 				38B9E1852D582AB50079209F /* IMInputBarView.swift */,
-				384F15D12D5A1A480035FF7D /* IMKeyboardFrameTrackerView.swift */,
 				5B733F4E2D53C8AA008485DD /* IMPhotoCell.swift */,
 				5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */,
 				5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */,
@@ -222,7 +219,6 @@
 				5B733F552D54FAC3008485DD /* IMAssetsCollectionViewController.swift in Sources */,
 				5B733F4F2D53C8AB008485DD /* IMPhotoCell.swift in Sources */,
 				38B9E1882D58304E0079209F /* IMPickerWrapperViewController.swift in Sources */,
-				384F15D22D5A1A480035FF7D /* IMKeyboardFrameTrackerView.swift in Sources */,
 				38B9E1862D582AB60079209F /* IMInputBarView.swift in Sources */,
 				5B5998E82D5B6736004F6A20 /* IMPhotosViewController.swift in Sources */,
 				5B733F482D53B8F1008485DD /* IMAlbumAssetsViewController.swift in Sources */,

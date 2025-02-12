@@ -54,6 +54,13 @@ public class IMPickerViewController: UIViewController {
     
     var configuration: IMPickerConfiguration = IMPickerConfiguration()
     
+    var adjustsContentInset: Bool = true {
+        didSet {
+            photosViewController.adjustsContentInset = adjustsContentInset
+            albumsViewController.adjustsContentInset = adjustsContentInset
+        }
+    }
+    
     weak var delegate: IMPickerViewControllerDelegate?
     
     // MARK: - Private Properties
@@ -67,8 +74,9 @@ public class IMPickerViewController: UIViewController {
     }()
     
     private let containerView = UIView()
-    private let photosVC = IMPhotosViewController()
-    private let albumsVC = IMAlbumsViewController()
+    private let photosViewController = IMPhotosViewController()
+    private let albumsViewController = IMAlbumsViewController()
+    private var albumAssetsViewController: IMAlbumAssetsViewController?
     private var hdModeEnabled: Bool = false
     private var selectedAssets: [PHAsset] = []
     
@@ -79,12 +87,12 @@ public class IMPickerViewController: UIViewController {
         setupNavigationBar()
         setupContainerView()
         segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
-        photosVC.badgeColor = configuration.selectionOverlayBadgeColor
-        photosVC.selectionDelegate = self
-        photosVC.pickerController = self
-        add(childViewController: photosVC)
-        albumsVC.delegate = self
-        albumsVC.pickerController = self
+        photosViewController.badgeColor = configuration.selectionOverlayBadgeColor
+        photosViewController.selectionDelegate = self
+        photosViewController.pickerController = self
+        add(childViewController: photosViewController)
+        albumsViewController.delegate = self
+        albumsViewController.pickerController = self
     }
     
     // MARK: - Navigation Bar Setup
@@ -173,9 +181,9 @@ public class IMPickerViewController: UIViewController {
     }
     
     func switchToPhotos() {
-        remove(childViewController: albumsVC)
-        if photosVC.parent == nil {
-            add(childViewController: photosVC)
+        remove(childViewController: albumsViewController)
+        if photosViewController.parent == nil {
+            add(childViewController: photosViewController)
         }
         navigationItem.titleView = segmentedControl
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -188,9 +196,9 @@ public class IMPickerViewController: UIViewController {
     }
     
     func switchToAlbums() {
-        remove(childViewController: photosVC)
-        if albumsVC.parent == nil {
-            add(childViewController: albumsVC)
+        remove(childViewController: photosViewController)
+        if albumsViewController.parent == nil {
+            add(childViewController: albumsViewController)
         }
         navigationItem.titleView = segmentedControl
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -264,24 +272,27 @@ public class IMPickerViewController: UIViewController {
 // MARK: - IMAlbumsViewControllerDelegate Implementation
 extension IMPickerViewController: IMAlbumsViewControllerDelegate {
     func albumsViewController(_ controller: IMAlbumsViewController, didSelectAlbum album: PHAssetCollection) {
-        let albumDetailVC = IMAlbumAssetsViewController(album: album)
-        albumDetailVC.selectionDelegate = self
-        albumDetailVC.pickerController = self
-        albumDetailVC.badgeColor = configuration.selectionOverlayBadgeColor
-        albumDetailVC.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", comment: "")
-        albumDetailVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
+        let viewController = IMAlbumAssetsViewController(album: album)
+        viewController.selectionDelegate = self
+        viewController.pickerController = self
+        viewController.badgeColor = configuration.selectionOverlayBadgeColor
+        viewController.adjustsContentInset = adjustsContentInset
+        viewController.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", comment: "")
+        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),
             style: .plain,
             target: self,
             action: #selector(backFromAlbumDetail)
         )
-        albumDetailVC.navigationItem.leftBarButtonItem?.tintColor = configuration.leftNavigationItemTintColor
-        albumDetailVC.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
-        navigationController?.pushViewController(albumDetailVC, animated: true)
+        viewController.navigationItem.leftBarButtonItem?.tintColor = configuration.leftNavigationItemTintColor
+        viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
+        navigationController?.pushViewController(viewController, animated: true)
+        self.albumAssetsViewController = viewController
     }
     
     @objc func backFromAlbumDetail() {
         navigationController?.popViewController(animated: true)
+        albumAssetsViewController = nil
     }
 }
 

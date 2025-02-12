@@ -17,6 +17,7 @@ protocol IMAlbumsViewControllerDelegate: AnyObject {
 
 class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    var adjustsContentInset: Bool = true
     var tableView: UITableView!
     var albums: [PHAssetCollection] = []
     let imageManager = PHCachingImageManager()
@@ -47,7 +48,7 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         let margin: CGFloat = 15
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: margin),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -margin - 34),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -margin - (adjustsContentInset ? 34 : 0)),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: margin),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -margin)
         ])
