@@ -32,25 +32,29 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         checkPhotoLibraryPermission()
     }
     
+    override open func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        tableView.contentInset = UIEdgeInsets.init(top: adjustsContentInset ? 100 : 75, left: 0, bottom: 0, right: 0)
+    }
+    
     // MARK: - Setup
     func setupTableView() {
         tableView = UITableView(frame: .zero, style: .plain)
+        tableView.backgroundColor = .secondarySystemBackground
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.keyboardDismissMode = .interactive
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(IMAlbumCell.self, forCellReuseIdentifier: IMAlbumCell.identifier)
-        tableView.layer.cornerRadius = 12
-        tableView.clipsToBounds = true
         tableView.contentInsetAdjustmentBehavior = .never
         view.addSubview(tableView)
         
-        let margin: CGFloat = 15
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: margin),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -margin - (adjustsContentInset ? 34 : 0)),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: margin),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -margin)
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant:adjustsContentInset ? -34 : 0),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     

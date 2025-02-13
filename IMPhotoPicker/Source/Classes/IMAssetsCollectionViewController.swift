@@ -37,7 +37,6 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
         setupCollectionView()
         checkPhotoLibraryPermission()
     }
@@ -51,7 +50,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.keyboardDismissMode = .interactive
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .secondarySystemBackground
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(IMPhotoCell.self, forCellWithReuseIdentifier: IMPhotoCell.reuseIdentifier)
@@ -202,7 +201,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: view.safeAreaInsets.top, left: 0, bottom: adjustsContentInset ? view.safeAreaInsets.bottom : 0, right: 0)
+        return UIEdgeInsets(top: view.safeAreaInsets.top + (adjustsContentInset ? 5 : 0), left: 0, bottom: adjustsContentInset ? view.safeAreaInsets.bottom : 0, right: 0)
     }
     
     // MARK: - Private methods

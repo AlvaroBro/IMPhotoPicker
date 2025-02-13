@@ -83,7 +83,6 @@ public class IMPickerViewController: UIViewController {
     // MARK: - Lifecycle
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .secondarySystemBackground
         setupNavigationBar()
         setupContainerView()
         segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
@@ -137,10 +136,11 @@ public class IMPickerViewController: UIViewController {
     
     // MARK: - Container View Setup
     func setupContainerView() {
+        containerView.backgroundColor = .secondarySystemBackground
         containerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(containerView)
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.topAnchor.constraint(equalTo: view.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -195,14 +195,20 @@ public class IMPickerViewController: UIViewController {
     }
     
     // MARK: - Child View Controller Management
-    func add(childViewController child: UIViewController) {
+    
+    func add(childViewController child: UIViewController, insets: UIEdgeInsets = .zero) {
         addChild(child)
-        child.view.frame = containerView.bounds
-        child.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        child.view.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(child.view)
+        NSLayoutConstraint.activate([
+            child.view.topAnchor.constraint(equalTo: containerView.topAnchor, constant: insets.top),
+            child.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: insets.left),
+            child.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -insets.right),
+            child.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -insets.bottom)
+        ])
         child.didMove(toParent: self)
     }
-    
+
     func remove(childViewController child: UIViewController) {
         if child.parent != nil {
             child.willMove(toParent: nil)
