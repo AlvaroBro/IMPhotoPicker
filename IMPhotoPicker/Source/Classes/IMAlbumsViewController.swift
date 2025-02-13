@@ -16,20 +16,13 @@ protocol IMAlbumsViewControllerDelegate: AnyObject {
 }
 
 class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-        
-    var keyboardInset: CGFloat = 0 {
+
+    var contentInsetBottom: CGFloat = 0 {
         didSet {
             view?.setNeedsLayout()
             view?.layoutIfNeeded()
         }
     }
-    var adjustsContentInset: Bool = true {
-        didSet {
-            view?.setNeedsLayout()
-            view?.layoutIfNeeded()
-        }
-    }
-    
     var tableView: UITableView!
     var albums: [PHAssetCollection] = []
     let imageManager = PHCachingImageManager()
@@ -47,7 +40,10 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        tableView.contentInset = UIEdgeInsets.init(top: adjustsContentInset ? 125 : 75, left: 0, bottom: keyboardInset, right: 0)
+        tableView.contentInset = UIEdgeInsets.init(top: view.safeAreaInsets.top + 15,
+                                                   left: 0,
+                                                   bottom: contentInsetBottom,
+                                                   right: 0)
     }
     
     // MARK: - Setup
@@ -65,7 +61,7 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant:adjustsContentInset ? -34 : 0),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])

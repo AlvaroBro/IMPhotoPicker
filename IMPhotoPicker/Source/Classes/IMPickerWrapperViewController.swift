@@ -48,7 +48,6 @@ public class IMPickerWrapperViewController: UIViewController {
     public init() {
         pickerViewController = IMPickerViewController()
         pickerViewController.configuration = IMPickerConfiguration(rightButtonStyle: .hdModeToggle)
-        pickerViewController.adjustsContentInset = false
         childNavigationController = UINavigationController(rootViewController: pickerViewController)
         super.init(nibName: nil, bundle: nil)
         pickerViewController.delegate = self
@@ -70,10 +69,8 @@ public class IMPickerWrapperViewController: UIViewController {
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        if !pickerViewController.adjustsContentInset {
-            if pickerViewController.keyboardInset == 0 && view.safeAreaInsets.bottom > 0{
-                pickerViewController.keyboardInset = view.safeAreaInsets.bottom
-            }
+        if pickerViewController.contentInsetBottom == 0 && view.safeAreaInsets.bottom > 0 {
+            pickerViewController.contentInsetBottom = view.safeAreaInsets.bottom
         }
     }
     
@@ -165,7 +162,7 @@ public class IMPickerWrapperViewController: UIViewController {
                        delay: 0,
                        options: UIView.AnimationOptions(rawValue: curveValue << 16),
                        animations: {
-            self.pickerViewController.keyboardInset = bottomInset
+            self.pickerViewController.contentInsetBottom = bottomInset
         }, completion: nil)
     }
 
@@ -179,7 +176,7 @@ public class IMPickerWrapperViewController: UIViewController {
                        delay: 0,
                        options: UIView.AnimationOptions(rawValue: curveValue << 16),
                        animations: {
-            self.pickerViewController.keyboardInset = self.view.safeAreaInsets.bottom
+            self.pickerViewController.contentInsetBottom = self.view.safeAreaInsets.bottom
         }, completion: nil)
     }
 }
