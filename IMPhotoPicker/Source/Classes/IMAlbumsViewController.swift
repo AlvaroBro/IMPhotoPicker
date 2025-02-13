@@ -35,7 +35,7 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        tableView.contentInset = UIEdgeInsets.init(top: adjustsContentInset ? 100 : 75, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets.init(top: adjustsContentInset ? 125 : 75, left: 0, bottom: 0, right: 0)
     }
     
     // MARK: - Setup

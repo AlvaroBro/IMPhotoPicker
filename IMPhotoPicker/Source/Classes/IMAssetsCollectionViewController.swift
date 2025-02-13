@@ -201,7 +201,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: view.safeAreaInsets.top + (adjustsContentInset ? 5 : 0), left: 0, bottom: adjustsContentInset ? view.safeAreaInsets.bottom : 0, right: 0)
+        return UIEdgeInsets(top: view.safeAreaInsets.top + (adjustsContentInset ? 7 : 0), left: 0, bottom: adjustsContentInset ? view.safeAreaInsets.bottom : 0, right: 0)
     }
     
     // MARK: - Private methods
