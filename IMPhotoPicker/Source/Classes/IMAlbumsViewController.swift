@@ -48,6 +48,7 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.delegate = self
         tableView.register(IMAlbumCell.self, forCellReuseIdentifier: IMAlbumCell.identifier)
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.separatorStyle = .none
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
@@ -122,6 +123,11 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         } else {
             cell.albumImageView.image = nil
         }
+        
+        let isFirst = indexPath.row == 0
+        let isLast = indexPath.row == (albums.count - 1)
+        cell.updateAppearance(isFirst: isFirst, isLast: isLast)
+        
         return cell
     }
     

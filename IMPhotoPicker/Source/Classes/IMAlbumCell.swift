@@ -12,7 +12,8 @@ class IMAlbumCell: UITableViewCell {
     
     static let identifier = "IMAlbumCell"
     
-    // Public image view for album thumbnail
+    // MARK: - Initializers
+    
     let albumImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -22,7 +23,6 @@ class IMAlbumCell: UITableViewCell {
         return iv
     }()
     
-    // Public label for album title
     let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,26 +31,75 @@ class IMAlbumCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - Initializers
+    private let cardView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        return view
+    }()
+    
+    private let disclosureImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(systemName: "chevron.right")
+        iv.tintColor = .lightGray.withAlphaComponent(0.5)
+        return iv
+    }()
+    
+    private let topSeparator: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .lightGray.withAlphaComponent(0.5)
+        return view
+    }()
+    
+    private let bottomSeparator: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .lightGray.withAlphaComponent(0.5)
+        return view
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        accessoryType = .disclosureIndicator
-        contentView.addSubview(albumImageView)
-        contentView.addSubview(titleLabel)
+        contentView.backgroundColor = .secondarySystemBackground
         
-        let margin: CGFloat = 10
-        let imageSize: CGFloat = 60
+        contentView.addSubview(cardView)
+        cardView.addSubview(albumImageView)
+        cardView.addSubview(titleLabel)
+        cardView.addSubview(disclosureImageView)
+        cardView.addSubview(topSeparator)
+        cardView.addSubview(bottomSeparator)
         
         NSLayoutConstraint.activate([
-            albumImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: margin),
-            albumImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: margin),
-            albumImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -margin),
-            albumImageView.widthAnchor.constraint(equalToConstant: imageSize),
-            albumImageView.heightAnchor.constraint(equalToConstant: imageSize),
+            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            titleLabel.leadingAnchor.constraint(equalTo: albumImageView.trailingAnchor, constant: margin),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -margin)
+            albumImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 10),
+            albumImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 10),
+            albumImageView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -10),
+            albumImageView.widthAnchor.constraint(equalToConstant: 60),
+            albumImageView.heightAnchor.constraint(equalToConstant: 60),
+            
+            disclosureImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10),
+            disclosureImageView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
+            
+            titleLabel.leadingAnchor.constraint(equalTo: albumImageView.trailingAnchor, constant: 10),
+            titleLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: disclosureImageView.leadingAnchor, constant: -10),
+            
+            topSeparator.topAnchor.constraint(equalTo: cardView.topAnchor),
+            topSeparator.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            topSeparator.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
+            topSeparator.heightAnchor.constraint(equalToConstant: 0.25),
+            
+            bottomSeparator.bottomAnchor.constraint(equalTo: cardView.bottomAnchor),
+            bottomSeparator.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            bottomSeparator.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
+            bottomSeparator.heightAnchor.constraint(equalToConstant: 0.25)
         ])
     }
     
@@ -58,10 +107,32 @@ class IMAlbumCell: UITableViewCell {
         fatalError("init(coder:) not implemented")
     }
     
-    // MARK: - Layout
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let margin: CGFloat = 10
-        separatorInset = UIEdgeInsets(top: 0, left: albumImageView.frame.maxX + margin, bottom: 0, right: 0)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        albumImageView.image = nil
+        titleLabel.text = nil
+    }
+    
+    // MARK: - Public Methods
+    
+    public func updateAppearance(isFirst: Bool, isLast: Bool) {
+        topSeparator.isHidden = isFirst
+        bottomSeparator.isHidden = isLast
+        
+        var maskedCorners: CACornerMask = []
+        if isFirst {
+            maskedCorners.insert(.layerMinXMinYCorner)
+            maskedCorners.insert(.layerMaxXMinYCorner)
+        }
+        if isLast {
+            maskedCorners.insert(.layerMinXMaxYCorner)
+            maskedCorners.insert(.layerMaxXMaxYCorner)
+        }
+        if !maskedCorners.isEmpty {
+            cardView.layer.cornerRadius = 8
+            cardView.layer.maskedCorners = maskedCorners
+        } else {
+            cardView.layer.cornerRadius = 0
+        }
     }
 }
