@@ -47,6 +47,13 @@ class ViewController: UIViewController {
         return btn
     }()
     
+    let customPicker4Button: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Custom Picker Example 4 (WhatsApp 🙂)", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -63,12 +70,14 @@ class ViewController: UIViewController {
         view.addSubview(customPicker1Button)
         view.addSubview(customPicker2Button)
         view.addSubview(customPicker3Button)
+        view.addSubview(customPicker4Button)
         
         nativePickerButton.addTarget(self, action: #selector(presentNativePicker), for: .touchUpInside)
         inputAccessoryButton.addTarget(self, action: #selector(presentInputAccessoryViewController), for: .touchUpInside)
         customPicker1Button.addTarget(self, action: #selector(presentPicker1), for: .touchUpInside)
         customPicker2Button.addTarget(self, action: #selector(presentPicker2), for: .touchUpInside)
         customPicker3Button.addTarget(self, action: #selector(presentPicker3), for: .touchUpInside)
+        customPicker4Button.addTarget(self, action: #selector(presentPicker4), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             nativePickerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -84,7 +93,10 @@ class ViewController: UIViewController {
             customPicker2Button.topAnchor.constraint(equalTo: customPicker1Button.bottomAnchor, constant: 20),
             
             customPicker3Button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            customPicker3Button.topAnchor.constraint(equalTo: customPicker2Button.bottomAnchor, constant: 20)
+            customPicker3Button.topAnchor.constraint(equalTo: customPicker2Button.bottomAnchor, constant: 20),
+            
+            customPicker4Button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            customPicker4Button.topAnchor.constraint(equalTo: customPicker3Button.bottomAnchor, constant: 20)
         ])
     }
     
@@ -137,6 +149,17 @@ class ViewController: UIViewController {
     }
 
     @objc func presentPicker3() {
+        let picker = getPickerWrapperViewController()
+        picker.modalPresentationStyle = .fullScreen
+        present(picker, animated: true, completion: nil)
+    }
+    
+    @objc func presentPicker4() {
+        let picker = getPickerWrapperViewController()
+        presentPickerWrapperAsPageSheet(picker: picker)
+    }
+    
+    func getPickerWrapperViewController() -> IMPickerWrapperViewController {
         let picker = IMPickerWrapperViewController()
         picker.configuration = IMPickerConfiguration(
             rightButtonStyle: .hdModeToggle,
@@ -151,7 +174,7 @@ class ViewController: UIViewController {
                     )
         )
         picker.delegate = self
-        presentPickerWrapperAsPageSheet(picker: picker)
+        return picker
     }
     
     func presentPickerWrapperAsPageSheet(picker: IMPickerWrapperViewController) {

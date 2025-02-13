@@ -54,10 +54,19 @@ public class IMPickerViewController: UIViewController {
     
     var configuration: IMPickerConfiguration = IMPickerConfiguration()
     
+    var keyboardInset: CGFloat = 0 {
+        didSet {
+            photosViewController.keyboardInset = keyboardInset
+            albumsViewController.keyboardInset = keyboardInset
+            albumAssetsViewController?.keyboardInset = keyboardInset
+        }
+    }
+    
     var adjustsContentInset: Bool = true {
         didSet {
             photosViewController.adjustsContentInset = adjustsContentInset
             albumsViewController.adjustsContentInset = adjustsContentInset
+            albumAssetsViewController?.adjustsContentInset = adjustsContentInset
         }
     }
     
@@ -267,6 +276,7 @@ extension IMPickerViewController: IMAlbumsViewControllerDelegate {
         viewController.pickerController = self
         viewController.badgeColor = configuration.selectionOverlayBadgeColor
         viewController.adjustsContentInset = adjustsContentInset
+        viewController.keyboardInset = keyboardInset
         viewController.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", comment: "")
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),

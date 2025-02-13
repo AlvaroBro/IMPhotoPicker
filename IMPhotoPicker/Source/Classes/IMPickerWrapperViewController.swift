@@ -67,6 +67,16 @@ public class IMPickerWrapperViewController: UIViewController {
         fatalError("init(coder:) not implemented")
     }
     
+    override open func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if !pickerViewController.adjustsContentInset {
+            if pickerViewController.keyboardInset == 0 && view.safeAreaInsets.bottom > 0{
+                pickerViewController.keyboardInset = view.safeAreaInsets.bottom
+            }
+        }
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -155,8 +165,7 @@ public class IMPickerWrapperViewController: UIViewController {
                        delay: 0,
                        options: UIView.AnimationOptions(rawValue: curveValue << 16),
                        animations: {
-            // TODO: content inset
-            self.view.layoutIfNeeded()
+            self.pickerViewController.keyboardInset = bottomInset
         }, completion: nil)
     }
 
@@ -170,8 +179,7 @@ public class IMPickerWrapperViewController: UIViewController {
                        delay: 0,
                        options: UIView.AnimationOptions(rawValue: curveValue << 16),
                        animations: {
-            // TODO: content inset
-            self.view.layoutIfNeeded()
+            self.pickerViewController.keyboardInset = self.view.safeAreaInsets.bottom
         }, completion: nil)
     }
 }

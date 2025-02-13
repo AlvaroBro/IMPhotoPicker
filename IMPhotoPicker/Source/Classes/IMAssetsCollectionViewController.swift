@@ -26,7 +26,16 @@ protocol IMAssetSelectionDelegate: AnyObject {
 // MARK: - IMAssetsCollectionViewController
 class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    var adjustsContentInset: Bool = true
+    var keyboardInset: CGFloat = 0 {
+        didSet {
+            collectionView?.collectionViewLayout.invalidateLayout()
+        }
+    }
+    var adjustsContentInset: Bool = true {
+        didSet {
+            collectionView?.collectionViewLayout.invalidateLayout()
+        }
+    }
     var collectionView: UICollectionView!
     var assets: PHFetchResult<PHAsset>?
     let imageManager = PHCachingImageManager()
@@ -201,7 +210,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: view.safeAreaInsets.top + (adjustsContentInset ? 7 : 0), left: 0, bottom: adjustsContentInset ? view.safeAreaInsets.bottom : 0, right: 0)
+        return UIEdgeInsets(top: view.safeAreaInsets.top + (adjustsContentInset ? 7 : 0), left: 0, bottom: adjustsContentInset ? view.safeAreaInsets.bottom : keyboardInset, right: 0)
     }
     
     // MARK: - Private methods

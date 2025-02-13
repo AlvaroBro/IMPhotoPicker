@@ -16,8 +16,20 @@ protocol IMAlbumsViewControllerDelegate: AnyObject {
 }
 
 class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+        
+    var keyboardInset: CGFloat = 0 {
+        didSet {
+            view?.setNeedsLayout()
+            view?.layoutIfNeeded()
+        }
+    }
+    var adjustsContentInset: Bool = true {
+        didSet {
+            view?.setNeedsLayout()
+            view?.layoutIfNeeded()
+        }
+    }
     
-    var adjustsContentInset: Bool = true
     var tableView: UITableView!
     var albums: [PHAssetCollection] = []
     let imageManager = PHCachingImageManager()
@@ -35,7 +47,7 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        tableView.contentInset = UIEdgeInsets.init(top: adjustsContentInset ? 125 : 75, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets.init(top: adjustsContentInset ? 125 : 75, left: 0, bottom: keyboardInset, right: 0)
     }
     
     // MARK: - Setup
