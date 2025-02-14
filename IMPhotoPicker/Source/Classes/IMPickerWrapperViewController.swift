@@ -97,6 +97,12 @@ public class IMPickerWrapperViewController: UIViewController {
         ])
         
         inputBar.sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        
+        if #available(iOS 15.0, *) {
+            if let sheet = self.sheetPresentationController {
+                sheet.delegate = self
+            }
+        }
     }
 
     // MARK: - Public Methods
@@ -108,20 +114,25 @@ public class IMPickerWrapperViewController: UIViewController {
                 becomeFirstResponder()
             }
         } else {
-            if isFirstResponder {
-                resignFirstResponder()
-            } else if inputBar.isFirstResponder {
-                _ = inputBar.resignFirstResponder()
-            }
+            _ = resignFirstResponder()
         }
     }
     
     public override var inputAccessoryView: UIView? {
-        return self.selectedAssetCount > 0 ? inputBar : nil
+        return selectedAssetCount > 0 ? inputBar : nil
     }
     
     public override var canBecomeFirstResponder: Bool {
-        return self.selectedAssetCount > 0
+        return selectedAssetCount > 0
+    }
+    
+    public override func resignFirstResponder() -> Bool {
+        if isFirstResponder {
+            return super.resignFirstResponder()
+        } else if inputBar.isFirstResponder {
+            return inputBar.resignFirstResponder()
+        }
+        return false
     }
 
     // MARK: - Private Methods
@@ -136,6 +147,16 @@ public class IMPickerWrapperViewController: UIViewController {
                     sheet.selectedDetentIdentifier = .large
                 }
             }
+        }
+    }
+    
+    private func hideKeyboardAccountingForBarVisibility() {
+        if selectedAssetCount > 0 {
+            if inputBar.isFirstResponder {
+                becomeFirstResponder()
+            }
+        } else {
+            _ = resignFirstResponder()
         }
     }
     
@@ -209,5 +230,16 @@ extension IMPickerWrapperViewController: IMPickerViewControllerDelegate {
     
     public func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) {
         delegate?.pickerViewController(controller, didFailWithPermissionError: error)
+    }
+}
+
+// MARK: - UISheetPresentationControllerDelegate Implementation
+extension IMPickerWrapperViewController: UISheetPresentationControllerDelegate {
+    public func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+        if let detent = sheetPresentationController.selectedDetentIdentifier {
+            if detent.rawValue == "custom.detent" {
+                hideKeyboardAccountingForBarVisibility()
+            }
+        }
     }
 }
