@@ -212,11 +212,11 @@ class ViewController: UIViewController {
     // MARK: - Alerts
     func showNoPermissionAlert(fromViewController: UIViewController) {
         let alert = UIAlertController(
-            title: NSLocalizedString("alert_no_access_title", comment: ""),
-            message: NSLocalizedString("alert_no_access_message", comment: ""),
+            title: "No Access to Photos",
+            message: "Please enable photo library access in Settings.",
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: NSLocalizedString("alert_ok", comment: ""), style: .default, handler: { UIAlertAction in
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { UIAlertAction in
             fromViewController.dismiss(animated: true)
         }))
         fromViewController.present(alert, animated: true, completion: nil)

@@ -53,7 +53,7 @@ import UIKit
 /// Configuration object for customizing the appearance of the input bar.
 @objcMembers public class IMInputBarConfiguration : NSObject {
     /// The placeholder text displayed in the input bar's text field.
-    public var placeholder: String = NSLocalizedString("input_placeholder", comment: "")
+    public var placeholder: String = NSLocalizedString("input_placeholder", tableName: "IMPhotoPicker", comment: "")
     
     /// The background color of the input bar's text field.
     public var textFieldBackgroundColor: UIColor = .white

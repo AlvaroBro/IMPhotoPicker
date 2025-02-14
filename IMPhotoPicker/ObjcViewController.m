@@ -205,10 +205,10 @@
 }
 
 - (void)showNoPermissionAlertFromViewController:(UIViewController *)fromViewController {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"alert_no_access_title", nil)
-                                                                   message:NSLocalizedString(@"alert_no_access_message", nil)
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Access to Photos"
+                                                                   message:@"Please enable photo library access in Settings."
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"alert_ok", nil)
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK"
                                                      style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction * _Nonnull action) {
         [fromViewController dismissViewControllerAnimated:YES completion:nil];

@@ -22,7 +22,7 @@
 		5B733F4F2D53C8AB008485DD /* IMPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F4E2D53C8AA008485DD /* IMPhotoCell.swift */; };
 		5B733F552D54FAC3008485DD /* IMAssetsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F542D54FAC0008485DD /* IMAssetsCollectionViewController.swift */; };
 		5B733F582D5506F6008485DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B733F562D5506F6008485DD /* LaunchScreen.storyboard */; };
-		5BBE650C2D5FA94D0036300F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BBE650A2D5FA94D0036300F /* Localizable.strings */; };
+		5BBE650C2D5FA94D0036300F /* IMPhotoPicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BBE650A2D5FA94D0036300F /* IMPhotoPicker.strings */; };
 		5BD525132D5F775D00784A77 /* ObjcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD525122D5F775D00784A77 /* ObjcViewController.m */; };
 		6FF3B59324F9090C0023EB44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF3B59224F9090C0023EB44 /* AppDelegate.swift */; };
 		6FF3B59524F9090C0023EB44 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF3B59424F9090C0023EB44 /* SceneDelegate.swift */; };
@@ -46,9 +46,9 @@
 		5B733F4E2D53C8AA008485DD /* IMPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPhotoCell.swift; sourceTree = "<group>"; };
 		5B733F542D54FAC0008485DD /* IMAssetsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMAssetsCollectionViewController.swift; sourceTree = "<group>"; };
 		5B733F572D5506F6008485DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		5BBE650B2D5FA94D0036300F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
-		5BBE650D2D5FA9530036300F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		5BBE650E2D5FA95B0036300F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5BBE650B2D5FA94D0036300F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/IMPhotoPicker.strings; sourceTree = "<group>"; };
+		5BBE650D2D5FA9530036300F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/IMPhotoPicker.strings; sourceTree = "<group>"; };
+		5BBE650E2D5FA95B0036300F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/IMPhotoPicker.strings; sourceTree = "<group>"; };
 		5BD525102D5F775D00784A77 /* IMPhotoPicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IMPhotoPicker-Bridging-Header.h"; sourceTree = "<group>"; };
 		5BD525112D5F775D00784A77 /* ObjcViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjcViewController.h; sourceTree = "<group>"; };
 		5BD525122D5F775D00784A77 /* ObjcViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjcViewController.m; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				5B733F4C2D53C0DA008485DD /* IMPhotoPicker.xcassets */,
-				5BBE650A2D5FA94D0036300F /* Localizable.strings */,
+				5BBE650A2D5FA94D0036300F /* IMPhotoPicker.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -206,7 +206,7 @@
 				5B733F582D5506F6008485DD /* LaunchScreen.storyboard in Resources */,
 				6FF3B59C24F909170023EB44 /* Assets.xcassets in Resources */,
 				5B733F4D2D53C0DA008485DD /* IMPhotoPicker.xcassets in Resources */,
-				5BBE650C2D5FA94D0036300F /* Localizable.strings in Resources */,
+				5BBE650C2D5FA94D0036300F /* IMPhotoPicker.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,14 +248,14 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		5BBE650A2D5FA94D0036300F /* Localizable.strings */ = {
+		5BBE650A2D5FA94D0036300F /* IMPhotoPicker.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				5BBE650B2D5FA94D0036300F /* ca */,
 				5BBE650D2D5FA9530036300F /* en */,
 				5BBE650E2D5FA95B0036300F /* es */,
 			);
-			name = Localizable.strings;
+			name = IMPhotoPicker.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

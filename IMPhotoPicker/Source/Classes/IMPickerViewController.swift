@@ -67,8 +67,8 @@ extension IMPickerViewControllerDelegate {
     // MARK: - Private Properties
     private let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: [
-            NSLocalizedString("photos_segment_title", comment: ""),
-            NSLocalizedString("albums_segment_title", comment: "")
+            NSLocalizedString("photos_segment_title", tableName: "IMPhotoPicker", comment: ""),
+            NSLocalizedString("albums_segment_title", tableName: "IMPhotoPicker", comment: "")
         ])
         sc.selectedSegmentIndex = 0
         return sc
@@ -100,7 +100,7 @@ extension IMPickerViewControllerDelegate {
         
         navigationItem.titleView = segmentedControl
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("cancel_button_title", comment: ""),
+            title: NSLocalizedString("cancel_button_title", tableName: "IMPhotoPicker", comment: ""),
             style: .plain,
             target: self,
             action: #selector(cancelTapped)
@@ -110,7 +110,7 @@ extension IMPickerViewControllerDelegate {
         switch rightButtonStyle {
         case .accept:
             navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: NSLocalizedString("accept_button_title", comment: ""),
+                title: NSLocalizedString("accept_button_title", tableName: "IMPhotoPicker", comment: ""),
                 style: .done,
                 target: self,
                 action: #selector(acceptTapped)
@@ -309,7 +309,7 @@ extension IMPickerViewController: IMAlbumsViewControllerDelegate {
         viewController.pickerController = self
         viewController.badgeColor = configuration.selectionOverlayBadgeColor
         viewController.contentInsetBottom = contentInsetBottom
-        viewController.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", comment: "")
+        viewController.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", tableName: "IMPhotoPicker", comment: "")
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),
             style: .plain,

@@ -8,9 +8,6 @@
 
 "accept_button_title" = "Accept";
 "albums_segment_title" = "Albums";
-"alert_no_access_message" = "Please enable photo library access in Settings.";
-"alert_no_access_title" = "No Access to Photos";
-"alert_ok" = "OK";
 "cancel_button_title" = "Cancel";
 "default_album_title" = "Album";
 "photos_segment_title" = "Photos";

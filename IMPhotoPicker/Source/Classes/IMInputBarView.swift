@@ -15,7 +15,7 @@ public class IMInputBarView: UIView {
     public let textField: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = NSLocalizedString("input_placeholder", comment: "")
+        tf.placeholder = NSLocalizedString("input_placeholder", tableName: "IMPhotoPicker", comment: "")
         tf.backgroundColor = .white
         tf.borderStyle = .none
         tf.layer.borderColor = UIColor.gray.cgColor

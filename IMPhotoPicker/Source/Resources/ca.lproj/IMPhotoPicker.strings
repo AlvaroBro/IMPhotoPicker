@@ -8,9 +8,6 @@
 
 "accept_button_title" = "Acceptar";
 "albums_segment_title" = "Àlbums";
-"alert_no_access_message" = "Si us plau, habilita l'accés a la biblioteca de fotos a la configuració.";
-"alert_no_access_title" = "Sense accés a les fotos";
-"alert_ok" = "D'acord";
 "cancel_button_title" = "Cancel·lar";
 "default_album_title" = "Àlbum";
 "photos_segment_title" = "Fotos";
