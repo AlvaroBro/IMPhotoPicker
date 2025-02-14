@@ -9,7 +9,7 @@
 #import <PhotosUI/PhotosUI.h>
 #import "IMPhotoPicker-Swift.h"
 
-@interface ObjcViewController () <PHPickerViewControllerDelegate, IMPickerViewControllerDelegate, IMPickerWrapperViewControllerDelegate>
+@interface ObjcViewController () <PHPickerViewControllerDelegate, IMPickerWrapperViewControllerDelegate>
 
 @property (nonatomic, strong) UIButton *nativePickerButton;
 @property (nonatomic, strong) UIButton *inputAccessoryButton;
@@ -223,7 +223,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - IMPickerViewControllerDelegate
+#pragma mark - IMPickerWrapperViewControllerDelegate
 
 - (void)pickerViewController:(IMPickerViewController *)controller didUpdateSelection:(NSArray<PHAsset *> *)selection hdModeEnabled:(BOOL)hdModeEnabled {
     NSLog(@"Updated selection: %lu items, HD mode: %@", (unsigned long)selection.count, hdModeEnabled ? @"Enabled" : @"Disabled");
@@ -242,8 +242,6 @@
 - (void)pickerViewControllerDidTapRightButton:(IMPickerViewController *)controller {
     NSLog(@"Right button tapped");
 }
-
-#pragma mark - IMPickerWrapperViewControllerDelegate
 
 - (void)pickerWrapperViewController:(IMPickerWrapperViewController *)controller didTapSendWithText:(NSString *)text {
     NSLog(@"Send tapped with text: %@", text);

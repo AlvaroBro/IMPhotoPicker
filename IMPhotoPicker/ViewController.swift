@@ -190,7 +190,7 @@ class ViewController: UIViewController {
                         },
                         .large()
                     ]
-                } else if #available(iOS 15.0, *) {
+                } else {
                     sheet.detents = [
                         .medium(),
                         .large()
