@@ -107,7 +107,9 @@ class ViewController: UIViewController {
         configuration.filter = nil
         configuration.selectionLimit = 0
         configuration.preferredAssetRepresentationMode = .automatic
-        configuration.selection = .ordered
+        if #available(iOS 15.0, *) {
+            configuration.selection = .ordered
+        }
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true)

@@ -6,8 +6,10 @@
 //
 
 #import "ObjcViewController.h"
+#import <PhotosUI/PhotosUI.h>
+#import "IMPhotoPicker-Swift.h"
 
-@interface ObjcViewController ()
+@interface ObjcViewController () <PHPickerViewControllerDelegate, IMPickerViewControllerDelegate, IMPickerWrapperViewControllerDelegate>
 
 @property (nonatomic, strong) UIButton *nativePickerButton;
 @property (nonatomic, strong) UIButton *inputAccessoryButton;
@@ -97,7 +99,9 @@
     configuration.filter = nil;
     configuration.selectionLimit = 0;
     configuration.preferredAssetRepresentationMode = PHPickerConfigurationAssetRepresentationModeAutomatic;
-    configuration.selection = PHPickerConfigurationSelectionOrdered;
+    if (@available(iOS 15, *)) {
+        configuration.selection = PHPickerConfigurationSelectionOrdered;
+    }
     
     PHPickerViewController *picker = [[PHPickerViewController alloc] initWithConfiguration:configuration];
     picker.delegate = self;

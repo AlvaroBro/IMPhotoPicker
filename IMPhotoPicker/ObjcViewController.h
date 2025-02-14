@@ -6,12 +6,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <PhotosUI/PhotosUI.h>
-#import "IMPhotoPicker-Swift.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ObjcViewController : UIViewController <PHPickerViewControllerDelegate, IMPickerViewControllerDelegate, IMPickerWrapperViewControllerDelegate>
+@interface ObjcViewController : UIViewController 
 
 @end
 

@@ -235,6 +235,7 @@ extension IMPickerWrapperViewController: IMPickerViewControllerDelegate {
 }
 
 // MARK: - UISheetPresentationControllerDelegate Implementation
+@available(iOS 15.0, *)
 extension IMPickerWrapperViewController: UISheetPresentationControllerDelegate {
     public func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
         if let detent = sheetPresentationController.selectedDetentIdentifier {
