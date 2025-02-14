@@ -11,7 +11,7 @@ import Photos
 // MARK: - IMPickerWrapperViewControllerDelegate
 @objc public protocol IMPickerWrapperViewControllerDelegate: IMPickerViewControllerDelegate {
     /// Called when the send button is tapped.
-    func pickerWrapperViewController(_ controller: IMPickerWrapperViewController, didTapSendWithText text: String)
+    func pickerWrapperViewController(_ controller: IMPickerWrapperViewController, didTapSendWithText text: String, selection: [PHAsset], hdModeEnabled: Bool)
 }
 
 // MARK: - IMPickerWrapperViewController
@@ -138,7 +138,7 @@ import Photos
 
     // MARK: - Private Methods
     @objc private func sendButtonTapped() {
-        delegate?.pickerWrapperViewController(self, didTapSendWithText: inputBar.textField.text ?? "")
+        delegate?.pickerWrapperViewController(self, didTapSendWithText: inputBar.textField.text ?? "", selection: pickerViewController.assets, hdModeEnabled: pickerViewController.isHDModeEnabled)
     }
     
     private func switchToLargeDetentIfNeeded() {

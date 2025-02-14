@@ -44,6 +44,14 @@ extension IMPickerViewControllerDelegate {
 
     // MARK: - Public Properties
     
+    var isHDModeEnabled: Bool {
+        return hdModeEnabled
+    }
+
+    var assets: [PHAsset] {
+        return selectedAssets
+    }
+    
     var selectionLimit: Int {
         configuration.selectionLimit
     }

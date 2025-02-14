@@ -252,8 +252,8 @@ extension ViewController: IMPickerWrapperViewControllerDelegate {
         print("Right button tapped")
     }
     
-    func pickerWrapperViewController(_ controller: IMPickerWrapperViewController, didTapSendWithText text: String) {
-        print("Send tapped with text: \(text)")
+    func pickerWrapperViewController(_ controller: IMPickerWrapperViewController, didTapSendWithText text: String, selection: [PHAsset], hdModeEnabled: Bool) {
+        print("Send tapped with text: \(text), \(selection.count) items, HD mode: \(hdModeEnabled ? "Enabled" : "Disabled")")
         controller.dismiss(animated: true, completion: nil)
     }
     

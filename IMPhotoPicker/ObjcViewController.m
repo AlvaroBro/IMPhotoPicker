@@ -243,8 +243,8 @@
     NSLog(@"Right button tapped");
 }
 
-- (void)pickerWrapperViewController:(IMPickerWrapperViewController *)controller didTapSendWithText:(NSString *)text {
-    NSLog(@"Send tapped with text: %@", text);
+- (void)pickerWrapperViewController:(IMPickerWrapperViewController *)controller didTapSendWithText:(NSString *)text selection:(NSArray<PHAsset *> *)selection hdModeEnabled:(BOOL)hdModeEnabled {
+    NSLog(@"Send tapped with text: %@, %lu items, HD mode: %@", text, (unsigned long)selection.count, hdModeEnabled ? @"Enabled" : @"Disabled");
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
