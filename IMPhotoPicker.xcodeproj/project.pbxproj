@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		38B9E1862D582AB60079209F /* IMInputBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B9E1852D582AB50079209F /* IMInputBarView.swift */; };
 		38B9E1882D58304E0079209F /* IMPickerWrapperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B9E1872D58304D0079209F /* IMPickerWrapperViewController.swift */; };
-		5B5998E02D566890004F6A20 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B5998DE2D566890004F6A20 /* Localizable.strings */; };
 		5B5998E62D5B654A004F6A20 /* IMAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E52D5B654A004F6A20 /* IMAlbumCell.swift */; };
 		5B5998E82D5B6736004F6A20 /* IMPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */; };
 		5B5998EA2D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */; };
@@ -19,10 +18,11 @@
 		5B733F422D53AFBA008485DD /* IMAlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F412D53AFBA008485DD /* IMAlbumsViewController.swift */; };
 		5B733F482D53B8F1008485DD /* IMAlbumAssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F472D53B8F1008485DD /* IMAlbumAssetsViewController.swift */; };
 		5B733F4A2D53B96F008485DD /* IMPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F492D53B96E008485DD /* IMPickerViewController.swift */; };
-		5B733F4D2D53C0DA008485DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B733F4C2D53C0DA008485DD /* Assets.xcassets */; };
+		5B733F4D2D53C0DA008485DD /* IMPhotoPicker.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B733F4C2D53C0DA008485DD /* IMPhotoPicker.xcassets */; };
 		5B733F4F2D53C8AB008485DD /* IMPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F4E2D53C8AA008485DD /* IMPhotoCell.swift */; };
 		5B733F552D54FAC3008485DD /* IMAssetsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F542D54FAC0008485DD /* IMAssetsCollectionViewController.swift */; };
 		5B733F582D5506F6008485DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B733F562D5506F6008485DD /* LaunchScreen.storyboard */; };
+		5BBE650C2D5FA94D0036300F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BBE650A2D5FA94D0036300F /* Localizable.strings */; };
 		5BD525132D5F775D00784A77 /* ObjcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD525122D5F775D00784A77 /* ObjcViewController.m */; };
 		6FF3B59324F9090C0023EB44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF3B59224F9090C0023EB44 /* AppDelegate.swift */; };
 		6FF3B59524F9090C0023EB44 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF3B59424F9090C0023EB44 /* SceneDelegate.swift */; };
@@ -33,9 +33,6 @@
 /* Begin PBXFileReference section */
 		38B9E1852D582AB50079209F /* IMInputBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMInputBarView.swift; sourceTree = "<group>"; };
 		38B9E1872D58304D0079209F /* IMPickerWrapperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPickerWrapperViewController.swift; sourceTree = "<group>"; };
-		5B5998DF2D566890004F6A20 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		5B5998E32D566A43004F6A20 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		5B5998E42D566AA2004F6A20 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5B5998E52D5B654A004F6A20 /* IMAlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAlbumCell.swift; sourceTree = "<group>"; };
 		5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMPhotosViewController.swift; sourceTree = "<group>"; };
 		5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPhotoLibraryPermissionManager.swift; sourceTree = "<group>"; };
@@ -45,10 +42,13 @@
 		5B733F412D53AFBA008485DD /* IMAlbumsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMAlbumsViewController.swift; sourceTree = "<group>"; };
 		5B733F472D53B8F1008485DD /* IMAlbumAssetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMAlbumAssetsViewController.swift; sourceTree = "<group>"; };
 		5B733F492D53B96E008485DD /* IMPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPickerViewController.swift; sourceTree = "<group>"; };
-		5B733F4C2D53C0DA008485DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5B733F4C2D53C0DA008485DD /* IMPhotoPicker.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = IMPhotoPicker.xcassets; sourceTree = "<group>"; };
 		5B733F4E2D53C8AA008485DD /* IMPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPhotoCell.swift; sourceTree = "<group>"; };
 		5B733F542D54FAC0008485DD /* IMAssetsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMAssetsCollectionViewController.swift; sourceTree = "<group>"; };
 		5B733F572D5506F6008485DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5BBE650B2D5FA94D0036300F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5BBE650D2D5FA9530036300F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5BBE650E2D5FA95B0036300F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5BD525102D5F775D00784A77 /* IMPhotoPicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IMPhotoPicker-Bridging-Header.h"; sourceTree = "<group>"; };
 		5BD525112D5F775D00784A77 /* ObjcViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjcViewController.h; sourceTree = "<group>"; };
 		5BD525122D5F775D00784A77 /* ObjcViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjcViewController.m; sourceTree = "<group>"; };
@@ -101,8 +101,8 @@
 		5B733F5E2D552237008485DD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5B733F4C2D53C0DA008485DD /* Assets.xcassets */,
-				5B5998DE2D566890004F6A20 /* Localizable.strings */,
+				5B733F4C2D53C0DA008485DD /* IMPhotoPicker.xcassets */,
+				5BBE650A2D5FA94D0036300F /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -203,10 +203,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B5998E02D566890004F6A20 /* Localizable.strings in Resources */,
 				5B733F582D5506F6008485DD /* LaunchScreen.storyboard in Resources */,
 				6FF3B59C24F909170023EB44 /* Assets.xcassets in Resources */,
-				5B733F4D2D53C0DA008485DD /* Assets.xcassets in Resources */,
+				5B733F4D2D53C0DA008485DD /* IMPhotoPicker.xcassets in Resources */,
+				5BBE650C2D5FA94D0036300F /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,22 +240,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		5B5998DE2D566890004F6A20 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5B5998DF2D566890004F6A20 /* en */,
-				5B5998E32D566A43004F6A20 /* es */,
-				5B5998E42D566AA2004F6A20 /* ca */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
 		5B733F562D5506F6008485DD /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				5B733F572D5506F6008485DD /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		5BBE650A2D5FA94D0036300F /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5BBE650B2D5FA94D0036300F /* ca */,
+				5BBE650D2D5FA9530036300F /* en */,
+				5BBE650E2D5FA95B0036300F /* es */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
