@@ -23,6 +23,7 @@
 		5B733F4F2D53C8AB008485DD /* IMPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F4E2D53C8AA008485DD /* IMPhotoCell.swift */; };
 		5B733F552D54FAC3008485DD /* IMAssetsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F542D54FAC0008485DD /* IMAssetsCollectionViewController.swift */; };
 		5B733F582D5506F6008485DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B733F562D5506F6008485DD /* LaunchScreen.storyboard */; };
+		5BD525132D5F775D00784A77 /* ObjcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD525122D5F775D00784A77 /* ObjcViewController.m */; };
 		6FF3B59324F9090C0023EB44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF3B59224F9090C0023EB44 /* AppDelegate.swift */; };
 		6FF3B59524F9090C0023EB44 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF3B59424F9090C0023EB44 /* SceneDelegate.swift */; };
 		6FF3B59724F9090C0023EB44 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF3B59624F9090C0023EB44 /* ViewController.swift */; };
@@ -48,6 +49,9 @@
 		5B733F4E2D53C8AA008485DD /* IMPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPhotoCell.swift; sourceTree = "<group>"; };
 		5B733F542D54FAC0008485DD /* IMAssetsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMAssetsCollectionViewController.swift; sourceTree = "<group>"; };
 		5B733F572D5506F6008485DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5BD525102D5F775D00784A77 /* IMPhotoPicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IMPhotoPicker-Bridging-Header.h"; sourceTree = "<group>"; };
+		5BD525112D5F775D00784A77 /* ObjcViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjcViewController.h; sourceTree = "<group>"; };
+		5BD525122D5F775D00784A77 /* ObjcViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjcViewController.m; sourceTree = "<group>"; };
 		6FF3B58F24F9090C0023EB44 /* IMPhotoPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IMPhotoPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FF3B59224F9090C0023EB44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6FF3B59424F9090C0023EB44 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +135,9 @@
 				5B733F562D5506F6008485DD /* LaunchScreen.storyboard */,
 				6FF3B59B24F909170023EB44 /* Assets.xcassets */,
 				6FF3B5A024F909170023EB44 /* Info.plist */,
+				5BD525112D5F775D00784A77 /* ObjcViewController.h */,
+				5BD525122D5F775D00784A77 /* ObjcViewController.m */,
+				5BD525102D5F775D00784A77 /* IMPhotoPicker-Bridging-Header.h */,
 			);
 			path = IMPhotoPicker;
 			sourceTree = "<group>";
@@ -167,6 +174,7 @@
 				TargetAttributes = {
 					6FF3B58E24F9090C0023EB44 = {
 						CreatedOnToolsVersion = 12.0;
+						LastSwiftMigration = 1540;
 					};
 				};
 			};
@@ -217,6 +225,7 @@
 				5B733F4A2D53B96F008485DD /* IMPickerViewController.swift in Sources */,
 				5B5998E62D5B654A004F6A20 /* IMAlbumCell.swift in Sources */,
 				5B733F552D54FAC3008485DD /* IMAssetsCollectionViewController.swift in Sources */,
+				5BD525132D5F775D00784A77 /* ObjcViewController.m in Sources */,
 				5B733F4F2D53C8AB008485DD /* IMPhotoCell.swift in Sources */,
 				38B9E1882D58304E0079209F /* IMPickerWrapperViewController.swift in Sources */,
 				38B9E1862D582AB60079209F /* IMInputBarView.swift in Sources */,
@@ -379,6 +388,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NNV532YAYY;
 				INFOPLIST_FILE = IMPhotoPicker/Info.plist;
@@ -389,6 +399,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.imbox.IMPhotoPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "IMPhotoPicker/IMPhotoPicker-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -399,6 +411,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NNV532YAYY;
 				INFOPLIST_FILE = IMPhotoPicker/Info.plist;
@@ -409,6 +422,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.imbox.IMPhotoPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "IMPhotoPicker/IMPhotoPicker-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

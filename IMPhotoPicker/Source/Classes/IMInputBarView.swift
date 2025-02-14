@@ -94,7 +94,7 @@ public class IMInputBarView: UIView {
         invalidateIntrinsicContentSize()
     }
     
-    public func applyConfiguration(_ config: IMPickerConfiguration.InputBarConfiguration?) {
+    public func applyConfiguration(_ config: IMInputBarConfiguration?) {
         textField.placeholder = config?.placeholder
         textField.backgroundColor = config?.textFieldBackgroundColor
         textField.font = config?.textFieldFont

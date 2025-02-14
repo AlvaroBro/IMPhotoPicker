@@ -131,17 +131,18 @@ class ViewController: UIViewController {
     @objc func presentPicker2() {
         let picker = IMPickerViewController()
         let customButton = UIBarButtonItem(title: "Custom", style: .done, target: self, action: #selector(customRightButtonTapped))
-        picker.configuration = IMPickerConfiguration(
-            rightButtonStyle: .custom(customButton),
-            selectionLimit: 3,
-            cancelButtonNavigationItemTintColor: .red,
-            leftNavigationItemTintColor: .blue,
-            rightNavigationItemTintColor: .blue,
-            segmentedControlTintColor: .white,
-            segmentedControlSelectedSegmentTintColor: .black,
-            segmentedControlTextAttributes: [.foregroundColor: UIColor.black],
-            segmentedControlSelectedTextAttributes: [.foregroundColor: UIColor.white]
-        )
+        let configuration = IMPickerConfiguration()
+        configuration.rightButtonStyle = .custom
+        configuration.customRightBarButtonItem = customButton
+        configuration.selectionLimit = 3
+        configuration.cancelButtonNavigationItemTintColor = .red
+        configuration.leftNavigationItemTintColor = .blue
+        configuration.rightNavigationItemTintColor = .blue
+        configuration.segmentedControlTintColor = .white
+        configuration.segmentedControlSelectedSegmentTintColor = .black
+        configuration.segmentedControlTextAttributes = [.foregroundColor: UIColor.black]
+        configuration.segmentedControlSelectedTextAttributes = [.foregroundColor: UIColor.white]
+        picker.configuration = configuration
         picker.delegate = self
         let navController = UINavigationController(rootViewController: picker)
         navController.modalPresentationStyle = .fullScreen
@@ -161,18 +162,17 @@ class ViewController: UIViewController {
     
     func getPickerWrapperViewController() -> IMPickerWrapperViewController {
         let picker = IMPickerWrapperViewController()
-        picker.configuration = IMPickerConfiguration(
-            rightButtonStyle: .hdModeToggle,
-            cancelButtonNavigationItemTintColor: .black,
-            leftNavigationItemTintColor: .black,
-            rightNavigationItemTintColor: .black,
-            selectionOverlayBadgeColor: .systemGreen,
-            inputBarConfiguration: IMPickerConfiguration.InputBarConfiguration(
-                        placeholder: "Enter your message...",
-                        sendButtonBackgroundColor: .systemGreen,
-                        sendButtonBadgeColor: .systemGreen
-                    )
-        )
+        let configuration = IMPickerConfiguration()
+        configuration.rightButtonStyle = .hdModeToggle
+        configuration.cancelButtonNavigationItemTintColor = .black
+        configuration.leftNavigationItemTintColor = .black
+        configuration.rightNavigationItemTintColor = .black
+        configuration.selectionOverlayBadgeColor = .systemGreen
+        configuration.inputBarConfiguration = IMInputBarConfiguration()
+        configuration.inputBarConfiguration?.placeholder = "Enter your message..."
+        configuration.inputBarConfiguration?.sendButtonBackgroundColor = .systemGreen
+        configuration.inputBarConfiguration?.sendButtonBadgeColor = .systemGreen
+        picker.configuration = configuration
         picker.delegate = self
         return picker
     }

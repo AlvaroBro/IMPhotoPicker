@@ -10,7 +10,7 @@ import Photos
 
 // MARK: - IMPickerViewControllerDelegate
 /// Delegate protocol for IMPickerViewController events.
-public protocol IMPickerViewControllerDelegate: AnyObject {
+@objc public protocol IMPickerViewControllerDelegate: AnyObject {
     /// Called whenever the selection is updated.
     func pickerViewController(_ controller: IMPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool)
     
@@ -33,13 +33,13 @@ extension IMPickerViewControllerDelegate {
     func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) { }
 }
 
-public class IMPickerViewController: UIViewController {
+@objc public class IMPickerViewController: UIViewController {
 
     // MARK: - Types
-    public enum CustomPickerRightButtonStyle: Equatable {
+    @objc public enum CustomPickerRightButtonStyle: Int {
         case accept
         case hdModeToggle
-        case custom(UIBarButtonItem)
+        case custom
     }
 
     // MARK: - Public Properties
@@ -52,7 +52,7 @@ public class IMPickerViewController: UIViewController {
         configuration.rightButtonStyle
     }
     
-    var configuration: IMPickerConfiguration = IMPickerConfiguration()
+    @objc var configuration: IMPickerConfiguration = IMPickerConfiguration()
     
     var contentInsetBottom: CGFloat = 0 {
         didSet {
@@ -62,7 +62,7 @@ public class IMPickerViewController: UIViewController {
         }
     }
     
-    weak var delegate: IMPickerViewControllerDelegate?
+    @objc weak var delegate: IMPickerViewControllerDelegate?
     
     // MARK: - Private Properties
     private let segmentedControl: UISegmentedControl = {
@@ -125,9 +125,11 @@ public class IMPickerViewController: UIViewController {
                 action: #selector(toggleHDMode)
             )
             navigationItem.rightBarButtonItem?.tintColor = configuration.rightNavigationItemTintColor
-        case .custom(let item):
-            navigationItem.rightBarButtonItem = item
-            item.tintColor = configuration.rightNavigationItemTintColor
+        case .custom:
+            if let customItem = configuration.customRightBarButtonItem {
+                navigationItem.rightBarButtonItem = customItem
+                customItem.tintColor = configuration.rightNavigationItemTintColor
+            }
         }
     }
     

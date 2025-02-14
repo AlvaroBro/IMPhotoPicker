@@ -8,11 +8,14 @@
 import UIKit
 
 /// Configuration object for customizing the appearance and behavior of the picker.
-public struct IMPickerConfiguration {
+@objcMembers public class IMPickerConfiguration : NSObject {
     
     /// Specifies the style for the right button in the picker.
     /// Supported styles include: accept, HD mode toggle, or a custom UIBarButtonItem.
     public var rightButtonStyle: IMPickerViewController.CustomPickerRightButtonStyle = .accept
+    
+    /// A custom UIBarButtonItem to be used when the right button style is set to custom.
+    public var customRightBarButtonItem: UIBarButtonItem?
     
     /// The maximum number of assets that can be selected.
     public var selectionLimit: Int = 0
@@ -44,29 +47,29 @@ public struct IMPickerConfiguration {
     public var selectionOverlayBadgeColor: UIColor?
     
     /// Configuration settings for the input bar.
-    public var inputBarConfiguration: InputBarConfiguration = InputBarConfiguration()
+    public var inputBarConfiguration: IMInputBarConfiguration?
+}
+
+/// Configuration object for customizing the appearance of the input bar.
+@objcMembers public class IMInputBarConfiguration : NSObject {
+    /// The placeholder text displayed in the input bar's text field.
+    public var placeholder: String = NSLocalizedString("input_placeholder", comment: "")
     
-    /// Configuration object for customizing the appearance of the input bar.
-    public struct InputBarConfiguration {
-        /// The placeholder text displayed in the input bar's text field.
-        public var placeholder: String = NSLocalizedString("input_placeholder", comment: "")
-        
-        /// The background color of the input bar's text field.
-        public var textFieldBackgroundColor: UIColor = .white
-        
-        /// The font used for the text in the input bar's text field.
-        public var textFieldFont: UIFont = UIFont.systemFont(ofSize: 14)
-        
-        /// The image displayed on the send button.
-        public var sendButtonImage: UIImage = UIImage(systemName: "paperplane.fill")!
-        
-        /// The tint color of the send button.
-        public var sendButtonTintColor: UIColor = .white
-        
-        /// The background color of the send button.
-        public var sendButtonBackgroundColor: UIColor = .systemBlue
-        
-        /// The badge color for the send button, if a badge is displayed.
-        public var sendButtonBadgeColor: UIColor = .systemBlue
-    }
+    /// The background color of the input bar's text field.
+    public var textFieldBackgroundColor: UIColor = .white
+    
+    /// The font used for the text in the input bar's text field.
+    public var textFieldFont: UIFont = UIFont.systemFont(ofSize: 14)
+    
+    /// The image displayed on the send button.
+    public var sendButtonImage: UIImage = UIImage(systemName: "paperplane.fill")!
+    
+    /// The tint color of the send button.
+    public var sendButtonTintColor: UIColor = .white
+    
+    /// The background color of the send button.
+    public var sendButtonBackgroundColor: UIColor = .systemBlue
+    
+    /// The badge color for the send button, if a badge is displayed.
+    public var sendButtonBadgeColor: UIColor = .systemBlue
 }

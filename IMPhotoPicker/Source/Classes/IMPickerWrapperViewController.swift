@@ -9,17 +9,17 @@ import UIKit
 import Photos
 
 // MARK: - IMPickerWrapperViewControllerDelegate
-public protocol IMPickerWrapperViewControllerDelegate: IMPickerViewControllerDelegate {
+@objc public protocol IMPickerWrapperViewControllerDelegate: IMPickerViewControllerDelegate {
     /// Called when the send button is tapped.
     func pickerWrapperViewController(_ controller: IMPickerWrapperViewController, didTapSendWithText text: String)
 }
 
 // MARK: - IMPickerWrapperViewController
-public class IMPickerWrapperViewController: UIViewController {
+@objc public class IMPickerWrapperViewController: UIViewController {
 
     // MARK: - Public Properties
     ///
-    public var configuration: IMPickerConfiguration = IMPickerConfiguration() {
+    @objc public var configuration: IMPickerConfiguration = IMPickerConfiguration() {
         didSet {
             pickerViewController.configuration = configuration
             inputBar.applyConfiguration(configuration.inputBarConfiguration)
@@ -27,7 +27,7 @@ public class IMPickerWrapperViewController: UIViewController {
     }
     
     /// Delegate for container events.
-    public weak var delegate: IMPickerWrapperViewControllerDelegate?
+    @objc public weak var delegate: IMPickerWrapperViewControllerDelegate?
     
     /// The internally instantiated picker.
     public let pickerViewController: IMPickerViewController
@@ -47,7 +47,8 @@ public class IMPickerWrapperViewController: UIViewController {
     // MARK: - Initializers
     public init() {
         pickerViewController = IMPickerViewController()
-        pickerViewController.configuration = IMPickerConfiguration(rightButtonStyle: .hdModeToggle)
+        pickerViewController.configuration = IMPickerConfiguration()
+        pickerViewController.configuration.rightButtonStyle = .hdModeToggle
         childNavigationController = UINavigationController(rootViewController: pickerViewController)
         super.init(nibName: nil, bundle: nil)
         pickerViewController.delegate = self
