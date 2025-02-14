@@ -85,14 +85,10 @@ public class IMPickerViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
+        configureNavigationBarAppearance()
         setupContainerView()
+        setupChildViewControllers()
         segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
-        photosViewController.badgeColor = configuration.selectionOverlayBadgeColor
-        photosViewController.selectionDelegate = self
-        photosViewController.pickerController = self
-        add(childViewController: photosViewController)
-        albumsViewController.delegate = self
-        albumsViewController.pickerController = self
     }
     
     // MARK: - Navigation Bar Setup
@@ -135,6 +131,18 @@ public class IMPickerViewController: UIViewController {
         }
     }
     
+    private func configureNavigationBarAppearance() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundEffect = UIBlurEffect(style: .regular)
+        appearance.backgroundColor = .secondarySystemBackground.withAlphaComponent(0.5)
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.isTranslucent = true
+    }
+    
     // MARK: - Container View Setup
     func setupContainerView() {
         containerView.backgroundColor = .secondarySystemBackground
@@ -146,6 +154,41 @@ public class IMPickerViewController: UIViewController {
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+    
+    // MARK: - Child View Controllers Setup
+    func setupChildViewControllers() {
+        photosViewController.badgeColor = configuration.selectionOverlayBadgeColor
+        photosViewController.selectionDelegate = self
+        photosViewController.pickerController = self
+        
+        albumsViewController.delegate = self
+        albumsViewController.pickerController = self
+        
+        addChild(photosViewController)
+        containerView.addSubview(photosViewController.view)
+        photosViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            photosViewController.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+            photosViewController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            photosViewController.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            photosViewController.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        ])
+        photosViewController.didMove(toParent: self)
+        
+        addChild(albumsViewController)
+        containerView.addSubview(albumsViewController.view)
+        albumsViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            albumsViewController.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+            albumsViewController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            albumsViewController.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            albumsViewController.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        ])
+        albumsViewController.didMove(toParent: self)
+        
+        photosViewController.view.isHidden = false
+        albumsViewController.view.isHidden = true
     }
     
     // MARK: - Navigation Bar Actions
@@ -182,17 +225,13 @@ public class IMPickerViewController: UIViewController {
     }
     
     func switchToPhotos() {
-        remove(childViewController: albumsViewController)
-        if photosViewController.parent == nil {
-            add(childViewController: photosViewController)
-        }
+        photosViewController.view.isHidden = false
+        albumsViewController.view.isHidden = true
     }
     
     func switchToAlbums() {
-        remove(childViewController: photosViewController)
-        if albumsViewController.parent == nil {
-            add(childViewController: albumsViewController)
-        }
+        photosViewController.view.isHidden = true
+        albumsViewController.view.isHidden = false
     }
     
     // MARK: - Child View Controller Management
