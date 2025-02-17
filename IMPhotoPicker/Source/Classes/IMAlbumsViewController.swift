@@ -70,13 +70,11 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     // MARK: - Permissions
     func checkPhotoLibraryPermission() {
         IMPhotoLibraryPermissionManager.shared.checkAuthorization { [weak self] authorized in
-            DispatchQueue.main.async {
-                if authorized {
-                    self?.loadAlbums()
-                } else {
-                    if let picker = self?.pickerController {
-                        picker.delegate?.pickerViewController(picker, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
-                    }
+            if authorized {
+                self?.loadAlbums()
+            } else {
+                if let picker = self?.pickerController {
+                    picker.delegate?.pickerViewController(picker, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
                 }
             }
         }

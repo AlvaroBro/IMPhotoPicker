@@ -44,6 +44,19 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
         checkPhotoLibraryPermission()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            if let cell = collectionView.cellForItem(at: indexPath) as? IMPhotoCell,
+               let asset = assets?[indexPath.item],
+               let delegate = selectionDelegate {
+                let order = delegate.selectionOrder(for: asset)
+                cell.setSelectionOrder(order)
+                cell.updateVideoDuration(for: asset, selectionOrder: order)
+            }
+        }
+    }
+    
     // MARK: - Setup
     func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
@@ -71,13 +84,11 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     // MARK: - Permissions
     func checkPhotoLibraryPermission() {
         IMPhotoLibraryPermissionManager.shared.checkAuthorization { [weak self] authorized in
-            DispatchQueue.main.async {
-                if authorized {
-                    self?.loadAssetsAndReload()
-                } else {
-                    if let picker = self?.pickerController {
-                        picker.delegate?.pickerViewController(picker, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
-                    }
+            if authorized {
+                self?.loadAssetsAndReload()
+            } else {
+                if let picker = self?.pickerController {
+                    picker.delegate?.pickerViewController(picker, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
                 }
             }
         }
@@ -117,20 +128,6 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
             cell.badgeColor = badgeColor ?? .systemBlue
         }
         return cell
-    }
-    
-    // MARK: - View Updates
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        for indexPath in collectionView.indexPathsForVisibleItems {
-            if let cell = collectionView.cellForItem(at: indexPath) as? IMPhotoCell,
-               let asset = assets?[indexPath.item],
-               let delegate = selectionDelegate {
-                let order = delegate.selectionOrder(for: asset)
-                cell.setSelectionOrder(order)
-                cell.updateVideoDuration(for: asset, selectionOrder: order)
-            }
-        }
     }
     
     // MARK: - UICollectionViewDelegate
