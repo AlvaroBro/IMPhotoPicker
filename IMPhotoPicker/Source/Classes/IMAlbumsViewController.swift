@@ -16,7 +16,13 @@ protocol IMAlbumsViewControllerDelegate: AnyObject {
 }
 
 class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+    
+    var contentInsetTop: CGFloat = 0 {
+        didSet {
+            view?.setNeedsLayout()
+            view?.layoutIfNeeded()
+        }
+    }
     var contentInsetBottom: CGFloat = 0 {
         didSet {
             view?.setNeedsLayout()
@@ -28,6 +34,7 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     let imageManager = PHCachingImageManager()
     weak var delegate: IMAlbumsViewControllerDelegate?
     weak var pickerController: IMPickerViewController?
+    var viewDidAppear: Bool = false
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -37,10 +44,19 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         checkPhotoLibraryPermission()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if !viewDidAppear {
+            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: false)
+        }
+        viewDidAppear = true
+    }
+    
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        tableView.contentInset = UIEdgeInsets.init(top: view.safeAreaInsets.top + 15,
+        tableView.contentInset = UIEdgeInsets.init(top: contentInsetTop + 15,
                                                    left: 0,
                                                    bottom: contentInsetBottom,
                                                    right: 0)

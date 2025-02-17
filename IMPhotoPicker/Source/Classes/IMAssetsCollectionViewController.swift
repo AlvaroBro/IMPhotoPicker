@@ -24,7 +24,12 @@ protocol IMAssetSelectionDelegate: AnyObject {
 
 // MARK: - IMAssetsCollectionViewController
 class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+    
+    var contentInsetTop: CGFloat = 0 {
+        didSet {
+            collectionView?.collectionViewLayout.invalidateLayout()
+        }
+    }
     var contentInsetBottom: CGFloat = 0 {
         didSet {
             collectionView?.collectionViewLayout.invalidateLayout()
@@ -201,7 +206,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: view.safeAreaInsets.top,
+        return UIEdgeInsets(top: contentInsetTop > 0 ? contentInsetTop : view.safeAreaInsets.top,
                             left: 0,
                             bottom: contentInsetBottom > 0 ? contentInsetBottom : view.safeAreaInsets.bottom,
                             right: 0)

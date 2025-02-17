@@ -70,6 +70,10 @@ import Photos
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        if pickerViewController.contentInsetTop == 0 && view.safeAreaInsets.top > 0 {
+            pickerViewController.contentInsetTop = view.safeAreaInsets.top
+        }
+        
         if pickerViewController.contentInsetBottom == 0 && view.safeAreaInsets.bottom > 0 {
             pickerViewController.contentInsetBottom = view.safeAreaInsets.bottom
         }

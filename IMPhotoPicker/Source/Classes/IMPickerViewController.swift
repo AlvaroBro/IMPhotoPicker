@@ -62,11 +62,17 @@ extension IMPickerViewControllerDelegate {
     
     @objc var configuration: IMPickerConfiguration = IMPickerConfiguration()
     
-    var contentInsetBottom: CGFloat = 0 {
+    var contentInsetTop: CGFloat? {
         didSet {
-            photosViewController.contentInsetBottom = contentInsetBottom
-            albumsViewController.contentInsetBottom = contentInsetBottom
-            albumAssetsViewController?.contentInsetBottom = contentInsetBottom
+            view?.setNeedsLayout()
+            view?.layoutIfNeeded()
+        }
+    }
+    
+    var contentInsetBottom: CGFloat? {
+        didSet {
+            view?.setNeedsLayout()
+            view?.layoutIfNeeded()
         }
     }
     
@@ -97,6 +103,17 @@ extension IMPickerViewControllerDelegate {
         setupContainerView()
         setupChildViewControllers()
         segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
+    }
+    
+    override open func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        photosViewController.contentInsetTop = (contentInsetTop != nil ? contentInsetTop : view.safeAreaInsets.top)!
+        photosViewController.contentInsetBottom = (contentInsetBottom != nil ? contentInsetBottom : view.safeAreaInsets.bottom)!
+        albumsViewController.contentInsetTop = (contentInsetTop != nil ? contentInsetTop : view.safeAreaInsets.top)!
+        albumsViewController.contentInsetBottom = (contentInsetBottom != nil ? contentInsetBottom : view.safeAreaInsets.bottom)!
+        albumAssetsViewController?.contentInsetTop = (contentInsetTop != nil ? contentInsetTop : view.safeAreaInsets.top)!
+        albumAssetsViewController?.contentInsetBottom = (contentInsetBottom != nil ? contentInsetBottom : view.safeAreaInsets.bottom)!
     }
     
     // MARK: - Navigation Bar Setup
@@ -316,7 +333,8 @@ extension IMPickerViewController: IMAlbumsViewControllerDelegate {
         viewController.selectionDelegate = self
         viewController.pickerController = self
         viewController.badgeColor = configuration.selectionOverlayBadgeColor
-        viewController.contentInsetBottom = contentInsetBottom
+        viewController.contentInsetTop = contentInsetTop != nil ? contentInsetTop! : view.safeAreaInsets.top
+        viewController.contentInsetBottom = contentInsetBottom != nil ? contentInsetBottom! : view.safeAreaInsets.bottom
         viewController.navigationItem.title = album.localizedTitle ?? NSLocalizedString("default_album_title", tableName: "IMPhotoPicker", comment: "")
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),
