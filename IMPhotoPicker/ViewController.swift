@@ -148,7 +148,7 @@ class ViewController: UIViewController {
         picker.delegate = self
         let navController = UINavigationController(rootViewController: picker)
         navController.modalPresentationStyle = .fullScreen
-        present(navController, animated: true)
+        presentViewControllerAsPageSheet(picker: navController)
     }
 
     @objc func presentPicker3() {
@@ -159,7 +159,7 @@ class ViewController: UIViewController {
     
     @objc func presentPicker4() {
         let picker = getPickerWrapperViewController()
-        presentPickerWrapperAsPageSheet(picker: picker)
+        presentViewControllerAsPageSheet(picker: picker)
     }
     
     func getPickerWrapperViewController() -> IMPickerWrapperViewController {
@@ -180,7 +180,7 @@ class ViewController: UIViewController {
         return picker
     }
     
-    func presentPickerWrapperAsPageSheet(picker: IMPickerWrapperViewController) {
+    func presentViewControllerAsPageSheet(picker: UIViewController) {
         if #available(iOS 15.0, *) {
             picker.modalPresentationStyle = .pageSheet
             if let sheet = picker.sheetPresentationController {
@@ -261,5 +261,9 @@ extension ViewController: IMPickerWrapperViewControllerDelegate {
     func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) {
         print("Permission error: \(error)")
         showNoPermissionAlert(fromViewController: controller)
+    }
+    
+    func pickerViewControllerDidAttemptToDismiss(_ controller: IMPickerViewController) {
+        print("User attempted to dismiss via swipe-down gesture.")
     }
 }

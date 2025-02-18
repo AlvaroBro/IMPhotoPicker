@@ -144,7 +144,7 @@
     picker.delegate = self;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:picker];
     nav.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:nav animated:YES completion:nil];
+    [self presentViewControllerAsPageSheet:nav];
 }
 
 - (void)presentPicker3 {
@@ -155,7 +155,7 @@
 
 - (void)presentPicker4 {
     IMPickerWrapperViewController *picker = [self getPickerWrapperViewController];
-    [self presentPickerWrapperAsPageSheet:picker];
+    [self presentViewControllerAsPageSheet:picker];
 }
 
 - (IMPickerWrapperViewController *)getPickerWrapperViewController {
@@ -175,7 +175,7 @@
     return picker;
 }
 
-- (void)presentPickerWrapperAsPageSheet:(IMPickerWrapperViewController *)picker {
+- (void)presentViewControllerAsPageSheet:(UIViewController *)picker {
     if (@available(iOS 15.0, *)) {
         picker.modalPresentationStyle = UIModalPresentationPageSheet;
         UISheetPresentationController *sheet = picker.sheetPresentationController;
@@ -251,6 +251,10 @@
 - (void)pickerViewController:(IMPickerViewController *)controller didFailWithPermissionError:(NSError *)error {
     NSLog(@"Permission error: %@", error);
     [self showNoPermissionAlertFromViewController:controller];
+}
+
+- (void)pickerViewControllerDidAttemptToDismiss:(IMPickerViewController *)controller {
+    NSLog(@"User attempted to dismiss via swipe-down gesture.");
 }
 
 @end

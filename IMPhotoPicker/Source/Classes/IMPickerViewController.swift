@@ -26,11 +26,17 @@ import Photos
     
     /// Called when a permission error occurs.
     func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error)
+    
+    /// Called when the user attempts to dismiss the picker (e.g., via a swipe-down gesture)
+    /// but dismissal is prevented because one or more assets are currently selected.
+    func pickerViewControllerDidAttemptToDismiss(_ controller: IMPickerViewController)
+
 }
 
 extension IMPickerViewControllerDelegate {
     func pickerViewControllerDidTapRightButton(_ controller: IMPickerViewController) { }
     func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) { }
+    func pickerViewControllerDidAttemptToDismiss(_ controller: IMPickerViewController) { }
 }
 
 @objc public class IMPickerViewController: UIViewController {
@@ -98,6 +104,7 @@ extension IMPickerViewControllerDelegate {
     // MARK: - Lifecycle
     public override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupNavigationBar()
         configureNavigationBarAppearance()
         setupContainerView()
@@ -297,7 +304,8 @@ extension IMPickerViewControllerDelegate {
             navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
         }
         delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
-        updateInputBarVisibilityIfNeeded()
+        updateInputBarVisibility()
+        updateIsModalInPresentation()
         return true
     }
     
@@ -308,7 +316,8 @@ extension IMPickerViewControllerDelegate {
                 navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
             }
             delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
-            updateInputBarVisibilityIfNeeded()
+            updateInputBarVisibility()
+            updateIsModalInPresentation()
         }
     }
     
@@ -319,9 +328,29 @@ extension IMPickerViewControllerDelegate {
         return nil
     }
     
-    private func updateInputBarVisibilityIfNeeded() {
+    private func updateInputBarVisibility() {
         if let container = self.navigationController?.parent as? IMPickerWrapperViewController {
             container.updateInputBarVisibility(selectedAssetCount: selectedAssets.count)
+        }
+    }
+    
+    private func updateIsModalInPresentation() {
+        let shouldPreventDismissal = selectedAssets.count > 0
+        let delegate: UIAdaptivePresentationControllerDelegate? = shouldPreventDismissal ? self : nil;
+        if let container = self.navigationController?.parent as? IMPickerWrapperViewController {
+            container.isModalInPresentation = shouldPreventDismissal
+            if let nav = container.navigationController {
+                nav.presentationController?.delegate = delegate
+            } else {
+                container.presentationController?.delegate = delegate
+            }
+        } else {
+            self.isModalInPresentation = shouldPreventDismissal
+        }
+        if let nav = navigationController {
+            nav.presentationController?.delegate = delegate
+        } else {
+            presentationController?.delegate = delegate
         }
     }
 }
@@ -366,5 +395,11 @@ extension IMPickerViewController: IMAssetSelectionDelegate {
     
     func selectionOrder(for asset: PHAsset) -> Int? {
         return orderFor(asset: asset)
+    }
+}
+
+extension IMPickerViewController : UIAdaptivePresentationControllerDelegate {
+    public func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        delegate?.pickerViewControllerDidAttemptToDismiss(self)
     }
 }

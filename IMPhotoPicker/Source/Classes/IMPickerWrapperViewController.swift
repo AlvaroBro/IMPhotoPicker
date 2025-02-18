@@ -236,6 +236,10 @@ extension IMPickerWrapperViewController: IMPickerViewControllerDelegate {
     public func pickerViewController(_ controller: IMPickerViewController, didFailWithPermissionError error: Error) {
         delegate?.pickerViewController(controller, didFailWithPermissionError: error)
     }
+    
+    public func pickerViewControllerDidAttemptToDismiss(_ controller: IMPickerViewController) {
+        delegate?.pickerViewControllerDidAttemptToDismiss(controller)
+    }
 }
 
 // MARK: - UISheetPresentationControllerDelegate Implementation
