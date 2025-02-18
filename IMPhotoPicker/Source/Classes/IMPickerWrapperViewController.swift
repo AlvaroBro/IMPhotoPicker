@@ -253,3 +253,10 @@ extension IMPickerWrapperViewController: UISheetPresentationControllerDelegate {
         }
     }
 }
+
+// MARK: - UIAdaptivePresentationControllerDelegate Implementation
+extension IMPickerWrapperViewController : UIAdaptivePresentationControllerDelegate {
+    public func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        delegate?.pickerViewControllerDidAttemptToDismiss(pickerViewController)
+    }
+}

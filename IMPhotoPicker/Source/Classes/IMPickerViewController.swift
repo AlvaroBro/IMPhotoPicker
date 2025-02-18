@@ -121,6 +121,8 @@ extension IMPickerViewControllerDelegate {
         albumsViewController.contentInsetBottom = (contentInsetBottom != nil ? contentInsetBottom : view.safeAreaInsets.bottom)!
         albumAssetsViewController?.contentInsetTop = (contentInsetTop != nil ? contentInsetTop : view.safeAreaInsets.top)!
         albumAssetsViewController?.contentInsetBottom = (contentInsetBottom != nil ? contentInsetBottom : view.safeAreaInsets.bottom)!
+        
+        setPresentationControllerDelegate()
     }
     
     // MARK: - Navigation Bar Setup
@@ -336,21 +338,20 @@ extension IMPickerViewControllerDelegate {
     
     private func updateIsModalInPresentation() {
         let shouldPreventDismissal = selectedAssets.count > 0
-        let delegate: UIAdaptivePresentationControllerDelegate? = shouldPreventDismissal ? self : nil;
         if let container = self.navigationController?.parent as? IMPickerWrapperViewController {
             container.isModalInPresentation = shouldPreventDismissal
-            if let nav = container.navigationController {
-                nav.presentationController?.delegate = delegate
-            } else {
-                container.presentationController?.delegate = delegate
-            }
         } else {
             self.isModalInPresentation = shouldPreventDismissal
         }
-        if let nav = navigationController {
-            nav.presentationController?.delegate = delegate
+    }
+    
+    private func setPresentationControllerDelegate() {
+        if let container = self.navigationController?.parent as? IMPickerWrapperViewController {
+            container.navigationController?.presentationController?.delegate = container
         } else {
-            presentationController?.delegate = delegate
+            if let nav = navigationController {
+                nav.presentationController?.delegate = self
+            }
         }
     }
 }
@@ -398,6 +399,7 @@ extension IMPickerViewController: IMAssetSelectionDelegate {
     }
 }
 
+// MARK: - UIAdaptivePresentationControllerDelegate Implementation
 extension IMPickerViewController : UIAdaptivePresentationControllerDelegate {
     public func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
         delegate?.pickerViewControllerDidAttemptToDismiss(self)
