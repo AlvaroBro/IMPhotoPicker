@@ -33,7 +33,7 @@ import Photos
     public let pickerViewController: IMPickerViewController
     
     /// The input bar view.
-    public let inputBar: IMInputBarView = {
+    @objc public let inputBar: IMInputBarView = {
         let view = IMInputBarView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -142,7 +142,7 @@ import Photos
 
     // MARK: - Private Methods
     @objc private func sendButtonTapped() {
-        delegate?.pickerWrapperViewController(self, didTapSendWithText: inputBar.textField.text ?? "", selection: pickerViewController.assets, hdModeEnabled: pickerViewController.isHDModeEnabled)
+        delegate?.pickerWrapperViewController(self, didTapSendWithText: inputBar.textView.text ?? "", selection: pickerViewController.assets, hdModeEnabled: pickerViewController.isHDModeEnabled)
     }
     
     private func switchToLargeDetentIfNeeded() {

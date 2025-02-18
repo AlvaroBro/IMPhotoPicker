@@ -8,26 +8,24 @@
 import UIKit
 
 // MARK: - IMInputBarView
-public class IMInputBarView: UIView {
+@objcMembers public class IMInputBarView: UIView, UITextViewDelegate {
 
     // MARK: - Public Properties
-    /// The text field for input.
-    public let textField: UITextField = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = NSLocalizedString("input_placeholder", tableName: "IMPhotoPicker", comment: "")
-        tf.backgroundColor = .white
-        tf.borderStyle = .none
-        tf.layer.borderColor = UIColor.gray.cgColor
-        tf.layer.borderWidth = 1.0
-        tf.layer.cornerRadius = 10.0
-        tf.clipsToBounds = true
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: 0))
-        tf.leftView = paddingView
-        tf.leftViewMode = .always
-        return tf
+    /// The text view for input.
+    public let textView: UITextView = {
+        let tv = UITextView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = .white
+        tv.layer.borderColor = UIColor.gray.cgColor
+        tv.layer.borderWidth = 1.0
+        tv.layer.cornerRadius = 10.0
+        tv.clipsToBounds = true
+        tv.font = UIFont.systemFont(ofSize: 14)
+        tv.isScrollEnabled = false
+        tv.textContainerInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
+        return tv
     }()
-    
+
     /// The send button with a paper plane icon.
     public let sendButton: UIButton = {
         let btn = UIButton(type: .custom)
@@ -40,7 +38,7 @@ public class IMInputBarView: UIView {
         btn.clipsToBounds = false
         return btn
     }()
-    
+
     /// The badge count indicating the number of selected items.
     public var badgeCount: Int = 0 {
         didSet {
@@ -48,7 +46,7 @@ public class IMInputBarView: UIView {
             badgeLabel.isHidden = badgeCount <= 0
         }
     }
-    
+
     // MARK: - Private Properties
     private let badgeLabel: UILabel = {
         let label = UILabel()
@@ -63,73 +61,111 @@ public class IMInputBarView: UIView {
         label.layer.borderColor = UIColor.white.cgColor
         return label
     }()
-    
+
+    private let placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 14)
+        return label
+    }()
+
+    private var textViewHeightConstraint: NSLayoutConstraint!
+    private let maxNumberOfLines: CGFloat = 5
+
     // MARK: - Initializers
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
     }
-    
+
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) not implemented")
     }
-    
+
     // MARK: - Public Methods
-    
     public override func resignFirstResponder() -> Bool {
-        return textField.resignFirstResponder()
+        return textView.resignFirstResponder()
     }
-    
+
     public override var isFirstResponder: Bool {
-        return textField.isFirstResponder
+        return textView.isFirstResponder
     }
-    
+
     public override var intrinsicContentSize: CGSize {
         let bottomInset = safeAreaInsets.bottom
         return CGSize(width: UIView.noIntrinsicMetric, height: 56 + bottomInset)
     }
-    
+
     public override func safeAreaInsetsDidChange() {
         super.safeAreaInsetsDidChange()
         invalidateIntrinsicContentSize()
     }
-    
+
     public func applyConfiguration(_ config: IMInputBarConfiguration?) {
-        textField.placeholder = config?.placeholder ?? NSLocalizedString("input_placeholder", tableName: "IMPhotoPicker", comment: "")
-        textField.backgroundColor = config?.textFieldBackgroundColor ?? .white
-        textField.font = config?.textFieldFont ?? UIFont.systemFont(ofSize: 14)
+        placeholderLabel.text = config?.placeholder ?? NSLocalizedString("input_placeholder", tableName: "IMPhotoPicker", comment: "")
+        placeholderLabel.font = config?.textFieldFont ?? UIFont.systemFont(ofSize: 14)
+        textView.backgroundColor = config?.textFieldBackgroundColor ?? .white
+        textView.font = config?.textFieldFont ?? UIFont.systemFont(ofSize: 14)
         sendButton.setImage(config?.sendButtonImage ?? UIImage(systemName: "paperplane.fill"), for: .normal)
         sendButton.tintColor = config?.sendButtonTintColor ?? .white
         sendButton.backgroundColor = config?.sendButtonBackgroundColor ?? .systemBlue
         badgeLabel.backgroundColor = config?.sendButtonBadgeColor ?? .systemBlue
+        textViewDidChange(textView)
     }
-    
+
     // MARK: - Private Methods
     private func setupViews() {
         backgroundColor = .secondarySystemBackground
-        addSubview(textField)
+        addSubview(textView)
         addSubview(sendButton)
         sendButton.addSubview(badgeLabel)
-        
+
+        textView.delegate = self
+        textView.addSubview(placeholderLabel)
+
+        let initialHeight = (textView.font?.lineHeight ?? 17) + textView.textContainerInset.top + textView.textContainerInset.bottom
+        textViewHeightConstraint = textView.heightAnchor.constraint(equalToConstant: initialHeight)
+
         NSLayoutConstraint.activate([
-            textField.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            textField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
-            
-            sendButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 20),
-            sendButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            sendButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
-            
-            textField.heightAnchor.constraint(equalToConstant: 36),
-            sendButton.heightAnchor.constraint(equalToConstant: 36),
+            textView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 12),
+            textView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
+            textView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            textViewHeightConstraint,
+
+            sendButton.leadingAnchor.constraint(equalTo: textView.trailingAnchor, constant: 12),
+            sendButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -12),
+            sendButton.bottomAnchor.constraint(equalTo: textView.bottomAnchor, constant: 0),
+            sendButton.heightAnchor.constraint(equalToConstant: 34),
             sendButton.widthAnchor.constraint(equalTo: sendButton.heightAnchor),
-            
+
             badgeLabel.topAnchor.constraint(equalTo: sendButton.topAnchor, constant: -6),
             badgeLabel.trailingAnchor.constraint(equalTo: sendButton.trailingAnchor, constant: 6),
             badgeLabel.widthAnchor.constraint(equalToConstant: 20),
-            badgeLabel.heightAnchor.constraint(equalToConstant: 20)
+            badgeLabel.heightAnchor.constraint(equalToConstant: 20),
+
+            placeholderLabel.centerYAnchor.constraint(equalTo: textView.centerYAnchor),
+            placeholderLabel.leadingAnchor.constraint(equalTo: textView.leadingAnchor, constant: textView.textContainerInset.left + textView.textContainer.lineFragmentPadding)
         ])
-        
+
         sendButton.layer.cornerRadius = 18
         badgeLabel.layer.cornerRadius = 10
+    }
+
+    // MARK: - UITextViewDelegate
+    public func textViewDidChange(_ textView: UITextView) {
+        placeholderLabel.isHidden = !textView.text.isEmpty
+
+        let size = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+        let maxHeight = (textView.font?.lineHeight ?? 17) * maxNumberOfLines + textView.textContainerInset.top + textView.textContainerInset.bottom
+
+        if size.height <= maxHeight {
+            textViewHeightConstraint.constant = size.height
+            textView.isScrollEnabled = false
+        } else {
+            textViewHeightConstraint.constant = maxHeight
+            textView.isScrollEnabled = true
+        }
+        layoutIfNeeded()
     }
 }
