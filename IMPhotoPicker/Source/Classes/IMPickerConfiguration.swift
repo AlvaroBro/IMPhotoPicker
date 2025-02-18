@@ -53,23 +53,23 @@ import UIKit
 /// Configuration object for customizing the appearance of the input bar.
 @objcMembers public class IMInputBarConfiguration : NSObject {
     /// The placeholder text displayed in the input bar's text field.
-    public var placeholder: String = NSLocalizedString("input_placeholder", tableName: "IMPhotoPicker", comment: "")
+    public var placeholder: String?
     
     /// The background color of the input bar's text field.
-    public var textFieldBackgroundColor: UIColor = .white
+    public var textFieldBackgroundColor: UIColor?
     
     /// The font used for the text in the input bar's text field.
-    public var textFieldFont: UIFont = UIFont.systemFont(ofSize: 14)
+    public var textFieldFont: UIFont?
     
     /// The image displayed on the send button.
-    public var sendButtonImage: UIImage = UIImage(systemName: "paperplane.fill")!
+    public var sendButtonImage: UIImage?
     
     /// The tint color of the send button.
-    public var sendButtonTintColor: UIColor = .white
+    public var sendButtonTintColor: UIColor?
     
     /// The background color of the send button.
-    public var sendButtonBackgroundColor: UIColor = .systemBlue
+    public var sendButtonBackgroundColor: UIColor?
     
     /// The badge color for the send button, if a badge is displayed.
-    public var sendButtonBadgeColor: UIColor = .systemBlue
+    public var sendButtonBadgeColor: UIColor?
 }

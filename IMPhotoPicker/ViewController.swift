@@ -174,6 +174,7 @@ class ViewController: UIViewController {
         configuration.inputBarConfiguration?.placeholder = "Enter your message..."
         configuration.inputBarConfiguration?.sendButtonBackgroundColor = .systemGreen
         configuration.inputBarConfiguration?.sendButtonBadgeColor = .systemGreen
+        configuration.inputBarConfiguration?.sendButtonTintColor = .white
         picker.configuration = configuration
         picker.delegate = self
         return picker

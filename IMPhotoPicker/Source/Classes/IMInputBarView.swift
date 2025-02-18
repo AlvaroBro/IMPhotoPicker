@@ -30,7 +30,7 @@ public class IMInputBarView: UIView {
     
     /// The send button with a paper plane icon.
     public let sendButton: UIButton = {
-        let btn = UIButton(type: .system)
+        let btn = UIButton(type: .custom)
         btn.translatesAutoresizingMaskIntoConstraints = false
         if let sendImage = UIImage(systemName: "paperplane.fill") {
             btn.setImage(sendImage, for: .normal)
@@ -95,13 +95,13 @@ public class IMInputBarView: UIView {
     }
     
     public func applyConfiguration(_ config: IMInputBarConfiguration?) {
-        textField.placeholder = config?.placeholder
-        textField.backgroundColor = config?.textFieldBackgroundColor
-        textField.font = config?.textFieldFont
-        sendButton.setImage(config?.sendButtonImage, for: .normal)
-        sendButton.tintColor = config?.sendButtonTintColor
-        sendButton.backgroundColor = config?.sendButtonBackgroundColor
-        badgeLabel.backgroundColor = config?.sendButtonBadgeColor
+        textField.placeholder = config?.placeholder ?? NSLocalizedString("input_placeholder", tableName: "IMPhotoPicker", comment: "")
+        textField.backgroundColor = config?.textFieldBackgroundColor ?? .white
+        textField.font = config?.textFieldFont ?? UIFont.systemFont(ofSize: 14)
+        sendButton.setImage(config?.sendButtonImage ?? UIImage(systemName: "paperplane.fill"), for: .normal)
+        sendButton.tintColor = config?.sendButtonTintColor ?? .white
+        sendButton.backgroundColor = config?.sendButtonBackgroundColor ?? .systemBlue
+        badgeLabel.backgroundColor = config?.sendButtonBadgeColor ?? .systemBlue
     }
     
     // MARK: - Private Methods
