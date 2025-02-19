@@ -9,7 +9,7 @@
 #import <PhotosUI/PhotosUI.h>
 #import "IMPhotoPicker-Swift.h"
 
-@interface ObjcViewController () <PHPickerViewControllerDelegate, IMPickerWrapperViewControllerDelegate>
+@interface ObjcViewController () <PHPickerViewControllerDelegate, IMPickerWrapperViewControllerDelegate, CustomPickerWrapperViewControllerDelegate>
 
 @property (nonatomic, strong) UIButton *nativePickerButton;
 @property (nonatomic, strong) UIButton *inputAccessoryButton;
@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIButton *customPicker2Button;
 @property (nonatomic, strong) UIButton *customPicker3Button;
 @property (nonatomic, strong) UIButton *customPicker4Button;
+@property (nonatomic, strong) UIButton *customPicker5Button;
 
 @end
 
@@ -54,8 +55,12 @@
     self.customPicker3Button.translatesAutoresizingMaskIntoConstraints = NO;
     
     self.customPicker4Button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.customPicker4Button setTitle:@"Custom Picker Example 4 (WhatsApp 🙂)" forState:UIControlStateNormal];
+    [self.customPicker4Button setTitle:@"Custom Picker Example 4 (WhatsApp style)" forState:UIControlStateNormal];
     self.customPicker4Button.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.customPicker5Button = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.customPicker5Button setTitle:@"Custom Picker Example 5" forState:UIControlStateNormal];
+    self.customPicker5Button.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.view addSubview:self.nativePickerButton];
     [self.view addSubview:self.inputAccessoryButton];
@@ -63,6 +68,7 @@
     [self.view addSubview:self.customPicker2Button];
     [self.view addSubview:self.customPicker3Button];
     [self.view addSubview:self.customPicker4Button];
+    [self.view addSubview:self.customPicker5Button];
     
     [self.nativePickerButton addTarget:self action:@selector(presentNativePicker) forControlEvents:UIControlEventTouchUpInside];
     [self.inputAccessoryButton addTarget:self action:@selector(presentInputAccessoryViewController) forControlEvents:UIControlEventTouchUpInside];
@@ -70,6 +76,7 @@
     [self.customPicker2Button addTarget:self action:@selector(presentPicker2) forControlEvents:UIControlEventTouchUpInside];
     [self.customPicker3Button addTarget:self action:@selector(presentPicker3) forControlEvents:UIControlEventTouchUpInside];
     [self.customPicker4Button addTarget:self action:@selector(presentPicker4) forControlEvents:UIControlEventTouchUpInside];
+    [self.customPicker5Button addTarget:self action:@selector(presentPicker5) forControlEvents:UIControlEventTouchUpInside];
     
     [NSLayoutConstraint activateConstraints:@[
         [self.nativePickerButton.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
@@ -89,6 +96,9 @@
         
         [self.customPicker4Button.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
         [self.customPicker4Button.topAnchor constraintEqualToAnchor:self.customPicker3Button.bottomAnchor constant:20],
+        
+        [self.customPicker5Button.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [self.customPicker5Button.topAnchor constraintEqualToAnchor:self.customPicker4Button.bottomAnchor constant:20]
     ]];
 }
 
@@ -159,6 +169,12 @@
     [self presentViewControllerAsPageSheet:picker];
 }
 
+- (void)presentPicker5 {
+    CustomPickerWrapperViewController *customPicker = [[CustomPickerWrapperViewController alloc] init];
+    customPicker.delegate = self;
+    [self presentViewControllerAsPageSheet:customPicker];
+}
+
 - (IMPickerWrapperViewController *)getPickerWrapperViewController {
     IMPickerWrapperViewController *picker = [[IMPickerWrapperViewController alloc] init];
     IMPickerConfiguration *config = [[IMPickerConfiguration alloc] init];
@@ -224,7 +240,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - IMPickerWrapperViewControllerDelegate
+#pragma mark - IMPickerWrapperViewControllerDelegate, CustomPickerWrapperViewControllerDelegate
 
 - (void)pickerViewController:(IMPickerViewController *)controller didUpdateSelection:(NSArray<PHAsset *> *)selection hdModeEnabled:(BOOL)hdModeEnabled {
     NSLog(@"Updated selection: %lu items, HD mode: %@", (unsigned long)selection.count, hdModeEnabled ? @"Enabled" : @"Disabled");
@@ -256,6 +272,10 @@
 
 - (void)pickerViewControllerDidAttemptToDismiss:(IMPickerViewController *)controller {
     NSLog(@"User attempted to dismiss via swipe-down gesture.");
+}
+
+- (void)pickerWrapperViewController:(CustomPickerWrapperViewController *)controller didTapActionButtonWithSelection:(NSArray<PHAsset *> *)selection hdModeEnabled:(BOOL)hdModeEnabled {
+    NSLog(@"Custom action button tapped with %lu items, HD mode: %@", (unsigned long)selection.count, hdModeEnabled ? @"Enabled" : @"Disabled");
 }
 
 @end

@@ -49,7 +49,14 @@ class ViewController: UIViewController {
     
     let customPicker4Button: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Custom Picker Example 4 (WhatsApp 🙂)", for: .normal)
+        btn.setTitle("Custom Picker Example 4 (WhatsApp style)", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
+    let customPicker5Button: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Custom Picker Example 5", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
@@ -71,6 +78,7 @@ class ViewController: UIViewController {
         view.addSubview(customPicker2Button)
         view.addSubview(customPicker3Button)
         view.addSubview(customPicker4Button)
+        view.addSubview(customPicker5Button)
         
         nativePickerButton.addTarget(self, action: #selector(presentNativePicker), for: .touchUpInside)
         inputAccessoryButton.addTarget(self, action: #selector(presentInputAccessoryViewController), for: .touchUpInside)
@@ -78,6 +86,7 @@ class ViewController: UIViewController {
         customPicker2Button.addTarget(self, action: #selector(presentPicker2), for: .touchUpInside)
         customPicker3Button.addTarget(self, action: #selector(presentPicker3), for: .touchUpInside)
         customPicker4Button.addTarget(self, action: #selector(presentPicker4), for: .touchUpInside)
+        customPicker5Button.addTarget(self, action: #selector(presentPicker5), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             nativePickerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -96,7 +105,10 @@ class ViewController: UIViewController {
             customPicker3Button.topAnchor.constraint(equalTo: customPicker2Button.bottomAnchor, constant: 20),
             
             customPicker4Button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            customPicker4Button.topAnchor.constraint(equalTo: customPicker3Button.bottomAnchor, constant: 20)
+            customPicker4Button.topAnchor.constraint(equalTo: customPicker3Button.bottomAnchor, constant: 20),
+            
+            customPicker5Button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            customPicker5Button.topAnchor.constraint(equalTo: customPicker4Button.bottomAnchor, constant: 20)
         ])
     }
     
@@ -161,6 +173,12 @@ class ViewController: UIViewController {
     @objc func presentPicker4() {
         let picker = getPickerWrapperViewController()
         presentViewControllerAsPageSheet(picker: picker)
+    }
+    
+    @objc func presentPicker5() {
+        let customPicker = CustomPickerWrapperViewController()
+        customPicker.delegate = self
+        presentViewControllerAsPageSheet(picker: customPicker)
     }
     
     func getPickerWrapperViewController() -> IMPickerWrapperViewController {
@@ -235,7 +253,7 @@ extension ViewController: PHPickerViewControllerDelegate {
 
 // MARK: - IMPickerViewControllerDelegate
 
-extension ViewController: IMPickerWrapperViewControllerDelegate {
+extension ViewController: IMPickerWrapperViewControllerDelegate, CustomPickerWrapperViewControllerDelegate {
     func pickerViewController(_ controller: IMPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool) {
         print("Updated selection: \(selection.count) items, HD mode: \(hdModeEnabled ? "Enabled" : "Disabled")")
     }
@@ -266,5 +284,9 @@ extension ViewController: IMPickerWrapperViewControllerDelegate {
     
     func pickerViewControllerDidAttemptToDismiss(_ controller: IMPickerViewController) {
         print("User attempted to dismiss via swipe-down gesture.")
+    }
+    
+    func pickerWrapperViewController(_ controller: CustomPickerWrapperViewController, didTapActionButtonWithSelection selection: [PHAsset], hdModeEnabled: Bool) {
+        print("Custom action button tapped with \(selection.count) items, HD mode: \(hdModeEnabled ? "Enabled" : "Disabled")")
     }
 }

@@ -23,6 +23,8 @@
 		5B733F552D54FAC3008485DD /* IMAssetsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B733F542D54FAC0008485DD /* IMAssetsCollectionViewController.swift */; };
 		5B733F582D5506F6008485DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B733F562D5506F6008485DD /* LaunchScreen.storyboard */; };
 		5BBE650C2D5FA94D0036300F /* IMPhotoPicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BBE650A2D5FA94D0036300F /* IMPhotoPicker.strings */; };
+		5BBE673D2D663FAF0036300F /* CustomPickerWrapperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBE673C2D663FAF0036300F /* CustomPickerWrapperViewController.swift */; };
+		5BBE673F2D664BBC0036300F /* CustomBottomBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBE673E2D664BBC0036300F /* CustomBottomBarView.swift */; };
 		5BD525132D5F775D00784A77 /* ObjcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD525122D5F775D00784A77 /* ObjcViewController.m */; };
 		6FF3B59324F9090C0023EB44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF3B59224F9090C0023EB44 /* AppDelegate.swift */; };
 		6FF3B59524F9090C0023EB44 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF3B59424F9090C0023EB44 /* SceneDelegate.swift */; };
@@ -49,6 +51,8 @@
 		5BBE650B2D5FA94D0036300F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/IMPhotoPicker.strings; sourceTree = "<group>"; };
 		5BBE650D2D5FA9530036300F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/IMPhotoPicker.strings; sourceTree = "<group>"; };
 		5BBE650E2D5FA95B0036300F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/IMPhotoPicker.strings; sourceTree = "<group>"; };
+		5BBE673C2D663FAF0036300F /* CustomPickerWrapperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPickerWrapperViewController.swift; sourceTree = "<group>"; };
+		5BBE673E2D664BBC0036300F /* CustomBottomBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBottomBarView.swift; sourceTree = "<group>"; };
 		5BD525102D5F775D00784A77 /* IMPhotoPicker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IMPhotoPicker-Bridging-Header.h"; sourceTree = "<group>"; };
 		5BD525112D5F775D00784A77 /* ObjcViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjcViewController.h; sourceTree = "<group>"; };
 		5BD525122D5F775D00784A77 /* ObjcViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjcViewController.m; sourceTree = "<group>"; };
@@ -132,6 +136,8 @@
 				6FF3B59624F9090C0023EB44 /* ViewController.swift */,
 				5B5998EF2D5CB245004F6A20 /* InputAccessoryViewController.swift */,
 				5B5998F12D5CCA19004F6A20 /* SimpleInputBarView.swift */,
+				5BBE673C2D663FAF0036300F /* CustomPickerWrapperViewController.swift */,
+				5BBE673E2D664BBC0036300F /* CustomBottomBarView.swift */,
 				5B733F562D5506F6008485DD /* LaunchScreen.storyboard */,
 				6FF3B59B24F909170023EB44 /* Assets.xcassets */,
 				6FF3B5A024F909170023EB44 /* Info.plist */,
@@ -228,10 +234,12 @@
 				5BD525132D5F775D00784A77 /* ObjcViewController.m in Sources */,
 				5B733F4F2D53C8AB008485DD /* IMPhotoCell.swift in Sources */,
 				38B9E1882D58304E0079209F /* IMPickerWrapperViewController.swift in Sources */,
+				5BBE673F2D664BBC0036300F /* CustomBottomBarView.swift in Sources */,
 				38B9E1862D582AB60079209F /* IMInputBarView.swift in Sources */,
 				5B5998E82D5B6736004F6A20 /* IMPhotosViewController.swift in Sources */,
 				5B733F482D53B8F1008485DD /* IMAlbumAssetsViewController.swift in Sources */,
 				5B5998EA2D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift in Sources */,
+				5BBE673D2D663FAF0036300F /* CustomPickerWrapperViewController.swift in Sources */,
 				6FF3B59524F9090C0023EB44 /* SceneDelegate.swift in Sources */,
 				5B733F422D53AFBA008485DD /* IMAlbumsViewController.swift in Sources */,
 			);

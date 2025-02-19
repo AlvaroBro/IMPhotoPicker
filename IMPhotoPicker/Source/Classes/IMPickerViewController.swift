@@ -92,8 +92,8 @@ extension IMPickerViewControllerDelegate {
     
     // MARK: - Public Methods
     
-    func pickerWrapperContainer() -> IMPickerWrapperViewController? {
-        return self.navigationController?.parent as? IMPickerWrapperViewController
+    func pickerWrapperContainer() -> UIViewController? {
+        return self.navigationController?.parent as? UIViewController
     }
     
     // MARK: - Private Properties
@@ -318,7 +318,6 @@ extension IMPickerViewControllerDelegate {
             navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
         }
         delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
-        updateInputBarVisibility()
         updateIsModalInPresentation()
         return true
     }
@@ -330,7 +329,6 @@ extension IMPickerViewControllerDelegate {
                 navigationItem.rightBarButtonItem?.isEnabled = selectedAssets.count > 0
             }
             delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
-            updateInputBarVisibility()
             updateIsModalInPresentation()
         }
     }
@@ -340,12 +338,6 @@ extension IMPickerViewControllerDelegate {
             return index + 1
         }
         return nil
-    }
-    
-    private func updateInputBarVisibility() {
-        if let container = pickerWrapperContainer() {
-            container.updateInputBarVisibility(selectedAssetCount: selectedAssets.count)
-        }
     }
     
     private func updateIsModalInPresentation() {
@@ -359,11 +351,13 @@ extension IMPickerViewControllerDelegate {
     
     private func setPresentationControllerDelegate() {
         if let container = pickerWrapperContainer() {
-            container.navigationController?.presentationController?.delegate = container
-        } else {
-            if let nav = navigationController {
-                nav.presentationController?.delegate = self
+            if let containerNav = container.navigationController {
+                containerNav.presentationController?.delegate = container as? UIAdaptivePresentationControllerDelegate
+            } else {
+                container.presentationController?.delegate = container as? UIAdaptivePresentationControllerDelegate
             }
+        } else if let nav = navigationController {
+            nav.presentationController?.delegate = self
         }
     }
 }

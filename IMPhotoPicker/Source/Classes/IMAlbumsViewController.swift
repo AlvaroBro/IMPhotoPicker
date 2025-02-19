@@ -48,7 +48,9 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         super.viewDidAppear(animated)
         
         if !viewDidAppear {
-            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: false)
+            if tableView.numberOfRows(inSection: 0) > 0 {
+                tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+            }
         }
         viewDidAppear = true
     }

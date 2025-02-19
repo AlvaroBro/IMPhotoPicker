@@ -41,7 +41,6 @@ import Photos
 
     // MARK: - Private Properties
     private let childNavigationController: UINavigationController
-    private var childNavigationControllerBottomConstraint: NSLayoutConstraint!
     private var selectedAssetCount: Int = 0
 
     // MARK: - Initializers
@@ -67,18 +66,6 @@ import Photos
         fatalError("init(coder:) not implemented")
     }
     
-    override open func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        if pickerViewController.contentInsetTop == 0 && view.safeAreaInsets.top > 0 {
-            pickerViewController.contentInsetTop = view.safeAreaInsets.top
-        }
-        
-        if pickerViewController.contentInsetBottom == 0 && view.safeAreaInsets.bottom > 0 {
-            pickerViewController.contentInsetBottom = view.safeAreaInsets.bottom
-        }
-    }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -92,37 +79,29 @@ import Photos
         view.addSubview(childNavigationController.view)
         childNavigationController.didMove(toParent: self)
         
-        childNavigationControllerBottomConstraint = childNavigationController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        
         NSLayoutConstraint.activate([
             childNavigationController.view.topAnchor.constraint(equalTo: view.topAnchor),
             childNavigationController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             childNavigationController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            childNavigationControllerBottomConstraint
+            childNavigationController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
         inputBar.sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+    }
+    
+    override open func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
-        if #available(iOS 15.0, *) {
-            if let sheet = self.sheetPresentationController {
-                sheet.delegate = self
-            }
+        if pickerViewController.contentInsetTop == 0 && view.safeAreaInsets.top > 0 {
+            pickerViewController.contentInsetTop = view.safeAreaInsets.top
+        }
+        
+        if pickerViewController.contentInsetBottom == 0 && view.safeAreaInsets.bottom > 0 {
+            pickerViewController.contentInsetBottom = view.safeAreaInsets.bottom
         }
     }
 
     // MARK: - Public Methods
-    /// Updates the input bar visibility based on the number of selected assets.
-    public func updateInputBarVisibility(selectedAssetCount: Int) {
-        self.selectedAssetCount = selectedAssetCount
-        if selectedAssetCount > 0 {
-            if !inputBar.isFirstResponder, !isFirstResponder {
-                becomeFirstResponder()
-            }
-        } else {
-            _ = resignFirstResponder()
-        }
-    }
-    
     public override var inputAccessoryView: UIView? {
         return selectedAssetCount > 0 ? inputBar : nil
     }
@@ -141,6 +120,17 @@ import Photos
     }
 
     // MARK: - Private Methods
+    private func updateInputBarVisibility(selectedAssetCount: Int) {
+        self.selectedAssetCount = selectedAssetCount
+        if selectedAssetCount > 0 {
+            if !inputBar.isFirstResponder, !isFirstResponder {
+                becomeFirstResponder()
+            }
+        } else {
+            _ = resignFirstResponder()
+        }
+    }
+    
     @objc private func sendButtonTapped() {
         delegate?.pickerWrapperViewController(self, didTapSendWithText: inputBar.textView.text ?? "", selection: pickerViewController.assets, hdModeEnabled: pickerViewController.isHDModeEnabled)
     }
@@ -216,6 +206,7 @@ extension IMPickerWrapperViewController: IMPickerViewControllerDelegate {
             didUpdateSelection: selection,
             hdModeEnabled: hdModeEnabled
         )
+        updateInputBarVisibility(selectedAssetCount: selection.count)
     }
 
     public func pickerViewController(_ controller: IMPickerViewController, didFinishPicking selection: [PHAsset], hdModeEnabled: Bool) {
