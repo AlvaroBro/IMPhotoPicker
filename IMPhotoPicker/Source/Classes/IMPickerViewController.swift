@@ -47,6 +47,12 @@ extension IMPickerViewControllerDelegate {
         case hdModeToggle
         case custom
     }
+    
+    @objc public enum IMAssetTypeFilter: Int {
+        case all
+        case photos
+        case videos
+    }
 
     // MARK: - Public Properties
     
@@ -409,5 +415,17 @@ extension IMPickerViewController: IMAssetSelectionDelegate {
 extension IMPickerViewController : UIAdaptivePresentationControllerDelegate {
     public func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
         delegate?.pickerViewControllerDidAttemptToDismiss(self)
+    }
+}
+
+// MARK: - PHFetchOptions extension
+extension PHFetchOptions {
+    func applyAssetTypeFilter(from pickerController: IMPickerViewController?) {
+        if let picker = pickerController, picker.configuration.assetTypeFilter != .all {
+            let mediaType: Int = (picker.configuration.assetTypeFilter == .photos)
+                ? PHAssetMediaType.image.rawValue
+                : PHAssetMediaType.video.rawValue
+            self.predicate = NSPredicate(format: "mediaType == %d", mediaType)
+        }
     }
 }

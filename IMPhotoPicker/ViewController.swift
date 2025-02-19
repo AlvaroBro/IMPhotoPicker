@@ -134,6 +134,7 @@ class ViewController: UIViewController {
         let picker = IMPickerViewController()
         let customButton = UIBarButtonItem(title: "Custom", style: .done, target: self, action: #selector(customRightButtonTapped))
         let configuration = IMPickerConfiguration()
+        configuration.assetTypeFilter = .photos
         configuration.rightButtonStyle = .custom
         configuration.customRightBarButtonItem = customButton
         configuration.selectionLimit = 3

@@ -115,6 +115,8 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.albums = albumCollections.filter { album in
             let fetchOptions = PHFetchOptions()
             fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+            fetchOptions.applyAssetTypeFilter(from: pickerController)
+            
             let assetsFetchResult = PHAsset.fetchAssets(in: album, options: fetchOptions)
             return assetsFetchResult.count > 0
         }
@@ -131,7 +133,12 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         let cell = tableView.dequeueReusableCell(withIdentifier: IMAlbumCell.identifier, for: indexPath) as! IMAlbumCell
         let album = albums[indexPath.row]
         cell.titleLabel.text = album.localizedTitle
-        let assetsFetchResult = PHAsset.fetchAssets(in: album, options: nil)
+
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        fetchOptions.applyAssetTypeFilter(from: pickerController)
+        let assetsFetchResult = PHAsset.fetchAssets(in: album, options: fetchOptions)
+        
         if let lastAsset = assetsFetchResult.lastObject {
             let targetSize = CGSize(width: 100, height: 100)
             imageManager.requestImage(for: lastAsset,

@@ -130,6 +130,7 @@
                                                                     target:self
                                                                     action:@selector(customRightButtonTapped)];
     IMPickerConfiguration *config = [[IMPickerConfiguration alloc] init];
+    config.assetTypeFilter = IMAssetTypeFilterPhotos;
     config.rightButtonStyle = CustomPickerRightButtonStyleCustom;
     config.customRightBarButtonItem = customButton;
     config.selectionLimit = 3;

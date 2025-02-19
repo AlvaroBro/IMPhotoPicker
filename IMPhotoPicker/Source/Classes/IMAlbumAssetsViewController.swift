@@ -34,6 +34,7 @@ class IMAlbumAssetsViewController: IMAssetsCollectionViewController {
     override func loadAssets() {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.applyAssetTypeFilter(from: pickerController)
         self.assets = PHAsset.fetchAssets(in: album, options: fetchOptions)
     }
 }

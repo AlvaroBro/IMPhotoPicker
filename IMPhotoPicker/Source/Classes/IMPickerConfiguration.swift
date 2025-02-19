@@ -10,6 +10,9 @@ import UIKit
 /// Configuration object for customizing the appearance and behavior of the picker.
 @objcMembers public class IMPickerConfiguration : NSObject {
     
+    /// Filters which assets will be displayed in the picker (default: .all)
+    public var assetTypeFilter: IMPickerViewController.IMAssetTypeFilter = .all
+    
     /// Specifies the style for the right button in the picker.
     /// Supported styles include: accept, HD mode toggle, or a custom UIBarButtonItem.
     public var rightButtonStyle: IMPickerViewController.CustomPickerRightButtonStyle = .accept
