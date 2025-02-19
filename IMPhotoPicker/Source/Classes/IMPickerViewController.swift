@@ -39,7 +39,7 @@ extension IMPickerViewControllerDelegate {
     func pickerViewControllerDidAttemptToDismiss(_ controller: IMPickerViewController) { }
 }
 
-@objc public class IMPickerViewController: UIViewController {
+@objcMembers public class IMPickerViewController: UIViewController {
 
     // MARK: - Types
     @objc public enum CustomPickerRightButtonStyle: Int {
@@ -66,7 +66,7 @@ extension IMPickerViewControllerDelegate {
         configuration.rightButtonStyle
     }
     
-    @objc var configuration: IMPickerConfiguration = IMPickerConfiguration()
+    var configuration: IMPickerConfiguration = IMPickerConfiguration()
     
     var contentInsetTop: CGFloat? {
         didSet {
@@ -82,7 +82,7 @@ extension IMPickerViewControllerDelegate {
         }
     }
     
-    @objc weak var delegate: IMPickerViewControllerDelegate?
+    weak var delegate: IMPickerViewControllerDelegate?
     
     // MARK: - Private Properties
     private let segmentedControl: UISegmentedControl = {
@@ -228,18 +228,18 @@ extension IMPickerViewControllerDelegate {
     }
     
     // MARK: - Navigation Bar Actions
-    @objc func cancelTapped() {
+    func cancelTapped() {
         delegate?.pickerViewControllerDidCancel(self)
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func acceptTapped() {
+    func acceptTapped() {
         delegate?.pickerViewControllerDidTapRightButton(self)
         delegate?.pickerViewController(self, didFinishPicking: selectedAssets, hdModeEnabled: hdModeEnabled)
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func toggleHDMode() {
+    func toggleHDMode() {
         hdModeEnabled.toggle()
         navigationItem.rightBarButtonItem?.image = hdModeImage()
         delegate?.pickerViewControllerDidTapRightButton(self)
@@ -252,7 +252,7 @@ extension IMPickerViewControllerDelegate {
     }
     
     // MARK: - Segmented Control Action
-    @objc func segmentChanged(_ sender: UISegmentedControl) {
+    func segmentChanged(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
             switchToPhotos()
         } else {
@@ -378,7 +378,7 @@ extension IMPickerViewController: IMAlbumsViewControllerDelegate {
         albumAssetsViewController = viewController
     }
     
-    @objc func backFromAlbumDetail() {
+    func backFromAlbumDetail() {
         navigationController?.popViewController(animated: true)
         albumAssetsViewController = nil
     }

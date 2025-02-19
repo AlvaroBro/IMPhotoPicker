@@ -15,11 +15,11 @@ import Photos
 }
 
 // MARK: - IMPickerWrapperViewController
-@objc public class IMPickerWrapperViewController: UIViewController {
+@objcMembers public class IMPickerWrapperViewController: UIViewController {
 
     // MARK: - Public Properties
     ///
-    @objc public var configuration: IMPickerConfiguration = IMPickerConfiguration() {
+    public var configuration: IMPickerConfiguration = IMPickerConfiguration() {
         didSet {
             pickerViewController.configuration = configuration
             inputBar.applyConfiguration(configuration.inputBarConfiguration)
@@ -27,13 +27,13 @@ import Photos
     }
     
     /// Delegate for container events.
-    @objc public weak var delegate: IMPickerWrapperViewControllerDelegate?
+    public weak var delegate: IMPickerWrapperViewControllerDelegate?
     
     /// The internally instantiated picker.
     public let pickerViewController: IMPickerViewController
     
     /// The input bar view.
-    @objc public let inputBar: IMInputBarView = {
+    public let inputBar: IMInputBarView = {
         let view = IMInputBarView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -167,7 +167,7 @@ import Photos
     
     // MARK: - Keyboard notifications
 
-    @objc func keyboardWillChangeFrame(notification: Notification) {
+    func keyboardWillChangeFrame(notification: Notification) {
         guard let userInfo = notification.userInfo,
               let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
@@ -192,7 +192,7 @@ import Photos
         }, completion: nil)
     }
 
-    @objc func keyboardWillHide(notification: Notification) {
+    func keyboardWillHide(notification: Notification) {
         guard let userInfo = notification.userInfo,
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
               let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt
