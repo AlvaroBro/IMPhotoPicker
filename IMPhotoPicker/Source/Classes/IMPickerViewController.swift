@@ -84,6 +84,12 @@ extension IMPickerViewControllerDelegate {
     
     weak var delegate: IMPickerViewControllerDelegate?
     
+    // MARK: - Public Methods
+    
+    func pickerWrapperContainer() -> IMPickerWrapperViewController? {
+        return self.navigationController?.parent as? IMPickerWrapperViewController
+    }
+    
     // MARK: - Private Properties
     private let segmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: [
@@ -331,14 +337,14 @@ extension IMPickerViewControllerDelegate {
     }
     
     private func updateInputBarVisibility() {
-        if let container = self.navigationController?.parent as? IMPickerWrapperViewController {
+        if let container = pickerWrapperContainer() {
             container.updateInputBarVisibility(selectedAssetCount: selectedAssets.count)
         }
     }
     
     private func updateIsModalInPresentation() {
         let shouldPreventDismissal = selectedAssets.count > 0
-        if let container = self.navigationController?.parent as? IMPickerWrapperViewController {
+        if let container = pickerWrapperContainer() {
             container.isModalInPresentation = shouldPreventDismissal
         } else {
             self.isModalInPresentation = shouldPreventDismissal
@@ -346,7 +352,7 @@ extension IMPickerViewControllerDelegate {
     }
     
     private func setPresentationControllerDelegate() {
-        if let container = self.navigationController?.parent as? IMPickerWrapperViewController {
+        if let container = pickerWrapperContainer() {
             container.navigationController?.presentationController?.delegate = container
         } else {
             if let nav = navigationController {
