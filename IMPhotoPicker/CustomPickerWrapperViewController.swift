@@ -31,10 +31,12 @@ import Photos
     /// The internally instantiated picker.
     let pickerViewController: IMPickerViewController
     let customBottomBar = CustomBottomBarView()
-
+    
     // MARK: - Private Properties
     private let childNavigationController: UINavigationController
-    private var selectedAssetCount: Int = 0
+    
+    /// Constraint to control the vertical position of the bottom bar.
+    private var bottomBarBottomConstraint: NSLayoutConstraint!
     
     // MARK: - Initializers
     public init() {
@@ -61,12 +63,8 @@ import Photos
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        if pickerViewController.contentInsetTop == 0 && view.safeAreaInsets.top > 0 {
-            pickerViewController.contentInsetTop = view.safeAreaInsets.top
-        }
-        
-        if !customBottomBar.isHidden {
-            pickerViewController.contentInsetBottom = customBottomBar.frame.height
+        if bottomBarBottomConstraint.constant != 0 {
+            pickerViewController.contentInsetBottom = customBottomBar.intrinsicContentSize.height
         } else {
             pickerViewController.contentInsetBottom = view.safeAreaInsets.bottom
         }
@@ -74,17 +72,19 @@ import Photos
     
     // MARK: - Setup Methods
     
-    /// Sets up the custom bottom bar with the action button.
+    /// Sets up the custom bottom bar with the action button and positions it off-screen initially.
     private func setupBottomBar() {
-        customBottomBar.isHidden = true
         view.addSubview(customBottomBar)
+        customBottomBar.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             customBottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            customBottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            customBottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            customBottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-
+        
+        bottomBarBottomConstraint = customBottomBar.topAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+        bottomBarBottomConstraint.isActive = true
+        
         customBottomBar.actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
     }
     
@@ -112,20 +112,20 @@ import Photos
     }
     
     // MARK: - Public Methods
-    /// Updates the bottom bar visibility based on the number of selected assets.
-    public func updateInputBarVisibility(selectedAssetCount: Int) {
-        self.selectedAssetCount = selectedAssetCount
+    /// Updates the bottom bar visibility with a slide animation.
+    public func updateBottomBarVisibility(selectedAssetCount: Int) {
         let shouldShowBar = (selectedAssetCount > 0)
-        customBottomBar.isHidden = !shouldShowBar
+        
+        bottomBarBottomConstraint.constant = shouldShowBar ? -customBottomBar.intrinsicContentSize.height : 0
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.layoutIfNeeded()
+        })
         
         if shouldShowBar {
-            pickerViewController.contentInsetBottom = customBottomBar.frame.height
+            pickerViewController.contentInsetBottom = customBottomBar.intrinsicContentSize.height
         } else {
             pickerViewController.contentInsetBottom = view.safeAreaInsets.bottom
-        }
-        
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
         }
     }
 }
@@ -135,7 +135,7 @@ extension CustomPickerWrapperViewController: IMPickerViewControllerDelegate {
 
     public func pickerViewController(_ controller: IMPickerViewController, didUpdateSelection selection: [PHAsset], hdModeEnabled: Bool) {
         delegate?.pickerViewController(controller, didUpdateSelection: selection, hdModeEnabled: hdModeEnabled)
-        updateInputBarVisibility(selectedAssetCount: selection.count)
+        updateBottomBarVisibility(selectedAssetCount: selection.count)
     }
 
     public func pickerViewController(_ controller: IMPickerViewController, didFinishPicking selection: [PHAsset], hdModeEnabled: Bool) {

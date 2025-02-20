@@ -171,6 +171,9 @@
 
 - (void)presentPicker5 {
     CustomPickerWrapperViewController *customPicker = [[CustomPickerWrapperViewController alloc] init];
+    IMPickerConfiguration *config = [[IMPickerConfiguration alloc] init];
+    config.selectionLimit = 1;
+    customPicker.configuration = config;
     customPicker.delegate = self;
     [self presentViewControllerAsPageSheet:customPicker];
 }

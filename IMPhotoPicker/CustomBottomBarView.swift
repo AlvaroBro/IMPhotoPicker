@@ -18,7 +18,6 @@ import UIKit
         return button
     }()
 
-    // Margins for the button.
     private let topMargin: CGFloat = 10
     private let bottomMargin: CGFloat = 10
 

@@ -177,6 +177,9 @@ class ViewController: UIViewController {
     
     @objc func presentPicker5() {
         let customPicker = CustomPickerWrapperViewController()
+        let configuration = IMPickerConfiguration()
+        configuration.selectionLimit = 1
+        customPicker.configuration = configuration
         customPicker.delegate = self
         presentViewControllerAsPageSheet(picker: customPicker)
     }
