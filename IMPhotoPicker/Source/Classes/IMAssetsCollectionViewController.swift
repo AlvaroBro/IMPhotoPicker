@@ -197,10 +197,15 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let spacing: CGFloat = 2
-        let totalSpacing = spacing * 2
-        let width = (collectionView.bounds.width - totalSpacing) / 3
-        return CGSize(width: width, height: width)
+        let minRows: CGFloat = 3
+        let padding: CGFloat = 2
+        let totalPadding = padding * (minRows - 1)
+        let baseItemSize: CGFloat = 120
+        let availableWidth = collectionView.bounds.width - totalPadding
+        let itemsPerRow = max(minRows, floor(availableWidth / baseItemSize))
+        let adjustedPadding = padding * (itemsPerRow - 1)
+        let itemWidth = (collectionView.bounds.width - adjustedPadding) / itemsPerRow
+        return CGSize(width: itemWidth, height: itemWidth)
     }
     
     func collectionView(_ collectionView: UICollectionView,
