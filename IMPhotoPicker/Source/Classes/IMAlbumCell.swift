@@ -65,6 +65,13 @@ class IMAlbumCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = .secondarySystemBackground
         
+        albumImageView.translatesAutoresizingMaskIntoConstraints = true
+        titleLabel.translatesAutoresizingMaskIntoConstraints = true
+        cardView.translatesAutoresizingMaskIntoConstraints = true
+        disclosureImageView.translatesAutoresizingMaskIntoConstraints = true
+        topSeparator.translatesAutoresizingMaskIntoConstraints = true
+        bottomSeparator.translatesAutoresizingMaskIntoConstraints = true
+
         contentView.addSubview(cardView)
         cardView.addSubview(albumImageView)
         cardView.addSubview(titleLabel)
@@ -72,39 +79,44 @@ class IMAlbumCell: UITableViewCell {
         cardView.addSubview(topSeparator)
         cardView.addSubview(bottomSeparator)
         
-        NSLayoutConstraint.activate([
-            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            albumImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 10),
-            albumImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 10),
-            albumImageView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -10),
-            albumImageView.widthAnchor.constraint(equalToConstant: 60),
-            albumImageView.heightAnchor.constraint(equalToConstant: 60),
-            
-            disclosureImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10),
-            disclosureImageView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
-            
-            titleLabel.leadingAnchor.constraint(equalTo: albumImageView.trailingAnchor, constant: 10),
-            titleLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: disclosureImageView.leadingAnchor, constant: -10),
-            
-            topSeparator.topAnchor.constraint(equalTo: cardView.topAnchor),
-            topSeparator.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            topSeparator.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
-            topSeparator.heightAnchor.constraint(equalToConstant: 0.25),
-            
-            bottomSeparator.bottomAnchor.constraint(equalTo: cardView.bottomAnchor),
-            bottomSeparator.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            bottomSeparator.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
-            bottomSeparator.heightAnchor.constraint(equalToConstant: 0.25)
-        ])
+        cardView.autoresizingMask = [.flexibleWidth]
+        albumImageView.autoresizingMask = [.flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
+        titleLabel.autoresizingMask = [.flexibleWidth, .flexibleTopMargin, .flexibleBottomMargin]
+        disclosureImageView.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin, .flexibleBottomMargin]
+        topSeparator.autoresizingMask = [.flexibleWidth]
+        bottomSeparator.autoresizingMask = [.flexibleWidth]
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) not implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let bounds = contentView.bounds
+        
+        cardView.frame = CGRect(x: 16, y: 0, width: bounds.width - 32, height: bounds.height)
+        
+        let cardBounds = cardView.bounds
+        
+        albumImageView.frame = CGRect(x: 10, y: 10, width: 60, height: 60)
+        
+        let disclosureWidth: CGFloat = 16
+        disclosureImageView.frame = CGRect(x: cardBounds.width - disclosureWidth - 10,
+                                           y: (cardBounds.height - disclosureWidth) / 2,
+                                           width: disclosureWidth,
+                                           height: disclosureWidth)
+        
+        let titleX = albumImageView.frame.maxX + 10
+        let titleWidth = disclosureImageView.frame.minX - titleX - 10
+        titleLabel.frame = CGRect(x: titleX,
+                                  y: 0,
+                                  width: titleWidth,
+                                  height: cardBounds.height)
+                                  
+        topSeparator.frame = CGRect(x: titleX, y: 0, width: cardBounds.width - titleX, height: 0.25)
+        bottomSeparator.frame = CGRect(x: titleX, y: cardBounds.height - 0.25, width: cardBounds.width - titleX, height: 0.25)
     }
     
     override func prepareForReuse() {

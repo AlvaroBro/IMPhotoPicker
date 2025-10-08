@@ -58,10 +58,14 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        tableView.contentInset = UIEdgeInsets.init(top: contentInsetTop + 15,
-                                                   left: 0,
-                                                   bottom: contentInsetBottom,
-                                                   right: 0)
+        let newInsets = UIEdgeInsets(top: contentInsetTop + 15,
+                                     left: 0,
+                                     bottom: contentInsetBottom,
+                                     right: 0)
+
+        if tableView.contentInset != newInsets {
+            tableView.contentInset = newInsets
+        }
     }
     
     // MARK: - Setup
@@ -75,6 +79,7 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.register(IMAlbumCell.self, forCellReuseIdentifier: IMAlbumCell.identifier)
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.separatorStyle = .none
+        tableView.estimatedRowHeight = 80
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
@@ -167,5 +172,9 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.deselectRow(at: indexPath, animated: true)
         let selectedAlbum = albums[indexPath.row]
         delegate?.albumsViewController(self, didSelectAlbum: selectedAlbum)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
     }
 }
