@@ -12,3 +12,10 @@
 "default_album_title" = "Album";
 "photos_segment_title" = "Photos";
 "input_placeholder" = "Add comment";
+
+/* Limited Access Banner */
+"limited_access_message" = "You've allowed access to a select number of photos.";
+"limited_access_manage_button" = "Manage";
+"limited_access_action_sheet_title" = "Manage access to photos and videos";
+"limited_access_select_more" = "Select more photos";
+"limited_access_change_settings" = "Change settings";

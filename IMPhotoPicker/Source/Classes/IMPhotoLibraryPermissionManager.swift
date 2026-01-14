@@ -5,6 +5,7 @@
 //  Created by Alvaro Marcos on 11/2/25.
 //
 
+import UIKit
 import Photos
 
 // MARK: - IMPhotoLibraryPermissionError
@@ -48,6 +49,27 @@ final class IMPhotoLibraryPermissionManager {
             default:
                 completion(false)
             }
+        }
+    }
+    
+    /// Returns true if the app has limited photo library access (iOS 14+).
+    @available(iOS 14, *)
+    var isLimitedAccess: Bool {
+        return PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited
+    }
+    
+    /// Presents the limited library picker to allow the user to select more photos.
+    /// - Parameter viewController: The view controller from which to present the picker.
+    @available(iOS 14, *)
+    func presentLimitedLibraryPicker(from viewController: UIViewController) {
+        PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
+    }
+    
+    /// Opens the app's settings page in the Settings app.
+    func openAppSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        if UIApplication.shared.canOpenURL(settingsURL) {
+            UIApplication.shared.open(settingsURL)
         }
     }
 }

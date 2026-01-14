@@ -51,6 +51,41 @@ import UIKit
     
     /// Configuration settings for the input bar.
     public var inputBarConfiguration: IMInputBarConfiguration?
+    
+    // MARK: - Limited Access Banner Configuration
+    
+    /// Whether to show the limited access banner when the app has limited photo library access.
+    /// Default is true.
+    public var showLimitedAccessBanner: Bool = true
+    
+    /// Custom message text for the limited access banner.
+    /// If nil, the default localized message will be used.
+    public var limitedAccessBannerMessage: String?
+    
+    /// Custom title for the "Manage" button in the limited access banner.
+    /// If nil, the default localized title will be used.
+    public var limitedAccessManageButtonTitle: String?
+    
+    /// The text color for the limited access banner message.
+    public var limitedAccessBannerMessageColor: UIColor?
+    
+    /// The color for the "Manage" link in the limited access banner.
+    public var limitedAccessManageButtonColor: UIColor?
+    
+    /// The font for the limited access banner text (both message and link).
+    public var limitedAccessBannerFont: UIFont?
+    
+    /// Custom title for the action sheet that appears when tapping "Manage".
+    /// If nil, the default localized title will be used.
+    public var limitedAccessActionSheetTitle: String?
+    
+    /// Custom title for the "Select more photos" action.
+    /// If nil, the default localized title will be used.
+    public var limitedAccessSelectMoreTitle: String?
+    
+    /// Custom title for the "Change settings" action.
+    /// If nil, the default localized title will be used.
+    public var limitedAccessChangeSettingsTitle: String?
 }
 
 /// Configuration object for customizing the appearance of the input bar.

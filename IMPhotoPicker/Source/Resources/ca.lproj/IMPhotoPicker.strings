@@ -12,3 +12,10 @@
 "default_album_title" = "Àlbum";
 "photos_segment_title" = "Fotos";
 "input_placeholder" = "Afegir comentari";
+
+/* Limited Access Banner */
+"limited_access_message" = "Has permès l'accés només a una quantitat selecta de fotos.";
+"limited_access_manage_button" = "Administrar";
+"limited_access_action_sheet_title" = "Administra l'accés a fotos i vídeos";
+"limited_access_select_more" = "Seleccionar més fotos";
+"limited_access_change_settings" = "Canviar la configuració";

@@ -28,6 +28,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     var contentInsetTop: CGFloat = 0 {
         didSet {
             collectionView?.collectionViewLayout.invalidateLayout()
+            updateBannerPosition()
         }
     }
     var contentInsetBottom: CGFloat = 0 {
@@ -40,13 +41,37 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     let imageManager = PHCachingImageManager()
     var badgeColor: UIColor?
     weak var selectionDelegate: IMAssetSelectionDelegate?
-    weak var pickerController: IMPickerViewController?
+    weak var pickerController: IMPickerViewController? {
+        didSet {
+            // Configure banner when pickerController is set
+            configureLimitedAccessBanner()
+        }
+    }
+    
+    // MARK: - Limited Access Banner
+    private var limitedAccessBannerView: IMLimitedAccessBannerView?
+    private var isBannerConfigured = false
+    
+    /// The height of the limited access banner when visible.
+    private var bannerHeight: CGFloat {
+        return limitedAccessBannerView?.systemLayoutSizeFitting(
+            CGSize(width: view.bounds.width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height ?? 60
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        setupLimitedAccessBanner()
         checkPhotoLibraryPermission()
+        registerForPhotoLibraryChanges()
+    }
+    
+    deinit {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,6 +116,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
         IMPhotoLibraryPermissionManager.shared.checkAuthorization { [weak self] authorized in
             if authorized {
                 self?.loadAssetsAndReload()
+                self?.updateLimitedAccessBannerVisibility()
             } else {
                 if let picker = self?.pickerController {
                     picker.delegate?.pickerViewController(picker, didFailWithPermissionError: IMPhotoLibraryPermissionError.denied)
@@ -211,7 +237,10 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: contentInsetTop > 0 ? contentInsetTop : view.safeAreaInsets.top,
+        let baseTopInset = contentInsetTop > 0 ? contentInsetTop : view.safeAreaInsets.top
+        let totalTopInset = baseTopInset + limitedAccessBannerInset
+        
+        return UIEdgeInsets(top: totalTopInset,
                             left: 0,
                             bottom: contentInsetBottom > 0 ? contentInsetBottom : view.safeAreaInsets.bottom,
                             right: 0)
@@ -230,5 +259,218 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
     /// Subclasses must override this method to load assets.
     func loadAssets() {
         // Implementation in subclasses.
+    }
+    
+    // MARK: - Limited Access Banner Setup
+    
+    private var bannerTopConstraint: NSLayoutConstraint?
+    
+    private func setupLimitedAccessBanner() {
+        let bannerView = IMLimitedAccessBannerView()
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        bannerView.isHidden = true
+        
+        bannerView.onManageTapped = { [weak self] in
+            self?.showLimitedAccessActionSheet()
+        }
+        
+        view.addSubview(bannerView)
+        
+        // Position at top, will be adjusted in viewDidLayoutSubviews
+        bannerTopConstraint = bannerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        
+        NSLayoutConstraint.activate([
+            bannerTopConstraint!,
+            bannerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bannerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        limitedAccessBannerView = bannerView
+        
+        // Apply configuration if pickerController was already set
+        configureLimitedAccessBanner()
+    }
+    
+    /// Configures the banner with custom settings from pickerController.
+    /// Called when pickerController is set.
+    private func configureLimitedAccessBanner() {
+        guard !isBannerConfigured, let bannerView = limitedAccessBannerView else { return }
+        
+        if let config = pickerController?.configuration {
+            // Hide banner view entirely if disabled
+            if !config.showLimitedAccessBanner {
+                bannerView.removeFromSuperview()
+                limitedAccessBannerView = nil
+                return
+            }
+            
+            if let message = config.limitedAccessBannerMessage {
+                bannerView.setMessage(message)
+            }
+            if let buttonTitle = config.limitedAccessManageButtonTitle {
+                bannerView.setManageButtonTitle(buttonTitle)
+            }
+            if let messageColor = config.limitedAccessBannerMessageColor {
+                bannerView.messageTextColor = messageColor
+            }
+            if let linkColor = config.limitedAccessManageButtonColor {
+                bannerView.manageLinkColor = linkColor
+            }
+            if let font = config.limitedAccessBannerFont {
+                bannerView.textFont = font
+            }
+        }
+        
+        isBannerConfigured = true
+    }
+    
+    private func updateLimitedAccessBannerVisibility() {
+        guard let bannerView = limitedAccessBannerView,
+              pickerController?.configuration.showLimitedAccessBanner ?? true else { return }
+        
+        if #available(iOS 14, *) {
+            let shouldShowBanner = IMPhotoLibraryPermissionManager.shared.isLimitedAccess
+            
+            if bannerView.isHidden == shouldShowBanner {
+                bannerView.isHidden = !shouldShowBanner
+                
+                // Update collection view content inset
+                UIView.animate(withDuration: 0.25) {
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                }
+            }
+        }
+    }
+    
+    /// Returns the extra top inset needed for the limited access banner.
+    var limitedAccessBannerInset: CGFloat {
+        guard let bannerView = limitedAccessBannerView,
+              !bannerView.isHidden else { return 0 }
+        return bannerHeight
+    }
+    
+    /// Updates the banner position based on content insets.
+    private func updateBannerPosition() {
+        // Banner is anchored to safe area top, no adjustment needed
+        // The collection view inset accounts for the banner height
+    }
+    
+    // MARK: - Limited Access Action Sheet
+    
+    private func showLimitedAccessActionSheet() {
+        let config = pickerController?.configuration
+        
+        let title = config?.limitedAccessActionSheetTitle
+            ?? NSLocalizedString("limited_access_action_sheet_title", tableName: "IMPhotoPicker", comment: "")
+        
+        let selectMoreTitle = config?.limitedAccessSelectMoreTitle
+            ?? NSLocalizedString("limited_access_select_more", tableName: "IMPhotoPicker", comment: "")
+        
+        let changeSettingsTitle = config?.limitedAccessChangeSettingsTitle
+            ?? NSLocalizedString("limited_access_change_settings", tableName: "IMPhotoPicker", comment: "")
+        
+        let cancelTitle = NSLocalizedString("cancel_button_title", tableName: "IMPhotoPicker", comment: "")
+        
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        
+        // Select more photos action
+        if #available(iOS 14, *) {
+            let selectMoreAction = UIAlertAction(title: selectMoreTitle, style: .default) { [weak self] _ in
+                guard let self = self else { return }
+                IMPhotoLibraryPermissionManager.shared.presentLimitedLibraryPicker(from: self)
+            }
+            alert.addAction(selectMoreAction)
+        }
+        
+        // Change settings action
+        let changeSettingsAction = UIAlertAction(title: changeSettingsTitle, style: .default) { _ in
+            IMPhotoLibraryPermissionManager.shared.openAppSettings()
+        }
+        alert.addAction(changeSettingsAction)
+        
+        // Cancel action
+        let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel)
+        alert.addAction(cancelAction)
+        
+        // iPad support
+        if let popover = alert.popoverPresentationController {
+            popover.sourceView = limitedAccessBannerView
+            popover.sourceRect = limitedAccessBannerView?.bounds ?? .zero
+        }
+        
+        present(alert, animated: true)
+    }
+    
+    // MARK: - Photo Library Change Observer
+    
+    private func registerForPhotoLibraryChanges() {
+        PHPhotoLibrary.shared().register(self)
+    }
+}
+
+// MARK: - PHPhotoLibraryChangeObserver
+extension IMAssetsCollectionViewController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            // Reload assets when the photo library changes
+            if let currentAssets = self.assets,
+               let changes = changeInstance.changeDetails(for: currentAssets) {
+                self.assets = changes.fetchResultAfterChanges
+                
+                if changes.hasIncrementalChanges {
+                    self.collectionView.performBatchUpdates({
+                        if let removed = changes.removedIndexes, !removed.isEmpty {
+                            self.collectionView.deleteItems(at: removed.map { IndexPath(item: $0, section: 0) })
+                        }
+                        if let inserted = changes.insertedIndexes, !inserted.isEmpty {
+                            self.collectionView.insertItems(at: inserted.map { IndexPath(item: $0, section: 0) })
+                        }
+                        if let changed = changes.changedIndexes, !changed.isEmpty {
+                            self.collectionView.reloadItems(at: changed.map { IndexPath(item: $0, section: 0) })
+                        }
+                        changes.enumerateMoves { fromIndex, toIndex in
+                            self.collectionView.moveItem(at: IndexPath(item: fromIndex, section: 0),
+                                                        to: IndexPath(item: toIndex, section: 0))
+                        }
+                    })
+                } else {
+                    self.collectionView.reloadData()
+                }
+                
+                // Clear selection when photos change
+                self.pickerController?.clearSelection()
+                
+                // Refresh visible cells to update selection state
+                self.refreshVisibleCellsSelection()
+                
+            } else {
+                // Full reload if we can't get incremental changes
+                self.loadAssetsAndReload()
+                
+                // Clear selection when photos change
+                self.pickerController?.clearSelection()
+                
+                // Refresh visible cells to update selection state
+                self.refreshVisibleCellsSelection()
+            }
+            
+            // Update banner visibility (in case permissions changed)
+            self.updateLimitedAccessBannerVisibility()
+        }
+    }
+    
+    /// Refreshes the selection state of all visible cells.
+    private func refreshVisibleCellsSelection() {
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            if let cell = collectionView.cellForItem(at: indexPath) as? IMPhotoCell,
+               let asset = assets?[indexPath.item],
+               let delegate = selectionDelegate {
+                let order = delegate.selectionOrder(for: asset)
+                cell.setSelectionOrder(order)
+                cell.updateVideoDuration(for: asset, selectionOrder: order)
+            }
+        }
     }
 }

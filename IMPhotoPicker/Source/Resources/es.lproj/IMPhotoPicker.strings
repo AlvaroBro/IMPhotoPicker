@@ -12,3 +12,10 @@
 "default_album_title" = "Álbum";
 "photos_segment_title" = "Fotos";
 "input_placeholder" = "Añadir comentario";
+
+/* Limited Access Banner */
+"limited_access_message" = "Permitiste acceso solo a una cantidad selecta de fotos.";
+"limited_access_manage_button" = "Administrar";
+"limited_access_action_sheet_title" = "Administra el acceso a fotos y videos";
+"limited_access_select_more" = "Seleccionar más fotos";
+"limited_access_change_settings" = "Cambiar los ajustes";

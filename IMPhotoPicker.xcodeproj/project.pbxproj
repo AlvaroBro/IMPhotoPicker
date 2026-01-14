@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		38B9E1862D582AB60079209F /* IMInputBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B9E1852D582AB50079209F /* IMInputBarView.swift */; };
 		38B9E1882D58304E0079209F /* IMPickerWrapperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B9E1872D58304D0079209F /* IMPickerWrapperViewController.swift */; };
+		5BA1B2262D87C12300000001 /* IMLimitedAccessBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA1B2252D87C12300000001 /* IMLimitedAccessBannerView.swift */; };
 		5B5998E62D5B654A004F6A20 /* IMAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E52D5B654A004F6A20 /* IMAlbumCell.swift */; };
 		5B5998E82D5B6736004F6A20 /* IMPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */; };
 		5B5998EA2D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		38B9E1852D582AB50079209F /* IMInputBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMInputBarView.swift; sourceTree = "<group>"; };
 		38B9E1872D58304D0079209F /* IMPickerWrapperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPickerWrapperViewController.swift; sourceTree = "<group>"; };
+		5BA1B2252D87C12300000001 /* IMLimitedAccessBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMLimitedAccessBannerView.swift; sourceTree = "<group>"; };
 		5B5998E52D5B654A004F6A20 /* IMAlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAlbumCell.swift; sourceTree = "<group>"; };
 		5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMPhotosViewController.swift; sourceTree = "<group>"; };
 		5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMPhotoLibraryPermissionManager.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				5B733F412D53AFBA008485DD /* IMAlbumsViewController.swift */,
 				5B733F542D54FAC0008485DD /* IMAssetsCollectionViewController.swift */,
 				38B9E1852D582AB50079209F /* IMInputBarView.swift */,
+				5BA1B2252D87C12300000001 /* IMLimitedAccessBannerView.swift */,
 				5B733F4E2D53C8AA008485DD /* IMPhotoCell.swift */,
 				5B5998E92D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift */,
 				5B5998E72D5B6736004F6A20 /* IMPhotosViewController.swift */,
@@ -236,6 +239,7 @@
 				38B9E1882D58304E0079209F /* IMPickerWrapperViewController.swift in Sources */,
 				5BBE673F2D664BBC0036300F /* CustomBottomBarView.swift in Sources */,
 				38B9E1862D582AB60079209F /* IMInputBarView.swift in Sources */,
+				5BA1B2262D87C12300000001 /* IMLimitedAccessBannerView.swift in Sources */,
 				5B5998E82D5B6736004F6A20 /* IMPhotosViewController.swift in Sources */,
 				5B733F482D53B8F1008485DD /* IMAlbumAssetsViewController.swift in Sources */,
 				5B5998EA2D5B7574004F6A20 /* IMPhotoLibraryPermissionManager.swift in Sources */,

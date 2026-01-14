@@ -349,6 +349,20 @@ extension IMPickerViewControllerDelegate {
         }
     }
     
+    /// Clears the current selection entirely.
+    /// Called when the photo library changes (e.g., after modifying limited access permissions).
+    func clearSelection() {
+        guard !selectedAssets.isEmpty else { return }
+        
+        selectedAssets.removeAll()
+        
+        if rightButtonStyle == .accept {
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+        delegate?.pickerViewController(self, didUpdateSelection: selectedAssets, hdModeEnabled: hdModeEnabled)
+        updateIsModalInPresentation()
+    }
+    
     private func setPresentationControllerDelegate() {
         if let container = pickerWrapperContainer() {
             if let containerNav = container.navigationController {
