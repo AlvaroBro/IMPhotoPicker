@@ -8,6 +8,21 @@
 import UIKit
 import Photos
 
+// MARK: - PaddedLabel
+class PaddedLabel: UILabel {
+    var padding = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
+    
+    override func drawText(in rect: CGRect) {
+        super.drawText(in: rect.inset(by: padding))
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        let size = super.intrinsicContentSize
+        return CGSize(width: size.width + padding.left + padding.right,
+                      height: size.height + padding.top + padding.bottom)
+    }
+}
+
 // MARK: - IMPhotoCell
 class IMPhotoCell: UICollectionViewCell {
     var representedAssetIdentifier: String?
@@ -52,15 +67,21 @@ class IMPhotoCell: UICollectionViewCell {
         return label
     }()
     
-    private let durationLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = UIColor.clear
+    private let durationLabel: PaddedLabel = {
+        let label = PaddedLabel()
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.1)
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
         label.textAlignment = .center
-        label.clipsToBounds = true
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.cornerRadius = 4
+        label.layer.masksToBounds = false
+        label.clipsToBounds = true
+        label.layer.shadowColor = UIColor.black.cgColor
+        label.layer.shadowOffset = .zero
+        label.layer.shadowRadius = 0.5
+        label.layer.shadowOpacity = 0.8
         return label
     }()
     
