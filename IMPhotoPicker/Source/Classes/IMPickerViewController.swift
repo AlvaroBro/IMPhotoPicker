@@ -183,7 +183,7 @@ extension IMPickerViewControllerDelegate {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundEffect = UIBlurEffect(style: .regular)
-        appearance.backgroundColor = .secondarySystemBackground.withAlphaComponent(0.5)
+        appearance.backgroundColor = .clear
         
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
@@ -193,7 +193,7 @@ extension IMPickerViewControllerDelegate {
     
     // MARK: - Container View Setup
     func setupContainerView() {
-        containerView.backgroundColor = .secondarySystemBackground
+        containerView.backgroundColor = .clear
         containerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(containerView)
         NSLayoutConstraint.activate([
@@ -260,7 +260,7 @@ extension IMPickerViewControllerDelegate {
     
     private func hdModeImage() -> UIImage? {
         let imageName = hdModeEnabled ? "im-hd-selected" : "im-hd"
-        return UIImage(named: imageName)?.withRenderingMode(.alwaysOriginal) ?? nil
+        return UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate) ?? nil // Para poder cambiarle el color
     }
     
     // MARK: - Segmented Control Action

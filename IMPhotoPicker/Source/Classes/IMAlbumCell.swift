@@ -37,6 +37,13 @@ class IMAlbumCell: UITableViewCell {
         view.backgroundColor = .white
         return view
     }()
+
+    /// When set, applied to the card background. Used by the picker to match the palette.
+    var cardBackgroundColor: UIColor? {
+        didSet {
+            cardView.backgroundColor = cardBackgroundColor ?? .white
+        }
+    }
     
     private let disclosureImageView: UIImageView = {
         let iv = UIImageView()

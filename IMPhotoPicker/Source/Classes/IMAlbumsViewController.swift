@@ -39,7 +39,7 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = pickerController?.configuration.pickerViewBackgroundColor
         setupTableView()
         checkPhotoLibraryPermission()
     }
@@ -138,7 +138,9 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: IMAlbumCell.identifier, for: indexPath) as! IMAlbumCell
+        cell.backgroundColor = .clear
         let album = albums[indexPath.row]
+        cell.cardBackgroundColor = pickerController?.configuration.albumCellCardBackgroundColor
         cell.titleLabel.text = album.localizedTitle
 
         let fetchOptions = PHFetchOptions()

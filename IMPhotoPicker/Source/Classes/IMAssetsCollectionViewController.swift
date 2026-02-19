@@ -96,7 +96,7 @@ class IMAssetsCollectionViewController: UIViewController, UICollectionViewDataSo
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.keyboardDismissMode = .interactive
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .secondarySystemBackground
+        collectionView.backgroundColor = pickerController?.configuration.pickerViewBackgroundColor
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(IMPhotoCell.self, forCellWithReuseIdentifier: IMPhotoCell.reuseIdentifier)

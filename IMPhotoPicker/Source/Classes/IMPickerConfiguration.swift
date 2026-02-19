@@ -49,6 +49,12 @@ import UIKit
     /// The color used for the selection overlay badge on assets.
     public var selectionOverlayBadgeColor: UIColor?
     
+    /// Background color for the picker view (Photos and Albums tabs).
+    public var pickerViewBackgroundColor: UIColor?
+    
+    /// Background color for each album row card in the albums list.
+    public var albumCellCardBackgroundColor: UIColor?
+    
     /// Configuration settings for the input bar.
     public var inputBarConfiguration: IMInputBarConfiguration?
     
