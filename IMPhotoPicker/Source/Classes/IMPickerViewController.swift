@@ -181,14 +181,20 @@ extension IMPickerViewControllerDelegate {
     
     private func configureNavigationBarAppearance() {
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundEffect = UIBlurEffect(style: .regular)
-        appearance.backgroundColor = .clear
-        
+        if let navBarColor = configuration.navigationBarBackgroundColor {
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = navBarColor
+            appearance.shadowColor = .clear
+        } else {
+            appearance.configureWithTransparentBackground()
+            appearance.backgroundEffect = UIBlurEffect(style: .regular)
+            appearance.backgroundColor = .clear
+        }
+
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.isTranslucent = configuration.navigationBarBackgroundColor == nil
     }
     
     // MARK: - Container View Setup

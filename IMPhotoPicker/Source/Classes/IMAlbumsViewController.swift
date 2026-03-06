@@ -71,7 +71,7 @@ class IMAlbumsViewController: UIViewController, UITableViewDataSource, UITableVi
     // MARK: - Setup
     func setupTableView() {
         tableView = UITableView(frame: .zero, style: .plain)
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = pickerController?.configuration.tableViewBackgroundColor ?? .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.keyboardDismissMode = .interactive
         tableView.dataSource = self

@@ -54,6 +54,12 @@ import UIKit
     
     /// Background color for each album row card in the albums list.
     public var albumCellCardBackgroundColor: UIColor?
+
+    /// Background color for the navigation bar header.
+    public var navigationBarBackgroundColor: UIColor?
+
+    /// Background color for the albums table view.
+    public var tableViewBackgroundColor: UIColor?
     
     /// Configuration settings for the input bar.
     public var inputBarConfiguration: IMInputBarConfiguration?
