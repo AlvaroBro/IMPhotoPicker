@@ -107,6 +107,9 @@ import UIKit
     
     /// The background color of the input bar's text field.
     public var textFieldBackgroundColor: UIColor?
+
+    /// The border color of the input bar's text field.
+    public var textFieldBorderColor: UIColor?
     
     /// The font used for the text in the input bar's text field.
     public var textFieldFont: UIFont?

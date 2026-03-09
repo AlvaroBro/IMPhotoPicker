@@ -72,6 +72,7 @@ import UIKit
 
     private var textViewHeightConstraint: NSLayoutConstraint!
     private let maxNumberOfLines: CGFloat = 5
+    private var currentConfiguration: IMInputBarConfiguration?
 
     // MARK: - Initializers
     public override init(frame: CGRect) {
@@ -103,6 +104,7 @@ import UIKit
     }
 
     public func applyConfiguration(_ config: IMInputBarConfiguration?) {
+        currentConfiguration = config
         placeholderLabel.text = config?.placeholder ?? NSLocalizedString("input_placeholder", tableName: "IMPhotoPicker", comment: "")
         placeholderLabel.font = config?.textFieldFont ?? UIFont.systemFont(ofSize: 14)
         textView.backgroundColor = config?.textFieldBackgroundColor ?? .white
@@ -111,7 +113,21 @@ import UIKit
         sendButton.tintColor = config?.sendButtonTintColor ?? .white
         sendButton.backgroundColor = config?.sendButtonBackgroundColor ?? .systemBlue
         badgeLabel.backgroundColor = config?.sendButtonBadgeColor ?? .systemBlue
+        if let borderColor = config?.textFieldBorderColor {
+            textView.layer.borderColor = borderColor.cgColor
+        }
         textViewDidChange(textView)
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            textView.backgroundColor = currentConfiguration?.textFieldBackgroundColor ?? .white
+            sendButton.backgroundColor = currentConfiguration?.sendButtonBackgroundColor ?? .systemBlue
+            if let borderColor = currentConfiguration?.textFieldBorderColor {
+                textView.layer.borderColor = borderColor.cgColor
+            }
+        }
     }
 
     // MARK: - Private Methods
